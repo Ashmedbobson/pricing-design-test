@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing — Makeasy</title>
+<meta name="description" content="Makeasy pricing: start with 3 free credits, then Maker at $19/month or Pro at $49/month.">
+<style>
+  :root{
+    --paper:#f3efe6;
+    --paper-hi:#faf7ef;
+    --ink:#1a2420;
+    --green:#1c6b4a;
+    --muted:#5c665f;
+    --rule:rgba(26,36,32,.14);
+    --rule-strong:rgba(26,36,32,.38);
+    --serif:Georgia,"Iowan Old Style","Palatino Linotype","Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  button{font:inherit;color:inherit}
+  :focus-visible{outline:2px solid var(--green);outline-offset:3px}
+
+  .wrap{
+    width:100%;
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 20px;
+  }
+
+  /* ---------- top bar ---------- */
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:18px 0 14px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .mark{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--serif);
+    font-size:19px;
+    text-decoration:none;
+  }
+  .mark::before{content:"";width:9px;height:9px;background:var(--green);flex:none}
+  .top-meta{
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{padding:34px 0 32px}
+  .kicker{
+    margin:0;
+    font-size:11px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--green);
+  }
+  h1{
+    margin:10px 0 0;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(68px,22vw,170px);
+    line-height:.82;
+    letter-spacing:-.045em;
+  }
+  h1 .stop{color:var(--green)}
+  .hero-sub{
+    margin:20px 0 0;
+    max-width:30ch;
+    font-size:17px;
+    color:var(--muted);
+  }
+
+  /* ---------- coupon ---------- */
+  .coupon{
+    position:relative;
+    margin-top:30px;
+    background:var(--paper-hi);
+    border:1px dashed var(--rule-strong);
+    padding:20px 18px;
+  }
+  .coupon::before,
+  .coupon::after{
+    content:"";
+    position:absolute;
+    width:18px;height:18px;
+    border-radius:50%;
+    background:var(--paper);
+    border:1px dashed var(--rule-strong);
+    top:50%;
+    transform:translateY(-50%);
+  }
+  .coupon::before{left:-10px;clip-path:inset(0 0 0 50%)}
+  .coupon::after{right:-10px;clip-path:inset(0 50% 0 0)}
+  .coupon-label{
+    margin:0 0 8px;
+    font-size:11.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--green);
+  }
+  .coupon-main{
+    margin:0;
+    font-family:var(--serif);
+    font-size:27px;
+    line-height:1.15;
+    letter-spacing:-.01em;
+  }
+  .coupon-note{
+    margin:6px 0 0;
+    font-size:14px;
+    color:var(--muted);
+  }
+  .coupon .btn{margin-top:16px;width:100%}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    min-height:48px;
+    padding:0 22px;
+    border:1px solid var(--ink);
+    border-radius:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-size:14px;
+    letter-spacing:.02em;
+    text-decoration:none;
+    cursor:pointer;
+    transition:background .18s ease,border-color .18s ease,color .18s ease;
+  }
+  .btn:hover{background:var(--green);border-color:var(--green);color:#f7f3e9}
+  .btn .arrow{transition:transform .18s ease}
+  .btn:hover .arrow{transform:translateX(3px)}
+  .btn--green{background:var(--green);border-color:var(--green);color:#f7f3e9}
+  .btn--green:hover{background:#15513a;border-color:#15513a}
+
+  /* ---------- billing bar ---------- */
+  .billing{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding:16px 0;
+    border-top:1px solid var(--rule-strong);
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .billing-label{
+    font-size:11.5px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .seg{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border:1px solid var(--ink);
+  }
+  .seg button{
+    appearance:none;
+    background:transparent;
+    border:0;
+    min-height:46px;
+    padding:0 10px;
+    font-size:11.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink);
+    cursor:pointer;
+    transition:background .16s ease,color .16s ease;
+  }
+  .seg button + button{border-left:1px solid var(--ink)}
+  .seg button[aria-pressed="true"]{
+    background:var(--ink);
+    color:var(--paper);
+  }
+  .billing-note{
+    margin:0;
+    font-size:13px;
+    line-height:1.4;
+    color:var(--green);
+  }
+
+  /* ---------- plates ---------- */
+  .plates{
+    display:grid;
+    grid-template-columns:1fr;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .plate{
+    padding:30px 0 32px;
+    display:flex;
+    flex-direction:column;
+  }
+  .plate + .plate{border-top:1px solid var(--rule-strong)}
+  .plate-top{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .num{
+    font-family:var(--serif);
+    font-size:12px;
+    letter-spacing:.14em;
+    color:var(--green);
+    font-variant-numeric:tabular-nums;
+  }
+  .tier{
+    margin:0;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:29px;
+    letter-spacing:-.01em;
+    order:-1;
+  }
+  .price{
+    margin:18px 0 0;
+    display:flex;
+    align-items:baseline;
+    gap:4px;
+    font-family:var(--serif);
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .amount{font-size:clamp(56px,15vw,80px);letter-spacing:-.035em}
+  .per{font-family:var(--sans);font-size:13px;color:var(--muted);letter-spacing:.02em}
+  .bill{
+    margin:8px 0 0;
+    font-size:12.5px;
+    color:var(--green);
+    min-height:18px;
+  }
+  .stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin:26px 0 26px;
+    padding:18px 0;
+    border-top:1px solid var(--rule);
+    border-bottom:1px solid var(--rule);
+  }
+  .stat-n{
+    display:block;
+    font-family:var(--serif);
+    font-size:32px;
+    line-height:1;
+    letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat-l{
+    display:block;
+    margin-top:6px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .plate .btn{margin-top:auto;width:100%}
+
+  /* ---------- index ---------- */
+  .index{padding:34px 0 0}
+  .index-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:8px;
+  }
+  .index-head h2{
+    margin:0;
+    font-size:11.5px;
+    font-weight:400;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+  .index-head span{
+    font-family:var(--serif);
+    font-size:12px;
+    color:var(--green);
+  }
+  .index ol{
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .index li{
+    display:grid;
+    grid-template-columns:38px 1fr;
+    gap:12px;
+    padding:16px 0;
+    border-top:1px solid var(--rule);
+    font-size:15px;
+    line-height:1.45;
+  }
+  .index ol{border-bottom:1px solid var(--rule)}
+  .index li .n{
+    font-family:var(--serif);
+    font-size:15px;
+    color:var(--green);
+    font-variant-numeric:tabular-nums;
+    padding-top:1px;
+  }
+  .index strong{font-weight:600}
+
+  /* ---------- footer ---------- */
+  .footer{
+    margin-top:34px;
+    padding:20px 0 44px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px 20px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .footer .mark{font-size:16px;color:var(--ink)}
+  .footer .mark::before{width:7px;height:7px}
+  .footer a{text-decoration:none;border-bottom:1px solid var(--rule-strong);padding-bottom:1px}
+  .footer a:hover{color:var(--green);border-bottom-color:var(--green)}
+
+  /* ---------- wider ---------- */
+  @media (min-width:600px){
+    .wrap{padding:0 32px}
+    .coupon{padding:24px 26px;max-width:420px}
+    .coupon .btn{width:auto}
+    .billing{
+      flex-direction:row;
+      align-items:center;
+      gap:20px;
+    }
+    .billing-label{flex:none}
+    .seg{flex:none;width:230px}
+    .billing-note{margin-left:auto;text-align:right;max-width:34ch}
+    .index ol{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      column-gap:44px;
+    }
+  }
+  @media (min-width:860px){
+    .wrap{padding:0 48px}
+    .top{padding:22px 0 16px}
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);
+      gap:56px;
+      align-items:end;
+      padding:44px 0 44px;
+    }
+    .hero-sub{margin-top:24px}
+    .coupon{margin-top:0;align-self:end}
+    .plates{grid-template-columns:1fr 1fr}
+    .plate{padding:38px 40px 40px}
+    .plate:first-child{padding-left:0}
+    .plate:last-child{padding-right:0}
+    .plate + .plate{
+      border-top:0;
+      border-left:1px solid var(--rule-strong);
+    }
+    .amount{font-size:84px}
+    .stats{gap:22px;margin:34px 0 34px}
+    .stat-n{font-size:38px}
+    .plate .btn{width:auto;min-width:200px;align-self:flex-start}
+    .index{padding-top:46px}
+    .index ol{column-gap:64px}
+    .index li{font-size:15.5px}
+    .footer{padding-bottom:60px}
+  }
+  @media (min-width:1100px){
+    .wrap{padding:0 64px}
+    .hero{padding:56px 0 52px;gap:72px}
+    .plate{padding:44px 56px 48px}
+    .amount{font-size:96px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <a class="mark" href="#">Makeasy</a>
+    <span class="top-meta">Pricing</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="kicker">Plans</p>
+        <h1>Pricing<span class="stop">.</span></h1>
+        <p class="hero-sub">3 free credits on signup, no card required.</p>
+      </div>
+
+      <div class="coupon">
+        <p class="coupon-label">Free start</p>
+        <p class="coupon-main">3 free credits</p>
+        <p class="coupon-note">No card required.</p>
+        <a class="btn btn--green" href="#">Start free <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <div class="billing">
+      <span class="billing-label" id="billing-label">Billing</span>
+      <div class="seg" role="group" aria-labelledby="billing-label">
+        <button type="button" data-cycle="monthly" aria-pressed="true">Monthly</button>
+        <button type="button" data-cycle="annual" aria-pressed="false">Annual</button>
+      </div>
+      <p class="billing-note">Annual billing costs 11 months — one month free.</p>
+    </div>
+
+    <section class="plates" aria-label="Plans">
+      <article class="plate" data-plan="maker">
+        <div class="plate-top">
+          <h2 class="tier">Maker</h2>
+          <span class="num">01</span>
+        </div>
+
+        <p class="price">
+          <span class="amount" data-price>$19</span>
+          <span class="per" data-per>/month</span>
+        </p>
+        <p class="bill" data-bill>billed monthly</p>
+
+        <div class="stats">
+          <div>
+            <span class="stat-n">50</span>
+            <span class="stat-l">credits</span>
+          </div>
+          <div>
+            <span class="stat-n">600</span>
+            <span class="stat-l">terminal minutes</span>
+          </div>
+        </div>
+
+        <a class="btn" href="#">Choose Maker</a>
+      </article>
+
+      <article class="plate" data-plan="pro">
+        <div class="plate-top">
+          <h2 class="tier">Pro</h2>
+          <span class="num">02</span>
+        </div>
+
+        <p class="price">
+          <span class="amount" data-price>$49</span>
+          <span class="per" data-per>/month</span>
+        </p>
+        <p class="bill" data-bill>billed monthly</p>
+
+        <div class="stats">
+          <div>
+            <span class="stat-n">160</span>
+            <span class="stat-l">credits</span>
+          </div>
+          <div>
+            <span class="stat-n">1,800</span>
+            <span class="stat-l">terminal minutes</span>
+          </div>
+        </div>
+
+        <a class="btn" href="#">Choose Pro</a>
+      </article>
+    </section>
+
+    <section class="index" aria-labelledby="index-title">
+      <div class="index-head">
+        <h2 id="index-title">Included</h2>
+        <span>01—05</span>
+      </div>
+      <ol>
+        <li><span class="n">01</span><span><strong>Broken output is always free</strong> — failed builds are refunded automatically.</span></li>
+        <li><span class="n">02</span><span><strong>One-click rewind</strong> to any earlier version.</span></li>
+        <li><span class="n">03</span><span><strong>Full export</strong> of your site — no lock-in.</span></li>
+        <li><span class="n">04</span><span><strong>A real terminal</strong> built into the app.</span></li>
+        <li><span class="n">05</span><span><strong>Annual billing</strong> costs 11 months (one month free).</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="mark" href="#">Makeasy</a>
+    <a href="#">Start free</a>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var PRICES = {
+    maker: {
+      monthly: { price: "$19", per: "/month", bill: "billed monthly" },
+      annual:  { price: "$209", per: "/year",  bill: "billed annually — one month free" }
+    },
+    pro: {
+      monthly: { price: "$49", per: "/month", bill: "billed monthly" },
+      annual:  { price: "$539", per: "/year",  bill: "billed annually — one month free" }
+    }
+  };
+
+  var buttons = document.querySelectorAll("[data-cycle]");
+
+  function render(cycle){
+    Object.keys(PRICES).forEach(function(plan){
+      var card = document.querySelector('[data-plan="' + plan + '"]');
+      if(!card) return;
+      var data = PRICES[plan][cycle];
+      card.querySelector("[data-price]").textContent = data.price;
+      card.querySelector("[data-per]").textContent = data.per;
+      card.querySelector("[data-bill]").textContent = data.bill;
+    });
+
+    buttons.forEach(function(btn){
+      btn.setAttribute("aria-pressed", String(btn.getAttribute("data-cycle") === cycle));
+    });
+  }
+
+  buttons.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      render(btn.getAttribute("data-cycle"));
+    });
+  });
+})();
+</script>
+</body>
+</html>

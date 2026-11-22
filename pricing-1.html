@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing — Makeasy</title>
+<meta name="description" content="Makeasy pricing: start with 3 free credits, then Maker at $19/month or Pro at $49/month.">
+<style>
+  :root{
+    --paper:#f3efe6;
+    --paper-hi:#faf7ef;
+    --ink:#1a2420;
+    --green:#1c6b4a;
+    --muted:#5c665f;
+    --rule:rgba(26,36,32,.14);
+    --rule-strong:rgba(26,36,32,.34);
+    --serif:Georgia,"Iowan Old Style","Palatino Linotype","Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  button{font:inherit;color:inherit}
+  :focus-visible{outline:2px solid var(--green);outline-offset:3px}
+
+  .wrap{
+    width:100%;
+    max-width:1060px;
+    margin:0 auto;
+    padding:0 20px;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    padding:18px 0 14px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .mark{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--serif);
+    font-size:19px;
+    letter-spacing:.005em;
+    text-decoration:none;
+  }
+  .mark::before{
+    content:"";
+    width:9px;height:9px;
+    background:var(--green);
+    display:block;
+  }
+  .masthead-meta{
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ---------- intro ---------- */
+  .intro{padding:40px 0 0}
+  .eyebrow{
+    margin:0;
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--green);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--rule);
+  }
+  h1{
+    margin:16px 0 0;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:clamp(46px,13vw,104px);
+    line-height:.94;
+    letter-spacing:-.025em;
+  }
+  .lede{
+    margin:20px 0 0;
+    max-width:34ch;
+    font-size:17px;
+    line-height:1.55;
+    color:var(--muted);
+  }
+
+  /* ---------- free start ---------- */
+  .free{
+    margin:28px 0 0;
+    border:1px solid var(--rule-strong);
+    border-left:3px solid var(--green);
+    background:var(--paper-hi);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .free-label{
+    margin:0 0 4px;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--green);
+  }
+  .free-text{
+    margin:0;
+    font-family:var(--serif);
+    font-size:20px;
+    line-height:1.3;
+  }
+  .free-text span{
+    display:block;
+    font-family:var(--sans);
+    font-size:14px;
+    color:var(--muted);
+    margin-top:4px;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    min-height:48px;
+    padding:0 20px;
+    border:1px solid var(--green);
+    border-radius:2px;
+    background:var(--green);
+    color:#f7f3e9;
+    font-size:14px;
+    letter-spacing:.02em;
+    text-decoration:none;
+    cursor:pointer;
+    transition:background .18s ease,color .18s ease,border-color .18s ease;
+  }
+  .btn:hover{background:#15513a;border-color:#15513a}
+  .btn .arrow{transition:transform .18s ease}
+  .btn:hover .arrow{transform:translateX(3px)}
+  .btn--ghost{
+    background:transparent;
+    color:var(--ink);
+    border-color:var(--rule-strong);
+  }
+  .btn--ghost:hover{
+    background:var(--ink);
+    color:var(--paper);
+    border-color:var(--ink);
+  }
+
+  /* ---------- billing toggle ---------- */
+  .billing{
+    margin:36px 0 0;
+    padding:0 0 14px;
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:4px 18px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .billing-label{
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-right:2px;
+  }
+  .toggle{
+    display:flex;
+    align-items:center;
+    gap:0;
+  }
+  .toggle button{
+    appearance:none;
+    background:none;
+    border:0;
+    border-bottom:2px solid transparent;
+    min-height:44px;
+    padding:0 12px;
+    margin-bottom:-2px;
+    font-size:12px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    cursor:pointer;
+    transition:color .15s ease,border-color .15s ease;
+  }
+  .toggle button:first-child{padding-left:0}
+  .toggle button[aria-pressed="true"]{
+    color:var(--ink);
+    border-bottom-color:var(--green);
+  }
+  .toggle button:hover{color:var(--ink)}
+  .billing-note{
+    margin:0;
+    font-size:13px;
+    color:var(--muted);
+    flex:1 1 200px;
+  }
+  .billing-note em{
+    font-style:normal;
+    color:var(--green);
+  }
+
+  /* ---------- statement ---------- */
+  .statement{
+    list-style:none;
+    margin:0;
+    padding:0;
+    border-top:0;
+  }
+  .entry{
+    padding:26px 0 28px;
+    border-bottom:1px solid var(--rule-strong);
+  }
+  .entry-head{
+    display:flex;
+    align-items:baseline;
+    flex-wrap:wrap;
+    gap:4px 12px;
+  }
+  .entry-name{
+    margin:0;
+    font-family:var(--serif);
+    font-weight:400;
+    font-size:27px;
+    letter-spacing:-.01em;
+  }
+  .entry-tag{
+    font-size:10px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--green);
+    border:1px solid rgba(28,107,74,.35);
+    padding:2px 6px 1px;
+    transform:translateY(-3px);
+  }
+  .leader{
+    display:none;
+    flex:1;
+    min-width:20px;
+    border-bottom:1px dotted var(--rule-strong);
+    transform:translateY(-5px);
+  }
+  .entry-price{
+    margin:0;
+    margin-left:auto;
+    display:flex;
+    align-items:baseline;
+    gap:3px;
+    font-family:var(--serif);
+    font-variant-numeric:tabular-nums;
+    line-height:1;
+  }
+  .amount{font-size:34px;letter-spacing:-.02em}
+  .per{font-family:var(--sans);font-size:13px;color:var(--muted);letter-spacing:.02em}
+  .entry-spec{
+    margin:12px 0 0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:4px 8px;
+    font-size:14px;
+    letter-spacing:.01em;
+  }
+  .entry-spec .sep{color:rgba(26,36,32,.35)}
+  .entry-bill{
+    margin:6px 0 0;
+    font-size:13px;
+    color:var(--green);
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .entry-bill::before{
+    content:"";
+    width:5px;height:5px;
+    background:var(--green);
+    flex:none;
+  }
+  .entry-foot{margin:18px 0 0}
+  .entry-foot .btn{width:100%}
+
+  /* ---------- notes ---------- */
+  .notes{
+    padding:36px 0 0;
+  }
+  .notes-title{
+    margin:0 0 4px;
+    font-size:11px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .notes-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--rule-strong);
+  }
+  .note-list{
+    list-style:none;
+    counter-reset:note;
+    margin:8px 0 0;
+    padding:0;
+  }
+  .note{
+    counter-increment:note;
+    display:grid;
+    grid-template-columns:26px 1fr;
+    gap:10px;
+    padding:12px 0;
+    border-bottom:1px dotted var(--rule-strong);
+    font-size:14.5px;
+    line-height:1.45;
+  }
+  .note::before{
+    content:counter(note,decimal-leading-zero);
+    font-family:var(--serif);
+    font-size:12px;
+    color:var(--green);
+    padding-top:2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .note strong{font-weight:600}
+
+  /* ---------- footer ---------- */
+  .footer{
+    margin-top:36px;
+    padding:20px 0 40px;
+    border-top:1px solid var(--rule-strong);
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px 20px;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .footer .mark{font-size:16px;color:var(--ink)}
+  .footer .mark::before{width:7px;height:7px}
+  .footer a{text-decoration:none;border-bottom:1px solid var(--rule-strong);padding-bottom:1px}
+  .footer a:hover{border-bottom-color:var(--green);color:var(--green)}
+
+  /* ---------- wider screens ---------- */
+  @media (min-width:640px){
+    .wrap{padding:0 32px}
+    .leader{display:block}
+    .entry-head{flex-wrap:nowrap}
+    .entry-price{margin-left:0}
+    .entry-foot .btn{width:auto;min-width:180px}
+    .free{flex-direction:row;align-items:center;justify-content:space-between;gap:24px;padding:20px 22px}
+    .free .btn{flex:none}
+    .note-list{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      column-gap:40px;
+    }
+  }
+  @media (min-width:900px){
+    .wrap{padding:0 48px}
+    .intro{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 336px;
+      column-gap:56px;
+      align-items:end;
+      padding-top:56px;
+    }
+    .free{
+      margin:0;
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:flex-start;
+      gap:14px;
+      padding:22px;
+    }
+    .free .btn{width:100%}
+    .entry{padding:30px 0 32px}
+    .entry-name{font-size:32px}
+    .amount{font-size:40px}
+    .entry-spec{font-size:15px}
+    .notes{padding-top:52px}
+    .footer{padding-bottom:56px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <a class="mark" href="#">Makeasy</a>
+    <span class="masthead-meta">Pricing</span>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="intro-copy">
+        <p class="eyebrow">Plans &amp; credits</p>
+        <h1>Pricing</h1>
+        <p class="lede">3 free credits on signup, no card required.</p>
+      </div>
+
+      <div class="free">
+        <div>
+          <p class="free-label">Free start</p>
+          <p class="free-text">3 free credits on signup<span>No card required.</span></p>
+        </div>
+        <a class="btn" href="#">Start free <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <div class="billing">
+      <span class="billing-label" id="billing-label">Billing</span>
+      <div class="toggle" role="group" aria-labelledby="billing-label">
+        <button type="button" data-cycle="monthly" aria-pressed="true">Monthly</button>
+        <button type="button" data-cycle="annual" aria-pressed="false">Annual</button>
+      </div>
+      <p class="billing-note" data-billing-note>Annual billing costs <em>11 months</em> — one month free.</p>
+    </div>
+
+    <ol class="statement">
+      <li class="entry" data-plan="maker">
+        <div class="entry-head">
+          <h2 class="entry-name">Maker</h2>
+          <span class="leader" aria-hidden="true"></span>
+          <p class="entry-price">
+            <span class="amount" data-price>$19</span>
+            <span class="per" data-per>/month</span>
+          </p>
+        </div>
+        <p class="entry-spec"><span>50 credits</span><span class="sep" aria-hidden="true">·</span><span>600 terminal minutes</span></p>
+        <p class="entry-bill" data-bill>billed monthly</p>
+        <div class="entry-foot">
+          <a class="btn btn--ghost" href="#">Choose Maker</a>
+        </div>
+      </li>
+
+      <li class="entry" data-plan="pro">
+        <div class="entry-head">
+          <h2 class="entry-name">Pro</h2>
+          <span class="leader" aria-hidden="true"></span>
+          <p class="entry-price">
+            <span class="amount" data-price>$49</span>
+            <span class="per" data-per>/month</span>
+          </p>
+        </div>
+        <p class="entry-spec"><span>160 credits</span><span class="sep" aria-hidden="true">·</span><span>1,800 terminal minutes</span></p>
+        <p class="entry-bill" data-bill>billed monthly</p>
+        <div class="entry-foot">
+          <a class="btn btn--ghost" href="#">Choose Pro</a>
+        </div>
+      </li>
+    </ol>
+
+    <section class="notes" aria-labelledby="notes-title">
+      <h2 class="notes-title" id="notes-title">Notes</h2>
+      <ol class="note-list">
+        <li class="note"><span><strong>Broken output is always free</strong> — failed builds are refunded automatically.</span></li>
+        <li class="note"><span><strong>One-click rewind</strong> to any earlier version.</span></li>
+        <li class="note"><span><strong>Full export</strong> of your site — no lock-in.</span></li>
+        <li class="note"><span><strong>A real terminal</strong> built into the app.</span></li>
+        <li class="note"><span><strong>Annual billing</strong> costs 11 months (one month free).</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="mark" href="#">Makeasy</a>
+    <a href="#">Start free</a>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var PRICES = {
+    maker: {
+      monthly: { price: "$19", per: "/month", bill: "billed monthly" },
+      annual:  { price: "$209", per: "/year",  bill: "billed annually — one month free" }
+    },
+    pro: {
+      monthly: { price: "$49", per: "/month", bill: "billed monthly" },
+      annual:  { price: "$539", per: "/year",  bill: "billed annually — one month free" }
+    }
+  };
+
+  var buttons = document.querySelectorAll("[data-cycle]");
+
+  function render(cycle){
+    Object.keys(PRICES).forEach(function(plan){
+      var row = document.querySelector('[data-plan="' + plan + '"]');
+      if(!row) return;
+      var data = PRICES[plan][cycle];
+      row.querySelector("[data-price]").textContent = data.price;
+      row.querySelector("[data-per]").textContent = data.per;
+      row.querySelector("[data-bill]").textContent = data.bill;
+    });
+
+    buttons.forEach(function(btn){
+      btn.setAttribute("aria-pressed", String(btn.getAttribute("data-cycle") === cycle));
+    });
+  }
+
+  buttons.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      render(btn.getAttribute("data-cycle"));
+    });
+  });
+})();
+</script>
+</body>
+</html>
