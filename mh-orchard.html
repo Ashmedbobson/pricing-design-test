@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makeasy — Describe it. Makeasy builds it.</title>
+<style>
+:root{
+  --cream:#faf5e9; --leaf:#2f5d33; --leaf-deep:#1e4023; --apple:#c8402a; --soil:#4a3421; --mut:#6d6152; --line:rgba(74,52,33,.16);
+  --path:#7fb069;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:clip;scroll-behavior:smooth}
+body{background:var(--cream);color:var(--soil);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:Fraunces,Georgia,"Times New Roman",serif;font-weight:700;line-height:1.02;letter-spacing:-.01em}
+em{font-style:italic;font-weight:500}
+.wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
+.label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--apple);font-weight:700}
+nav{position:fixed;inset:12px 12px auto 12px;z-index:60;display:flex;justify-content:space-between;align-items:center;background:rgba(250,245,233,.88);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px}
+nav .brand{font-family:Fraunces,Georgia,serif;font-size:19px;font-weight:700}
+nav .brand b{color:var(--apple)}
+nav .links{display:flex;gap:22px;font-size:16px;font-weight:500;align-items:center}
+nav .links a{color:var(--soil);text-decoration:none;padding:6px 0}
+nav .cta{background:var(--leaf);color:#fff;padding:10px 18px;border-radius:999px;font-size:16px;font-weight:600;text-decoration:none;min-height:40px;display:inline-flex;align-items:center}
+@media(max-width:640px){nav .links a:not(.cta){display:none}}
+.hero{min-height:96svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:120px;padding-bottom:54px;position:relative;overflow:hidden}
+.hero .sun{position:absolute;top:12%;right:6%;width:clamp(120px,20vw,220px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#ffd98a,#f5a83d);opacity:.85;box-shadow:0 0 90px rgba(245,168,61,.5)}
+.hero h1{font-size:clamp(46px,10vw,118px);max-width:12ch;position:relative}
+.hero h1 .ap{color:var(--apple)}
+.hero .sub{margin-top:20px;font-size:clamp(16px,2vw,20px);color:var(--mut);max-width:52ch;line-height:1.55;position:relative}
+.hero .row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;position:relative}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--leaf);color:#fff;padding:14px 26px;border-radius:999px;font-weight:600;font-size:16px;text-decoration:none;border:none;cursor:pointer;min-height:48px;font-family:inherit}
+.btn.ghostb{background:transparent;color:var(--soil);border:1px solid var(--soil)}
+.hero .meta{display:flex;gap:28px;margin-top:42px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);flex-wrap:wrap;position:relative}
+.hero .meta b{color:var(--soil);font-size:15px;display:block}
+/* HOW IT WORKS */
+.how{padding-top:96px;padding-bottom:20px}
+.how h2{font-size:clamp(36px,6vw,62px);margin:12px 0 10px}
+.how .lede{color:var(--mut);line-height:1.6;max-width:54ch}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}}
+.step{background:#fffdf4;border:1px solid var(--line);border-radius:20px;padding:26px}
+.step .num{font-family:Fraunces,Georgia,serif;font-size:44px;font-weight:700;color:var(--apple);line-height:1}
+.step h3{font-family:Fraunces,Georgia,serif;font-size:24px;font-weight:700;margin:12px 0 8px}
+.step p{color:var(--mut);line-height:1.6;font-size:16px}
+/* PATHS (signature switcher) */
+.paths{padding-top:96px;padding-bottom:20px}
+.paths h2{font-size:clamp(36px,6vw,62px);margin:12px 0 10px}
+.paths .lede{color:var(--mut);line-height:1.6;max-width:54ch}
+.pathbar{display:flex;gap:8px;margin-top:30px;background:#f1e8d2;border:1px solid var(--line);border-radius:999px;padding:6px;max-width:560px;overflow-x:auto}
+.pathbar button{flex:1;border:none;background:transparent;padding:11px 10px;border-radius:999px;font-family:inherit;font-size:16px;font-weight:600;color:var(--mut);cursor:pointer;white-space:nowrap;min-height:44px}
+.pathbar button[aria-pressed="true"]{background:var(--leaf);color:#fff}
+.pathgrid{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:34px;align-items:center}
+@media(max-width:820px){.pathgrid{grid-template-columns:1fr}}
+.pathcard{border-radius:24px;padding:30px;color:#fff;min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(160deg,var(--path),var(--leaf-deep));transition:background .5s}
+.pathcard .pname{font-family:Fraunces,Georgia,serif;font-size:clamp(34px,5vw,52px);font-weight:700}
+.pathcard .ptag{font-size:16px;opacity:.92;line-height:1.55;margin-top:8px;max-width:38ch}
+.pathlist{list-style:none}
+.pathlist li{display:flex;justify-content:space-between;gap:16px;padding:13px 2px;border-bottom:1px solid var(--line);font-size:16px}
+.pathlist li b{font-weight:600}
+.pathlist li span{color:var(--mut);text-align:right}
+/* BUILD YOUR BOX */
+.build{padding-top:90px;padding-bottom:110px}
+.build h2{font-size:clamp(36px,6vw,62px);margin:12px 0 10px}
+.build .lede{color:var(--mut);line-height:1.6;max-width:54ch}
+.build .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:38px;margin-top:36px;align-items:start}
+@media(max-width:820px){.build .grid{grid-template-columns:1fr}}
+.items{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:480px){.items{grid-template-columns:1fr}}
+.item{border:1px solid var(--line);background:#fffdf4;border-radius:16px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;font-size:16px;color:var(--soil);display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:56px;width:100%}
+.item .nm{font-weight:600;font-size:16px}
+.item .pr{font-size:13px;color:var(--mut)}
+.item .add{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--leaf);color:var(--leaf);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;background:#fff}
+.item.in{border-color:var(--leaf);background:#eef4e4}
+.item.in .add{background:var(--leaf);color:#fff}
+.boxcard{border:2px solid var(--soil);border-radius:22px;padding:24px;background:#fffdf4;position:sticky;top:90px}
+.boxslots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}
+.slot{aspect-ratio:1;border-radius:12px;border:1.5px dashed rgba(74,52,33,.3);display:flex;align-items:center;justify-content:center;font-size:11px;text-align:center;padding:4px;color:var(--mut);line-height:1.25}
+.slot.full{border-style:solid;border-color:var(--leaf);background:#eef4e4;color:var(--leaf-deep);font-weight:600}
+.boxcard .rowline{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.boxcard .rowline span{color:var(--mut)}
+.boxcard .rec{padding-top:14px}
+.boxcard .rec .plan{font-family:Fraunces,Georgia,serif;font-size:30px;font-weight:700;line-height:1.15}
+.boxcard .rec .why{font-size:14px;color:var(--mut);margin-top:6px;line-height:1.55}
+.boxcard .rec .btn{margin-top:14px}
+/* EXAMPLES */
+.examples{padding-top:90px;padding-bottom:20px}
+.examples h2{font-size:clamp(36px,6vw,62px);margin:12px 0 10px}
+.examples .lede{color:var(--mut);line-height:1.6;max-width:54ch}
+.kinds{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
+@media(max-width:820px){.kinds{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.kinds{grid-template-columns:1fr}}
+.kind{border:1px solid var(--line);background:#fffdf4;border-radius:16px;padding:20px;font-family:Fraunces,Georgia,serif;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px}
+.kind i{font-style:normal;color:var(--apple)}
+/* PRICING */
+.pricing{padding-top:90px;padding-bottom:20px}
+.pricing h2{font-size:clamp(36px,6vw,62px);margin:12px 0 10px}
+.pricing .lede{color:var(--mut);line-height:1.6;max-width:54ch}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:36px;max-width:880px}
+@media(max-width:820px){.plans{grid-template-columns:1fr}}
+.plan{border:1px solid var(--line);background:#fffdf4;border-radius:22px;padding:28px}
+.plan.pro{border:2px solid var(--leaf);background:#eef4e4}
+.plan .pname{font-family:Fraunces,Georgia,serif;font-size:26px;font-weight:700}
+.plan .price{font-family:Fraunces,Georgia,serif;font-size:44px;font-weight:700;margin:8px 0 4px}
+.plan .price span{font-size:17px;color:var(--mut);font-family:Inter,system-ui,sans-serif;font-weight:500}
+.plan ul{list-style:none;margin-top:14px}
+.plan li{padding:9px 0;border-bottom:1px dashed var(--line);font-size:16px;color:var(--soil)}
+.plan li:last-child{border-bottom:none}
+.plan .btn{margin-top:18px}
+/* FINAL CTA */
+.final{padding-top:100px;padding-bottom:110px;text-align:left}
+.final h2{font-size:clamp(38px,7vw,72px);max-width:16ch}
+.final h2 .ap{color:var(--apple)}
+.final .btn{margin-top:28px}
+footer{border-top:1px solid var(--line);padding-top:44px;padding-bottom:60px;color:var(--mut);font-size:14px;line-height:1.7}
+footer .big{font-family:Fraunces,Georgia,serif;font-size:clamp(26px,4vw,40px);color:var(--soil);margin-bottom:10px;font-weight:700}
+footer .flinks{display:flex;gap:22px;flex-wrap:wrap;margin-top:8px}
+footer .flinks a{color:var(--soil);text-decoration:none;font-weight:600;font-size:16px;padding:6px 0}
+.honest{margin-top:18px;font-size:12px}
+@media(max-width:480px){.label{letter-spacing:.15em}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">Makeasy<b>.</b></div>
+  <div class="links">
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#start">Sign in</a>
+    <a class="cta" href="#build">Start building</a>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="sun"></div>
+  <div class="label">Makeasy — AI app &amp; website builder</div>
+  <h1>Describe it.<br>Makeasy <em>builds</em><br>it<span class="ap">.</span></h1>
+  <p class="sub">Makeasy turns a plain description into a working website or app — built in a real terminal, finished in the studio, published under your own domain. No code to write, nothing to install.</p>
+  <div class="row">
+    <a class="btn" href="#build">Start building →</a>
+    <a class="btn ghostb" href="#examples">See examples</a>
+  </div>
+  <div class="meta">
+    <div><b>No code</b>to write, ever</div>
+    <div><b>Nothing</b>to install</div>
+    <div><b>Your own</b>domain, your name</div>
+    <div><b>A real terminal</b>does the building</div>
+  </div>
+</header>
+
+<section class="how wrap" id="how">
+  <div class="label">How it works</div>
+  <h2>Three steps,<br>start to <em>live</em>.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <h3>Describe</h3>
+      <p>Say what you want in plain words.</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <h3>Build</h3>
+      <p>Makeasy builds it in a real terminal while you watch, then you finish the details in the studio.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <h3>Publish</h3>
+      <p>One tap puts it live on your own domain.</p>
+    </div>
+  </div>
+</section>
+
+<section class="paths wrap" id="paths">
+  <div class="label">Start anywhere</div>
+  <h2>Pick a path.<br>See what's <em>honest</em>.</h2>
+  <p class="lede">Every build starts somewhere different. Pick the path closest to yours and see, plainly, what Makeasy puts in place first — no promises it can't keep.</p>
+  <div class="pathbar" id="pathBar" role="group" aria-label="Choose a path">
+    <button data-path="launch" aria-pressed="true">Launch</button>
+    <button data-path="sell" aria-pressed="false">Sell</button>
+    <button data-path="book" aria-pressed="false">Book</button>
+    <button data-path="grow" aria-pressed="false">Grow</button>
+  </div>
+  <div class="pathgrid">
+    <div class="pathcard" id="pathCard">
+      <div class="pname" id="pName">Launch</div>
+      <div class="ptag" id="pTag">A first site for a new idea. Your name, your offer, your town — live under your own domain.</div>
+    </div>
+    <ul class="pathlist" id="pathList"></ul>
+  </div>
+</section>
+
+<section class="build wrap" id="build">
+  <div class="label">Build your box</div>
+  <h2>Tap what your<br>site <em>actually</em> needs.</h2>
+  <p class="lede">No bundles, no padding. Tap the features your build needs, watch the crate fill, and we'll tell you honestly which plan fits — nothing more.</p>
+  <div class="grid">
+    <div class="items" id="itemGrid"></div>
+    <div class="boxcard">
+      <div class="label" style="color:var(--leaf)">Your crate</div>
+      <div class="boxslots" id="boxSlots"></div>
+      <div class="rowline"><span>Features</span><b id="bCount">0 picked</b></div>
+      <div class="rowline"><span>Crate</span><b>8 slots shown</b></div>
+      <div class="rec">
+        <div class="plan" id="planRec">Start tapping</div>
+        <p class="why" id="planWhy">Pick the features your site needs and we'll name the plan that honestly fits the build.</p>
+        <a class="btn" href="#pricing">See the plans →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="examples wrap" id="examples">
+  <div class="label">Examples</div>
+  <h2>What you<br>can <em>build</em>.</h2>
+  <p class="lede">If you can describe it, Makeasy can build it. These are the shapes people start with most.</p>
+  <div class="kinds">
+    <div class="kind"><i>·</i>Business websites</div>
+    <div class="kind"><i>·</i>Online stores</div>
+    <div class="kind"><i>·</i>Booking pages</div>
+    <div class="kind"><i>·</i>Portfolios</div>
+    <div class="kind"><i>·</i>Apps with accounts</div>
+    <div class="kind"><i>·</i>Landing pages</div>
+  </div>
+</section>
+
+<section class="pricing wrap" id="pricing">
+  <div class="label">Pricing</div>
+  <h2>Two plans.<br><em>Plain</em> prices.</h2>
+  <p class="lede">Pay for the building, not for promises. Both plans publish to your own domain.</p>
+  <div class="plans">
+    <div class="plan">
+      <div class="pname">Maker</div>
+      <div class="price">$19<span>/mo</span></div>
+      <ul>
+        <li>50 build credits</li>
+        <li>600 terminal minutes</li>
+        <li>Publish to your domain</li>
+      </ul>
+      <a class="btn ghostb" href="#build">Start with Maker →</a>
+    </div>
+    <div class="plan pro">
+      <div class="pname">Pro</div>
+      <div class="price">$49<span>/mo</span></div>
+      <ul>
+        <li>160 build credits</li>
+        <li>1,800 terminal minutes</li>
+        <li>Publish to your domain</li>
+        <li>Priority builds</li>
+      </ul>
+      <a class="btn" href="#build">Start with Pro →</a>
+    </div>
+  </div>
+</section>
+
+<section class="final wrap" id="start">
+  <div class="label">Begin</div>
+  <h2>Your idea is the only <em>missing</em> part<span class="ap">.</span></h2>
+  <a class="btn" href="#build">Start building →</a>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">Describe it. Makeasy builds it.</div>
+  <div class="flinks">
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Makeasy</a>
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#start">Sign in</a>
+  </div>
+  <div class="honest">Makeasy is an AI app &amp; website builder. Describe what you want; it is built in a real terminal, finished in the studio, and published under your own domain.</div>
+</div></footer>
+
+<script>
+(function(){
+  /* ---------- PATH SWITCHER ---------- */
+  var paths={
+    launch:{name:'Launch', color:'#7fb069', deep:'#2f5d33',
+      tag:'A first site for a new idea. Your name, your offer, your town — live under your own domain.',
+      items:[['A homepage that says it plainly','your name, your offer, your town'],['About & story page','why you started, in your words'],['Contact form','messages land in your inbox'],['Maps & hours','so people can actually find you'],['Your own domain','published under your name'],['Edit anytime in the studio','change words and photos yourself']]},
+    sell:{name:'Sell', color:'#e0856f', deep:'#8a2c1a',
+      tag:'A shop that takes real orders. List what you sell, take payment by card, and hear about every order.',
+      items:[['Product store','list what you sell, with prices'],['Online payments','customers pay by card at checkout'],['Photo gallery','your products, shown properly'],['Order emails','every order lands in your inbox'],['Stock counts','mark items sold out in one tap'],['Your own domain','your shop, at your address']]},
+    book:{name:'Book', color:'#e0a526', deep:'#8a5a12',
+      tag:'A booking page that fills your calendar. Customers pick a time, and reminders keep them showing up.',
+      items:[['Booking calendar','customers pick a time that suits'],['Appointment reminders','fewer no-shows, sent for you'],['Services & prices','what you offer, stated up front'],['Customer accounts','regulars book again in seconds'],['Contact form','questions before they book'],['Maps & hours','opening times, always current']]},
+    grow:{name:'Grow', color:'#7d8fa3', deep:'#3c4c5e',
+      tag:'A site that keeps working after launch. Fresh pages, a growing list, and proof from the people you served.',
+      items:[['Blog','post news your customers read'],['Newsletter signup','collect emails on every page'],['Reviews','show the words of happy customers'],['Photo gallery','fresh photos, added anytime'],['Landing pages','one page per offer or event'],['Edit anytime in the studio','grow it yourself, no developer needed']]}
+  };
+  var pCard=document.getElementById('pathCard'), pName=document.getElementById('pName'),
+      pTag=document.getElementById('pTag'), pList=document.getElementById('pathList');
+  function setPath(key){
+    var p=paths[key];
+    pCard.style.background='linear-gradient(160deg,'+p.color+','+p.deep+')';
+    pName.textContent=p.name; pTag.textContent=p.tag;
+    pList.innerHTML=p.items.map(function(it){return '<li><b>'+it[0]+'</b><span>'+it[1]+'</span></li>'}).join('');
+  }
+  document.getElementById('pathBar').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    this.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true'); setPath(b.dataset.path);
+  });
+  setPath('launch');
+  /* ---------- BUILD YOUR BOX ---------- */
+  var features=[
+    ['Online payments','Payments','customers pay by card'],
+    ['Booking calendar','Bookings','customers pick a time'],
+    ['Blog','Blog','post news and updates'],
+    ['Photo gallery','Gallery','show your work'],
+    ['Contact forms','Forms','messages to your inbox'],
+    ['Customer accounts','Accounts','people sign in'],
+    ['Product store','Store','sell what you make'],
+    ['Menu & prices','Menu','always up to date'],
+    ['Reviews','Reviews','let customers vouch'],
+    ['Maps & hours','Maps','easy to find'],
+    ['Newsletter signup','Newsletter','grow your list'],
+    ['Appointment reminders','Reminders','fewer no-shows']
+  ];
+  var picked=new Set();
+  var grid=document.getElementById('itemGrid'), slots=document.getElementById('boxSlots');
+  features.forEach(function(f, i){
+    var b=document.createElement('button'); b.className='item'; b.dataset.idx=i; b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span><span class="nm">'+f[0]+'</span><br><span class="pr">'+f[2]+'</span></span><span class="add">+</span>';
+    grid.appendChild(b);
+  });
+  for(var s=0;s<8;s++){ var d=document.createElement('div'); d.className='slot'; d.textContent='empty'; slots.appendChild(d); }
+  function renderBox(){
+    var names=[...picked].map(function(i){return features[i][1]});
+    slots.querySelectorAll('.slot').forEach(function(sl, i){
+      if(i<names.length){ sl.className='slot full'; sl.textContent=names[i]; }
+      else { sl.className='slot'; sl.textContent='empty'; }
+    });
+    var n=picked.size;
+    document.getElementById('bCount').textContent=n+(n===1?' feature':' features')+' picked';
+    var rec=document.getElementById('planRec'), why=document.getElementById('planWhy');
+    if(n===0){
+      rec.textContent='Start tapping';
+      why.textContent='Pick the features your site needs and we\u2019ll name the plan that honestly fits the build.';
+    } else if(n<=4){
+      rec.textContent='Maker fits this build';
+      why.textContent=n+(n===1?' feature':' features')+' is a comfortable Maker build — $19/mo, 50 build credits and 600 terminal minutes cover it.'+(n>8?'':'');
+    } else {
+      rec.textContent='Pro fits this build';
+      why.textContent=n+' features is a bigger build — Pro\u2019s $49/mo, 160 build credits and 1,800 terminal minutes give it room to grow.'+(n>8?' That is more than one crate\u2019s worth — Pro has the room for it.':'');
+    }
+  }
+  grid.addEventListener('click',function(e){
+    var b=e.target.closest('.item'); if(!b) return;
+    var i=+b.dataset.idx;
+    if(picked.has(i)){ picked.delete(i); b.classList.remove('in'); b.setAttribute('aria-pressed','false'); b.querySelector('.add').textContent='+'; }
+    else { picked.add(i); b.classList.add('in'); b.setAttribute('aria-pressed','true'); b.querySelector('.add').textContent='✓'; }
+    renderBox();
+  });
+  renderBox();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makeasy — Describe it. Makeasy builds it.</title>
+<style>
+:root{
+  --deep:#051019; --panel:#0a1e2e; --foam:#e9f4f5; --lume:#6ff2c4; --dim:#7d97a5; --line:rgba(233,244,245,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:clip;scroll-behavior:smooth}
+body{background:var(--deep);color:var(--foam);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+h1,h2{font-family:Archivo,"Arial Narrow","Helvetica Neue",Arial,sans-serif;font-weight:900;line-height:.98;letter-spacing:-.015em;text-transform:uppercase}
+.wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
+.label{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--lume)}
+/* NAV */
+nav{position:fixed;top:12px;left:12px;right:12px;z-index:60;display:flex;justify-content:space-between;align-items:center;background:rgba(5,16,25,.82);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding-top:8px;padding-bottom:8px;padding-left:18px;padding-right:10px}
+nav .brand{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;letter-spacing:.14em;font-size:17px;color:var(--foam)}
+nav .brand i{color:var(--lume);font-style:normal}
+nav .links{display:flex;gap:22px;font-size:16px;font-weight:500;align-items:center}
+nav .links a{color:var(--foam);text-decoration:none;display:inline-flex;align-items:center;min-height:40px}
+nav .cta{background:var(--lume);color:#04241a;padding-left:18px;padding-right:18px;border-radius:999px;font-size:16px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:640px){nav .links a.plain{display:none}}
+/* HERO */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:120px;padding-bottom:54px;position:relative;
+  background:radial-gradient(900px 480px at 78% 18%,rgba(111,242,196,.13),transparent 60%),linear-gradient(180deg,#071a29,var(--deep))}
+.hero h1{font-size:clamp(44px,11vw,150px);margin-top:16px}
+.hero h1 .thin{color:transparent;-webkit-text-stroke:1.5px var(--foam)}
+.hero h1 .lm{color:var(--lume);font-style:italic}
+.hero .sub{margin-top:22px;font-size:clamp(16px,2vw,20px);color:var(--dim);max-width:52ch;line-height:1.55}
+.hero .row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--lume);color:#04241a;padding-left:26px;padding-right:26px;min-height:48px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:none;cursor:pointer;font-family:inherit}
+.btn.ghostb{background:transparent;color:var(--foam);border:1px solid rgba(233,244,245,.4)}
+.hero .meta{display:flex;gap:28px;margin-top:42px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--dim);flex-wrap:wrap}
+.hero .meta b{color:var(--foam);font-size:16px;display:block;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-weight:500}
+/* HOW IT WORKS */
+.how{padding-top:110px;padding-bottom:90px}
+.how h2{font-size:clamp(34px,6vw,62px);margin-top:12px;margin-bottom:30px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}}
+.step{border:1px solid var(--line);border-radius:18px;padding-top:24px;padding-bottom:24px;padding-left:22px;padding-right:22px;background:var(--panel)}
+.step .num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;color:var(--lume);letter-spacing:.2em}
+.step h3{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:24px;margin-top:12px}
+.step p{color:var(--dim);line-height:1.6;margin-top:8px;font-size:16px}
+/* DESCENT */
+.descent{height:420vh;position:relative}
+.descent .stage{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center}
+.descent .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;width:100%}
+@media(max-width:820px){.descent .grid{grid-template-columns:1fr;gap:14px}.descent .stage{padding-top:64px}}
+.depthnum{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:clamp(76px,13vw,150px);line-height:1;color:var(--foam)}
+.depthnum small{font-size:.28em;color:var(--lume);letter-spacing:.1em}
+.zonename{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(22px,3.4vw,38px);margin-top:8px}
+.zonedesc{color:var(--dim);line-height:1.6;margin-top:10px;max-width:42ch;font-size:16px}
+.gauges{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap}
+.gauge .glabel{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+.gauge .gval{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:22px;margin-top:4px;color:var(--foam)}
+.depthrail{position:absolute;right:26px;top:50%;transform:translateY(-50%);height:52vh;width:2px;background:rgba(233,244,245,.15);border-radius:2px}
+.depthrail i{position:absolute;top:0;left:0;width:100%;background:var(--lume);border-radius:2px;height:0}
+.depthrail .dot{position:absolute;left:50%;top:0;width:12px;height:12px;border-radius:50%;background:var(--lume);transform:translate(-50%,-50%);box-shadow:0 0 18px rgba(111,242,196,.8)}
+@media(max-width:640px){.depthrail{display:none}}
+/* BROWSER MOCK */
+.mockbox{display:flex;justify-content:center}
+.mock{width:min(430px,88vw);border-radius:18px;border:1px solid rgba(233,244,245,.25);background:#0a1e2e;box-shadow:0 40px 80px rgba(0,0,0,.55);overflow:hidden}
+.mock .bar{display:flex;align-items:center;gap:7px;padding-top:10px;padding-bottom:10px;padding-left:14px;padding-right:14px;border-bottom:1px solid var(--line);background:rgba(5,16,25,.6)}
+.mock .bar .d{width:10px;height:10px;border-radius:50%;background:rgba(233,244,245,.3)}
+.mock .bar .d.lm{background:var(--lume)}
+.mock .url{margin-left:8px;flex:1;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);background:rgba(233,244,245,.07);border-radius:999px;padding-top:5px;padding-bottom:5px;padding-left:12px;padding-right:12px;white-space:nowrap;overflow:hidden}
+.mock .body{padding-top:16px;padding-bottom:16px;padding-left:16px;padding-right:16px;display:flex;flex-direction:column;gap:10px;min-height:300px}
+.blk{border-radius:10px;background:rgba(233,244,245,.08);opacity:.12;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease;padding-top:10px;padding-bottom:10px;padding-left:12px;padding-right:12px}
+.blk.on{opacity:1;transform:none}
+.blk .t{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--lume)}
+.blk .h{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:17px;margin-top:4px;color:var(--foam)}
+.blk .p{font-size:12px;color:var(--dim);line-height:1.5;margin-top:3px}
+.blk.hero-b{background:linear-gradient(135deg,rgba(111,242,196,.22),rgba(233,244,245,.05))}
+.blkrow{display:flex;gap:10px}
+.blkrow .blk{flex:1}
+.blk.pub{background:var(--lume)}
+.blk.pub .t{color:#04241a}
+.blk.pub .h{color:#04241a;font-size:15px}
+/* CONFIGURATOR */
+.vessel{padding-top:90px;padding-bottom:110px}
+.vessel .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px;align-items:start}
+@media(max-width:820px){.vessel .grid{grid-template-columns:1fr}}
+.vessel h2{font-size:clamp(34px,5.4vw,58px);margin-top:12px;margin-bottom:8px}
+.vessel .lede{color:var(--dim);line-height:1.6;max-width:50ch;font-size:16px}
+.optgroup{margin-bottom:24px}
+.optgroup .label{margin-bottom:10px;display:block}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{border:1px solid var(--line);background:var(--panel);color:var(--foam);border-radius:999px;padding-left:18px;padding-right:18px;min-height:44px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center}
+.opt[aria-pressed="true"]{background:var(--lume);color:#04241a;border-color:var(--lume);font-weight:700}
+.summary{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding-top:22px;padding-bottom:22px;padding-left:22px;padding-right:22px}
+.summary .label{margin-bottom:10px;display:block}
+.summary .line{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:17px;line-height:1.6;color:var(--foam)}
+.summary .note{font-size:13px;color:var(--dim);margin-top:10px;line-height:1.6}
+.sidewatch{display:flex;flex-direction:column;align-items:center;gap:14px;border:1px solid var(--line);border-radius:24px;background:var(--panel);padding-top:30px;padding-bottom:30px;padding-left:22px;padding-right:22px;text-align:center}
+.sidewatch .rname{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;font-size:20px}
+.sidewatch .rmeta{color:var(--dim);font-size:14px;line-height:1.6}
+.sidewatch .ring{width:120px;height:120px;border-radius:50%;border:8px solid #1b3448;background:radial-gradient(circle at 50% 42%,#122c40,#081a29 70%);display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;color:var(--lume);font-size:15px}
+/* BUILD LIST */
+.buildlist{padding-top:100px;padding-bottom:30px}
+.buildlist h2{font-size:clamp(34px,6vw,62px);margin-top:12px;margin-bottom:26px}
+.kinds{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.kinds{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.kinds{grid-template-columns:1fr}}
+.kind{border:1px solid var(--line);border-radius:18px;padding-top:22px;padding-bottom:22px;padding-left:20px;padding-right:20px;background:var(--panel);font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:19px}
+.kind span{display:block;font-family:Inter,system-ui,sans-serif;font-weight:400;text-transform:none;font-size:14px;color:var(--dim);margin-top:6px;line-height:1.55}
+/* PRICING */
+.pricing{padding-top:100px;padding-bottom:110px}
+.pricing h2{font-size:clamp(34px,6vw,62px);margin-top:12px;margin-bottom:30px}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){.plans{grid-template-columns:1fr}}
+.plan{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding-top:28px;padding-bottom:28px;padding-left:26px;padding-right:26px}
+.plan.pro{border-color:rgba(111,242,196,.55)}
+.plan .pname{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:22px}
+.plan .price{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:40px;margin-top:10px;color:var(--foam)}
+.plan .price small{font-size:16px;color:var(--dim)}
+.plan ul{list-style:none;margin-top:16px}
+.plan li{color:var(--dim);font-size:16px;line-height:1.5;padding-top:9px;padding-bottom:9px;border-top:1px solid var(--line)}
+.plan li b{color:var(--foam);font-weight:600}
+/* FINAL CTA */
+.final{padding-top:110px;padding-bottom:120px;text-align:center;position:relative;background:radial-gradient(700px 380px at 50% 100%,rgba(111,242,196,.12),transparent 60%)}
+.final h2{font-size:clamp(36px,7vw,76px);max-width:16ch;margin-left:auto;margin-right:auto}
+.final .row{display:flex;gap:14px;justify-content:center;margin-top:32px;flex-wrap:wrap}
+footer{border-top:1px solid var(--line);padding-top:44px;padding-bottom:60px;color:var(--dim);font-size:14px;line-height:1.7}
+footer .big{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,4vw,38px);color:var(--foam);margin-bottom:12px}
+footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
+footer .flinks a{color:var(--foam);text-decoration:none;font-size:16px;display:inline-flex;align-items:center;min-height:40px}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .blk{transition:none}
+}
+@media(max-width:480px){.label{letter-spacing:.16em}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">MAKE<i>A</i>SY</div>
+  <div class="links">
+    <a class="plain" href="#examples">Examples</a>
+    <a class="plain" href="#pricing">Pricing</a>
+    <a class="plain" href="#start">Sign in</a>
+    <a class="cta" href="#vessel">Start building</a>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="label">Makeasy — AI app &amp; website builder</div>
+  <h1>Describe it.<br><span class="thin">Makeasy</span> <span class="lm">builds</span> it.</h1>
+  <p class="sub">Makeasy turns a plain description into a working website or app — built in a real terminal, finished in the studio, published under your own domain. No code to write, nothing to install.</p>
+  <div class="row">
+    <a class="btn" href="#vessel">Start building</a>
+    <a class="btn ghostb" href="#examples">See examples</a>
+  </div>
+  <div class="meta">
+    <div><b>Terminal</b>built while you watch</div>
+    <div><b>Studio</b>finish the details</div>
+    <div><b>Your domain</b>published under it</div>
+  </div>
+</header>
+
+<section class="how wrap" id="how">
+  <div class="label">How it works</div>
+  <h2>Three steps.<br>No code.</h2>
+  <div class="steps">
+    <div class="step"><div class="num">01</div><h3>Describe</h3><p>Say what you want in plain words.</p></div>
+    <div class="step"><div class="num">02</div><h3>Build</h3><p>Makeasy builds it in a real terminal while you watch, then you finish the details in the studio.</p></div>
+    <div class="step"><div class="num">03</div><h3>Publish</h3><p>One tap puts it live on your own domain.</p></div>
+  </div>
+</section>
+
+<section class="descent" id="descent">
+  <div class="stage" id="dStage">
+    <div class="wrap grid">
+      <div>
+        <div class="label">Descend through a build · keep scrolling</div>
+        <div class="depthnum"><span id="depthNum">0</span><small> M</small></div>
+        <div class="zonename" id="zoneName">Surface — the idea</div>
+        <p class="zonedesc" id="zoneDesc">You say what you want in plain words. Nothing is built yet — this is the one part only you can do, and it takes a sentence.</p>
+        <div class="gauges">
+          <div class="gauge"><div class="glabel">Depth</div><div class="gval" id="gDepth">0 m</div></div>
+          <div class="gauge"><div class="glabel">Pages</div><div class="gval" id="gPages">1</div></div>
+          <div class="gauge"><div class="glabel">Features</div><div class="gval" id="gFeat">0</div></div>
+          <div class="gauge"><div class="glabel">Readiness</div><div class="gval" id="gReady">0%</div></div>
+        </div>
+      </div>
+      <div class="mockbox">
+        <div class="mock" id="mock">
+          <div class="bar"><span class="d lm"></span><span class="d"></span><span class="d"></span><span class="url">your-site — building…</span></div>
+          <div class="body">
+            <div class="blk hero-b" data-at="0.02"><div class="t">Your site</div><div class="h">The headline you asked for</div><div class="p">Your words, your name, your colours.</div></div>
+            <div class="blk" data-at="0.30"><div class="t">Pages</div><div class="h">Home · About · Contact</div><div class="p">The layout takes shape in the studio.</div></div>
+            <div class="blkrow">
+              <div class="blk" data-at="0.58"><div class="t">Booking</div><div class="p">Appointments, wired in.</div></div>
+              <div class="blk" data-at="0.66"><div class="t">Payments</div><div class="p">Cards accepted.</div></div>
+              <div class="blk" data-at="0.74"><div class="t">Accounts</div><div class="p">Sign-in for your people.</div></div>
+            </div>
+            <div class="blk pub" data-at="0.92"><div class="t">Published</div><div class="h">Live on your own domain ✓</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="depthrail"><i id="railFill"></i><div class="dot" id="railDot"></div></div>
+  </div>
+</section>
+
+<section class="vessel wrap" id="vessel">
+  <div class="label">Choose your vessel</div>
+  <h2>Pick the build.<br>We take it down.</h2>
+  <p class="lede">Every Makeasy build rides the same descent — describe, build, publish. Choose what you are making and which working parts it needs; the summary follows you.</p>
+  <div class="grid">
+    <div class="sidewatch">
+      <div class="ring" id="ringDepth">0 M</div>
+      <div class="rname" id="rName">Makeasy · Website</div>
+      <div class="rmeta">Built in a real terminal, finished in the studio, published under your own domain.</div>
+    </div>
+    <div>
+      <div class="optgroup"><span class="label">Build type</span>
+        <div class="opts" id="typeOpts">
+          <button class="opt" data-name="Website" aria-pressed="true">Website</button>
+          <button class="opt" data-name="Online store" aria-pressed="false">Online store</button>
+          <button class="opt" data-name="App with accounts" aria-pressed="false">App with accounts</button>
+        </div>
+      </div>
+      <div class="optgroup"><span class="label">Add-ons</span>
+        <div class="opts" id="addOpts">
+          <button class="opt" data-name="Blog" aria-pressed="false">Blog +0</button>
+          <button class="opt" data-name="Online payments" aria-pressed="false">Online payments</button>
+          <button class="opt" data-name="Booking" aria-pressed="false">Booking</button>
+        </div>
+      </div>
+      <div class="summary">
+        <span class="label">Build summary</span>
+        <div class="line" id="buildSummary">Your build: Website — no add-ons yet.</div>
+        <div class="note">That is the whole order. Describe it in the terminal and Makeasy takes it from the surface to rated depth.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="buildlist wrap" id="examples">
+  <div class="label">What you can build</div>
+  <h2>One builder.<br>Every depth.</h2>
+  <div class="kinds">
+    <div class="kind">Business websites<span>The classic: who you are, what you do, how to reach you.</span></div>
+    <div class="kind">Online stores<span>Products, a basket, and payments that land in your account.</span></div>
+    <div class="kind">Booking pages<span>Appointments and reservations, taken while you sleep.</span></div>
+    <div class="kind">Portfolios<span>Your work, shown properly, on your own domain.</span></div>
+    <div class="kind">Apps with accounts<span>Sign-in, member areas, and data that belongs to you.</span></div>
+    <div class="kind">Landing pages<span>One page, one job: the launch, the waitlist, the offer.</span></div>
+  </div>
+</section>
+
+<section class="pricing wrap" id="pricing">
+  <div class="label">Pricing</div>
+  <h2>Two plans.<br>Plain numbers.</h2>
+  <div class="plans">
+    <div class="plan">
+      <div class="pname">Maker</div>
+      <div class="price">$19<small>/mo</small></div>
+      <ul>
+        <li><b>50</b> build credits</li>
+        <li><b>600</b> terminal minutes</li>
+        <li>Publish to your domain</li>
+      </ul>
+    </div>
+    <div class="plan pro">
+      <div class="pname">Pro</div>
+      <div class="price">$49<small>/mo</small></div>
+      <ul>
+        <li><b>160</b> build credits</li>
+        <li><b>1,800</b> terminal minutes</li>
+        <li>Publish to your domain</li>
+        <li>Priority builds</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="final wrap" id="start">
+  <div class="label">Rated depth is waiting</div>
+  <h2>Your idea is the only missing part.</h2>
+  <div class="row">
+    <a class="btn" href="#vessel">Start building</a>
+    <a class="btn ghostb" href="#descent">Take the descent ↓</a>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">The deep is not dark. It is just built.</div>
+  <div class="flinks">
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Makeasy</a>
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#start">Sign in</a>
+  </div>
+</div></footer>
+
+<script>
+(function(){
+  var zones=[
+    {to:.28,name:'Surface — the idea',desc:'You say what you want in plain words. Nothing is built yet — this is the one part only you can do, and it takes a sentence.'},
+    {to:.58,name:'Structure — pages and layout',desc:'Makeasy lays out the pages and arranges them in the studio — home, about, contact — until the shape of the site stands up.'},
+    {to:.86,name:'Features — booking, payments, accounts',desc:'The working parts go in: booking, payments, accounts. Real features, wired to real tools, tested as they land.'},
+    {to:1.01,name:'Rated depth — ready to publish',desc:'Checked top to bottom and holding pressure. One tap puts it live on your own domain — this is where a description becomes a business.'}
+  ];
+  var descent=document.querySelector('.descent'), stage=document.getElementById('dStage'),
+      depthNum=document.getElementById('depthNum'), zoneName=document.getElementById('zoneName'), zoneDesc=document.getElementById('zoneDesc'),
+      gDepth=document.getElementById('gDepth'), gPages=document.getElementById('gPages'), gFeat=document.getElementById('gFeat'), gReady=document.getElementById('gReady'),
+      railFill=document.getElementById('railFill'), railDot=document.getElementById('railDot'),
+      ringDepth=document.getElementById('ringDepth');
+  var blocks=[].slice.call(document.querySelectorAll('#mock .blk'));
+  function lerp(a,b,t){return a+(b-a)*t}
+  function frame(){
+    var r=descent.getBoundingClientRect(), total=r.height-window.innerHeight;
+    var p=total>0?Math.min(1,Math.max(0,-r.top/total)):0;
+    var depth=Math.round(lerp(0,200,Math.pow(p,1.1)));
+    depthNum.textContent=depth;
+    gDepth.textContent=depth+' m';
+    gPages.textContent=String(1+Math.round(p*11));
+    gFeat.textContent=String(Math.round(p*9));
+    gReady.textContent=Math.round(p*100)+'%';
+    ringDepth.textContent=depth+' M';
+    railFill.style.height=(p*100)+'%'; railDot.style.top=(p*100)+'%';
+    stage.style.background='linear-gradient(180deg, rgb(7,'+(26-Math.round(p*16))+','+(41-Math.round(p*22))+'), rgb(2,6,'+Math.round(lerp(10,2,p))+'))';
+    blocks.forEach(function(b){ b.classList.toggle('on', p>=parseFloat(b.dataset.at)); });
+    for(var i=0;i<zones.length;i++){ if(p<zones[i].to){ if(zoneName.textContent!==zones[i].name){zoneName.textContent=zones[i].name; zoneDesc.textContent=zones[i].desc;} break; } }
+  }
+  var ticking=false;
+  window.addEventListener('scroll',function(){ if(!ticking){ticking=true; requestAnimationFrame(function(){frame(); ticking=false;});} },{passive:true});
+  window.addEventListener('resize',frame);
+  frame();
+  /* ---------- CONFIGURATOR ---------- */
+  var state={type:'Website', adds:[]};
+  var buildSummary=document.getElementById('buildSummary'), rName=document.getElementById('rName');
+  function render(){
+    rName.textContent='Makeasy · '+state.type;
+    buildSummary.textContent='Your build: '+state.type+(state.adds.length? ' — with '+state.adds.join(', ')+'.' : ' — no add-ons yet.');
+  }
+  var typeOpts=document.getElementById('typeOpts');
+  typeOpts.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b)return;
+    typeOpts.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true'); state.type=b.dataset.name; render(); });
+  var addOpts=document.getElementById('addOpts');
+  addOpts.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b)return;
+    var on=b.getAttribute('aria-pressed')==='true'; b.setAttribute('aria-pressed', on?'false':'true');
+    var n=b.dataset.name;
+    if(on){ state.adds=state.adds.filter(function(x){return x!==n}); } else { state.adds.push(n); }
+    render(); });
+  render();
+})();
+</script>
+</body>
+</html>

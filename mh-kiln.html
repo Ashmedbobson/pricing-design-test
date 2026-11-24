@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makeasy — Describe it. Makeasy builds it.</title>
+<style>
+:root{
+  --paper:#f4ecdd; --paper2:#ede1c9; --ink:#2a1a10; --clay:#b5502a; --clay-deep:#8f3c1e;
+  --sand:#e0cda6; --smoke:#6f5b47; --line:rgba(42,26,16,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,-apple-system,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,.serif{font-family:Fraunces,Georgia,"Times New Roman",serif;font-weight:600;line-height:1.02;letter-spacing:-.01em}
+em{font-style:italic;font-weight:500}
+.wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
+.label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--clay-deep);font-weight:600}
+nav{position:fixed;inset:12px 12px auto 12px;z-index:50;display:flex;justify-content:space-between;align-items:center;background:rgba(244,236,221,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding-top:8px;padding-bottom:8px;padding-left:18px;padding-right:10px}
+nav .brand{font-family:Fraunces,Georgia,serif;font-size:19px;font-weight:600}
+nav .brand b{color:var(--clay)}
+nav .links{display:flex;gap:22px;font-size:14px;font-weight:500;align-items:center}
+nav .links a{color:var(--ink);text-decoration:none;padding-top:10px;padding-bottom:10px}
+nav .cta{background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:16px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;min-height:40px}
+@media(max-width:640px){nav .links a.hideS{display:none}}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:120px;padding-bottom:56px;position:relative;overflow:hidden}
+.hero .ghost{position:absolute;top:6%;right:-2%;font-family:Fraunces,Georgia,serif;font-size:clamp(110px,24vw,320px);color:transparent;-webkit-text-stroke:1px rgba(42,26,16,.13);line-height:1;pointer-events:none;user-select:none}
+.hero h1{font-size:clamp(46px,10vw,124px);max-width:13ch}
+.hero h1 .hot{color:var(--clay)}
+.hero .sub{margin-top:22px;font-size:clamp(16px,2vw,20px);color:var(--smoke);max-width:52ch;line-height:1.55}
+.hero .row{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--clay);color:#fff;padding:14px 26px;border-radius:999px;font-weight:600;font-size:16px;text-decoration:none;border:none;cursor:pointer;min-height:48px;font-family:inherit}
+.btn.ghostb{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.hero .meta{display:flex;gap:28px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--smoke);flex-wrap:wrap}
+.hero .meta b{color:var(--ink);font-size:15px;display:block;font-family:Fraunces,Georgia,serif}
+/* HOW IT WORKS */
+.how{padding-top:100px;padding-bottom:100px}
+.how h2{font-size:clamp(36px,5.5vw,60px);margin-top:12px;margin-bottom:36px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}}
+.step{border:1px solid var(--line);border-radius:20px;padding:26px;background:#fbf6ea}
+.step .num{font-family:Fraunces,Georgia,serif;font-size:44px;color:var(--clay);line-height:1}
+.step h3{font-family:Fraunces,Georgia,serif;font-size:23px;font-weight:600;margin-top:12px}
+.step p{font-size:15px;color:var(--smoke);line-height:1.6;margin-top:8px}
+/* BUILD RUNWAY */
+.build{height:340vh;position:relative}
+.build .stage{position:sticky;top:0;height:100svh;display:flex;align-items:center;overflow:hidden;background:var(--bg,#efe3cb);transition:background .2s linear}
+.build .grid{display:grid;grid-template-columns:1.15fr 1fr;gap:32px;align-items:center;width:100%}
+@media(max-width:760px){.build .grid{grid-template-columns:1fr;gap:14px}.build .stage{padding-top:64px}}
+.framebox{position:relative;display:flex;justify-content:center}
+.browser{width:min(520px,88vw);background:#fdfaf2;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 30px 50px rgba(42,26,16,.22)}
+.chrome{display:flex;align-items:center;gap:10px;padding-top:10px;padding-bottom:10px;padding-left:14px;padding-right:14px;background:var(--paper2);border-bottom:1px solid var(--line)}
+.dot{width:11px;height:11px;border-radius:50%}
+.urlbar{flex:1;background:#fdfaf2;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--smoke);padding-top:5px;padding-bottom:5px;padding-left:12px;padding-right:12px;display:flex;justify-content:space-between;align-items:center}
+.livebadge{background:var(--clay);color:#fff;font-size:10px;font-weight:700;letter-spacing:.12em;border-radius:999px;padding-top:3px;padding-bottom:3px;padding-left:8px;padding-right:8px;opacity:0;transition:opacity .3s}
+.mock{padding-top:18px;padding-bottom:18px;padding-left:18px;padding-right:18px;background:rgb(207,200,186)}
+.mnav{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.mlogo{width:74px;height:16px;border-radius:5px}
+.mlinks{display:flex;gap:8px}
+.mlink{width:34px;height:9px;border-radius:99px}
+.mtitle{height:26px;border-radius:7px;margin-bottom:9px}
+.mtitle.w2{width:72%}
+.mtitle.w3{width:48%;margin-bottom:14px}
+.msub{height:10px;border-radius:99px;width:82%;margin-bottom:7px}
+.msub.w2{width:64%;margin-bottom:16px}
+.mbtn{width:118px;height:34px;border-radius:999px;margin-bottom:18px}
+.mcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mcard{border-radius:10px;height:64px}
+.mfoot{height:12px;border-radius:99px;margin-top:16px}
+.sk{border:2px dashed rgba(42,26,16,.35)}
+.temp{font-family:Fraunces,Georgia,serif;font-size:clamp(60px,9vw,110px);line-height:1}
+.temp small{font-size:.35em;color:var(--clay-deep)}
+.build .stagename{font-family:Fraunces,Georgia,serif;font-style:italic;font-size:clamp(22px,3vw,32px);margin-top:6px}
+.build p.desc{color:var(--smoke);line-height:1.6;margin-top:12px;max-width:40ch}
+.firebar{height:6px;background:rgba(42,26,16,.14);border-radius:99px;margin-top:26px;overflow:hidden;max-width:420px}
+.firebar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--sand),var(--clay),#ff7a29);border-radius:99px}
+.build .ticks{display:flex;justify-content:space-between;max-width:420px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--smoke);margin-top:8px}
+/* CONFIGURATOR */
+.config{padding-top:110px;padding-bottom:110px}
+.config h2{font-size:clamp(38px,6vw,64px);margin-top:12px;margin-bottom:8px}
+.config .lede{color:var(--smoke);max-width:52ch;line-height:1.6}
+.config .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;align-items:start}
+@media(max-width:820px){.config .grid{grid-template-columns:1fr}}
+.preview{background:var(--paper2);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.preview .pbrowser{width:min(300px,72vw)}
+.preview .pname{font-family:Fraunces,Georgia,serif;font-size:22px;text-align:center}
+.preview .pmeta{font-size:14px;color:var(--smoke);text-align:center;line-height:1.5}
+.optgroup{margin-bottom:26px}
+.optgroup .label{margin-bottom:10px;display:block}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{border:1px solid var(--line);background:#fff8ec;color:var(--ink);border-radius:999px;padding:11px 18px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;min-height:44px}
+.opt[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.summary{border-top:1px solid var(--line);padding-top:20px;margin-top:6px}
+.summary .line{font-family:Fraunces,Georgia,serif;font-size:clamp(20px,2.6vw,26px);line-height:1.35}
+.summary .note{font-size:13px;color:var(--smoke);margin-top:10px;line-height:1.55}
+/* WHAT YOU CAN BUILD */
+.canbuild{padding-top:30px;padding-bottom:100px}
+.canbuild h2{font-size:clamp(34px,5vw,54px);margin-top:10px;margin-bottom:30px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:820px){.cards{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:20px;padding:22px;background:#fbf6ea}
+.card .blob{height:110px;border-radius:14px;margin-bottom:16px}
+.card h3{font-family:Fraunces,Georgia,serif;font-size:21px;font-weight:600}
+.card p{font-size:14px;color:var(--smoke);line-height:1.55;margin-top:6px}
+/* PRICING */
+.pricing{padding-top:20px;padding-bottom:110px}
+.pricing h2{font-size:clamp(34px,5vw,54px);margin-top:10px;margin-bottom:30px}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:820px){.plans{grid-template-columns:1fr}}
+.plan{border:1px solid var(--line);border-radius:24px;padding:30px;background:#fbf6ea}
+.plan.pro{background:var(--ink);color:var(--paper)}
+.plan .pname2{font-family:Fraunces,Georgia,serif;font-size:24px}
+.plan .price{font-family:Fraunces,Georgia,serif;font-size:52px;margin-top:10px}
+.plan .price small{font-size:18px;color:var(--smoke)}
+.plan.pro .price small{color:var(--sand)}
+.plan ul{list-style:none;margin-top:18px}
+.plan li{font-size:15px;line-height:1.5;padding-top:9px;padding-bottom:9px;border-top:1px solid var(--line);color:var(--smoke)}
+.plan.pro li{color:var(--paper2)}
+.plan .btn{margin-top:22px}
+/* FINAL CTA */
+.final{padding-top:110px;padding-bottom:120px;text-align:center}
+.final h2{font-size:clamp(38px,6.5vw,72px);max-width:16ch;margin-left:auto;margin-right:auto}
+.final .btn{margin-top:34px}
+footer{border-top:1px solid var(--line);padding-top:44px;padding-bottom:60px;color:var(--smoke);font-size:14px;line-height:1.7}
+footer .big{font-family:Fraunces,Georgia,serif;font-size:clamp(26px,4vw,40px);color:var(--ink);margin-bottom:12px}
+footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
+footer .flinks a{color:var(--ink);text-decoration:none;font-weight:500;padding-top:8px;padding-bottom:8px}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .livebadge{transition:none}
+  .build .stage{transition:none}
+}
+@media(max-width:480px){.label{letter-spacing:.15em}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">Makeasy<b>.</b></div>
+  <div class="links">
+    <a href="#examples" class="hideS">Examples</a>
+    <a href="#pricing" class="hideS">Pricing</a>
+    <a href="#start" class="hideS">Sign in</a>
+    <a class="cta" href="#plan">Start building</a>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="ghost">Build</div>
+  <div class="label">Makeasy — AI app &amp; website builder</div>
+  <h1>Describe it.<br>Makeasy <em class="hot">builds</em> it.</h1>
+  <p class="sub">Makeasy turns a plain description into a working website or app — built in a real terminal, finished in the studio, published under your own domain. No code to write, nothing to install.</p>
+  <div class="row">
+    <a class="btn" href="#plan">Start building →</a>
+    <a class="btn ghostb" href="#examples">See examples</a>
+  </div>
+  <div class="meta">
+    <div><b>Describe</b>in plain words</div>
+    <div><b>Watch it build</b>in a real terminal</div>
+    <div><b>Publish</b>on your own domain</div>
+  </div>
+</header>
+
+<section class="how wrap" id="how">
+  <div class="label">How it works</div>
+  <h2>Three steps, <em>no code</em>.</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><h3>Describe</h3><p>Say what you want in plain words.</p></div>
+    <div class="step"><div class="num">2</div><h3>Build</h3><p>Makeasy builds it in a real terminal while you watch, then you finish the details in the studio.</p></div>
+    <div class="step"><div class="num">3</div><h3>Publish</h3><p>One tap puts it live on your own domain.</p></div>
+  </div>
+</section>
+
+<section class="build" id="build">
+  <div class="stage" id="buildStage">
+    <div class="wrap grid">
+      <div class="framebox">
+        <div class="browser" id="browserFrame">
+          <div class="chrome">
+            <span class="dot" style="background:#d08a6a"></span>
+            <span class="dot" style="background:#e0cda6"></span>
+            <span class="dot" style="background:#9db08a"></span>
+            <div class="urlbar"><span>your-site.com</span><span class="livebadge" id="liveBadge">● Live</span></div>
+          </div>
+          <div class="mock" id="mock">
+            <div class="mnav">
+              <div class="mlogo sk" id="mLogo"></div>
+              <div class="mlinks"><div class="mlink sk" data-m="link"></div><div class="mlink sk" data-m="link"></div><div class="mlink sk" data-m="link"></div></div>
+            </div>
+            <div class="mtitle sk" data-m="title"></div>
+            <div class="mtitle w2 sk" data-m="title"></div>
+            <div class="mtitle w3 sk" data-m="title"></div>
+            <div class="msub sk" data-m="sub"></div>
+            <div class="msub w2 sk" data-m="sub"></div>
+            <div class="mbtn sk" id="mBtn"></div>
+            <div class="mcards">
+              <div class="mcard sk" data-m="card"></div>
+              <div class="mcard sk" data-m="card"></div>
+              <div class="mcard sk" data-m="card"></div>
+            </div>
+            <div class="mfoot sk" data-m="foot"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="label">Scroll to build · keep scrolling</div>
+        <div class="temp"><span id="tempNum">24</span><small>°C</small></div>
+        <div class="stagename" id="stageName">Just an idea</div>
+        <p class="desc" id="stageDesc">Nothing built yet — just your words and a grey sketch of a page. Everything that happens next is Makeasy, building.</p>
+        <div class="firebar"><i id="fireFill"></i></div>
+        <div class="ticks"><span>Idea</span><span>Draft</span><span>Colour &amp; type</span><span>Polished</span><span>Live</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="config wrap" id="plan">
+  <div class="label">Plan your build</div>
+  <h2>What are we<br><em>building</em>?</h2>
+  <p class="lede">Two choices and you have a brief. Pick what you're making and how big it is — the summary below is exactly what Makeasy will build from your description.</p>
+  <div class="grid">
+    <div class="preview">
+      <div class="browser pbrowser">
+        <div class="chrome">
+          <span class="dot" style="background:#d08a6a"></span>
+          <span class="dot" style="background:#e0cda6"></span>
+          <span class="dot" style="background:#9db08a"></span>
+          <div class="urlbar"><span>your-site.com</span></div>
+        </div>
+        <div class="mock" style="background:#f7efdc">
+          <div class="mnav"><div class="mlogo" style="background:var(--ink)"></div>
+            <div class="mlinks"><div class="mlink" style="background:var(--sand)"></div><div class="mlink" style="background:var(--sand)"></div><div class="mlink" style="background:var(--sand)"></div></div></div>
+          <div class="mtitle" style="background:var(--ink);width:88%"></div>
+          <div class="mtitle w2" style="background:var(--ink)"></div>
+          <div class="msub" style="background:#cbb687"></div>
+          <div class="msub" style="background:#cbb687;width:82%"></div>
+          <div class="msub w2" style="background:#cbb687"></div>
+          <div class="mbtn" style="background:var(--clay)"></div>
+          <div class="mcards">
+            <div class="mcard" style="background:var(--sand)"></div>
+            <div class="mcard" style="background:var(--sand)"></div>
+            <div class="mcard" style="background:var(--sand)"></div>
+          </div>
+          <div class="mfoot" style="background:#d8cbae"></div>
+        </div>
+      </div>
+      <div class="pname" id="pName">Website · One page</div>
+      <div class="pmeta">Described by you · built by Makeasy · published on your domain</div>
+    </div>
+    <div>
+      <div class="optgroup"><span class="label">What you're building</span>
+        <div class="opts" id="typeOpts">
+          <button class="opt" data-type="website" aria-pressed="true">Website</button>
+          <button class="opt" data-type="store" aria-pressed="false">Online store</button>
+          <button class="opt" data-type="app" aria-pressed="false">App with accounts</button>
+        </div>
+      </div>
+      <div class="optgroup"><span class="label">Size</span>
+        <div class="opts" id="sizeOpts">
+          <button class="opt" data-size="one" aria-pressed="true">One page</button>
+          <button class="opt" data-size="few" aria-pressed="false">A few pages</button>
+          <button class="opt" data-size="full" aria-pressed="false">Full site</button>
+        </div>
+      </div>
+      <div class="summary">
+        <div class="line" id="summaryLine">Your build: a website on a single page.</div>
+        <p class="note">You describe it in your own words, Makeasy builds it in the terminal while you watch, you finish the details in the studio, and one tap publishes it to your own domain.</p>
+        <p style="margin-top:18px"><a class="btn" href="#start">Start this build →</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="canbuild wrap" id="examples">
+  <div class="label">What you can build</div>
+  <h2>One description away, <em>each one</em></h2>
+  <div class="cards">
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#b5502a,#8f3c1e)"></div>
+      <h3>Business websites</h3><p>Your services, your story, your contact details — a proper home for the business.</p></div>
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#31584a,#1e3a30)"></div>
+      <h3>Online stores</h3><p>Products, prices and checkout — a shop that takes orders while you sleep.</p></div>
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#e0cda6,#c8ab72)"></div>
+      <h3>Booking pages</h3><p>Appointments and reservations, taken on the page instead of over the phone.</p></div>
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#274b63,#122a3a)"></div>
+      <h3>Portfolios</h3><p>Work shown the way it deserves — galleries, case studies and a way to hire you.</p></div>
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#6b4a8f,#3d2a58)"></div>
+      <h3>Apps with accounts</h3><p>Sign-in, member areas and saved work — a real app, not just pages.</p></div>
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#c65a2e,#7e3418)"></div>
+      <h3>Landing pages</h3><p>One page, one offer, one button — for launches, waitlists and campaigns.</p></div>
+  </div>
+</section>
+
+<section class="pricing wrap" id="pricing">
+  <div class="label">Pricing</div>
+  <h2>Pick a plan, <em>start building</em></h2>
+  <div class="plans">
+    <div class="plan">
+      <div class="pname2">Maker</div>
+      <div class="price">$19<small>/mo</small></div>
+      <ul>
+        <li>50 build credits</li>
+        <li>600 terminal minutes</li>
+        <li>Publish to your domain</li>
+      </ul>
+      <a class="btn ghostb" href="#plan">Start with Maker</a>
+    </div>
+    <div class="plan pro">
+      <div class="pname2">Pro</div>
+      <div class="price">$49<small>/mo</small></div>
+      <ul>
+        <li>160 build credits</li>
+        <li>1,800 terminal minutes</li>
+        <li>Publish to your domain</li>
+        <li>Priority builds</li>
+      </ul>
+      <a class="btn" href="#plan">Start with Pro</a>
+    </div>
+  </div>
+</section>
+
+<section class="final wrap" id="start">
+  <div class="label">Start building</div>
+  <h2>Your idea is the only <em>missing part</em>.</h2>
+  <a class="btn" href="#plan">Start building →</a>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">Makeasy</div>
+  <div class="flinks">
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#start">Sign in</a>
+  </div>
+</div></footer>
+
+<script>
+(function(){
+  /* ---------- SCROLL TO BUILD RUNWAY ---------- */
+  var build = document.querySelector('.build'), stage = document.getElementById('buildStage'),
+      tempNum = document.getElementById('tempNum'), stageName = document.getElementById('stageName'),
+      stageDesc = document.getElementById('stageDesc'), fill = document.getElementById('fireFill'),
+      frame = document.getElementById('browserFrame'), mock = document.getElementById('mock'),
+      badge = document.getElementById('liveBadge'), mLogo = document.getElementById('mLogo'),
+      mBtn = document.getElementById('mBtn');
+  var stages = [
+    {to:.18, name:'Just an idea', desc:'Nothing built yet — just your words and a grey sketch of a page. Everything that happens next is Makeasy, building.'},
+    {to:.42, name:'Draft taking shape', desc:'The terminal lays out the pages. Blocks land where they belong and the rough shape of your site stands up.'},
+    {to:.62, name:'Colour and type', desc:'Grey gives way to brand colour and real type. The sketch starts to look like the thing you described.'},
+    {to:.86, name:'Details polished', desc:'Buttons, spacing and the small print get finished in the studio. Nearly ready for the world.'},
+    {to:.93, name:'Live — ready to publish', desc:'Finished and glowing at full heat. One tap puts it live on your own domain.'},
+    {to:1.01, name:'Live — ready to publish', desc:'The build cools into its finished state — published, calm, and yours. It stays exactly this good.'}
+  ];
+  function lerp(a,b,t){return a+(b-a)*t}
+  function mix(c1,c2,t){return [Math.round(lerp(c1[0],c2[0],t)),Math.round(lerp(c1[1],c2[1],t)),Math.round(lerp(c1[2],c2[2],t))]}
+  function rgb(c){return 'rgb('+c[0]+','+c[1]+','+c[2]+')'}
+  /* grey sketch -> finished page */
+  var FIN = {
+    bg:[247,239,220], logo:[42,26,16], link:[224,205,166], title:[42,26,16],
+    sub:[203,176,135], btn:[181,80,42], card:[224,205,166], foot:[216,203,174]
+  };
+  var GREY = {
+    bg:[207,200,186], logo:[168,160,146], link:[178,170,154], title:[165,157,141],
+    sub:[183,175,159], btn:[172,164,148], card:[190,182,164], foot:[178,170,154]
+  };
+  var parts = {
+    logo:[mLogo], btn:[mBtn],
+    link:mock.querySelectorAll('[data-m="link"]'), title:mock.querySelectorAll('[data-m="title"]'),
+    sub:mock.querySelectorAll('[data-m="sub"]'), card:mock.querySelectorAll('[data-m="card"]'),
+    foot:mock.querySelectorAll('[data-m="foot"]')
+  };
+  var skEls = mock.querySelectorAll('.sk');
+  function setBg(list, color){ for(var i=0;i<list.length;i++){ list[i].style.background = color; } }
+  function buildFrame(){
+    var r = build.getBoundingClientRect(), total = r.height - window.innerHeight;
+    var p = Math.min(1, Math.max(0, -r.top/total));
+    var temp = Math.round(lerp(24,1240, Math.pow(p,1.15)));
+    if(p>.93) temp = Math.round(lerp(1240,60,(p-.93)/.07));
+    tempNum.textContent = temp.toLocaleString();
+    fill.style.width = (p*100)+'%';
+    var h = Math.min(1, p/.9); h = Math.pow(h,1.1);
+    mock.style.background = rgb(mix(GREY.bg, FIN.bg, h));
+    setBg(parts.logo, rgb(mix(GREY.logo, FIN.logo, h)));
+    setBg(parts.link, rgb(mix(GREY.link, FIN.link, h)));
+    setBg(parts.title, rgb(mix(GREY.title, FIN.title, h)));
+    setBg(parts.sub, rgb(mix(GREY.sub, FIN.sub, h)));
+    setBg(parts.btn, rgb(mix(GREY.btn, FIN.btn, h)));
+    setBg(parts.card, rgb(mix(GREY.card, FIN.card, h)));
+    setBg(parts.foot, rgb(mix(GREY.foot, FIN.foot, h)));
+    var sketch = h < .45;
+    for(var i=0;i<skEls.length;i++){ skEls[i].style.borderStyle = sketch ? 'dashed' : 'solid'; skEls[i].style.borderColor = sketch ? 'rgba(42,26,16,.35)' : 'rgba(42,26,16,0)'; }
+    /* glow: rises with heat, peaks near full build, settles calm in the cool */
+    var glow = p<.86 ? (p/.86)*.55 : (p<.93 ? .55 : .55*(1-(p-.93)/.07) + .12);
+    frame.style.boxShadow = '0 30px 50px rgba(42,26,16,.22), 0 0 ' + Math.round(glow*90) + 'px rgba(255,110,30,' + (glow*.8).toFixed(2) + ')';
+    badge.style.opacity = (h>=.99) ? '1' : '0';
+    stage.style.setProperty('--bg', p<.5 ? '#efe3cb' : (p<.86 ? '#f3ddba' : '#efe3cb'));
+    for(var i=0;i<stages.length;i++){ if(p<stages[i].to){ if(stageName.textContent!==stages[i].name || stageDesc.textContent!==stages[i].desc){ stageName.textContent=stages[i].name; stageDesc.textContent=stages[i].desc; } break; } }
+  }
+  var ticking=false;
+  window.addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(function(){ buildFrame(); ticking=false; }); } }, {passive:true});
+  buildFrame();
+  /* ---------- PLAN YOUR BUILD CONFIGURATOR ---------- */
+  var types = {
+    website:{label:'Website', noun:'a website'},
+    store:{label:'Online store', noun:'an online store'},
+    app:{label:'App with accounts', noun:'an app with accounts'}
+  };
+  var sizes = {
+    one:{label:'One page', phrase:'on a single page'},
+    few:{label:'A few pages', phrase:'across a few pages'},
+    full:{label:'Full site', phrase:'as a full site, with room to grow'}
+  };
+  var state = {type:'website', size:'one'};
+  var pName = document.getElementById('pName'), summaryLine = document.getElementById('summaryLine');
+  function render(){
+    pName.textContent = types[state.type].label + ' · ' + sizes[state.size].label;
+    summaryLine.textContent = 'Your build: ' + types[state.type].noun + ' ' + sizes[state.size].phrase + '.';
+  }
+  function bindOpts(id, fn){
+    var box = document.getElementById(id);
+    box.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if(!b) return;
+      box.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true'); fn(b); render();
+    });
+  }
+  bindOpts('typeOpts', function(b){ state.type = b.dataset.type; });
+  bindOpts('sizeOpts', function(b){ state.size = b.dataset.size; });
+  render();
+})();
+</script>
+</body>
+</html>

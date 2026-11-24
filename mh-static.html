@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makeasy — Describe it. Makeasy builds it.</title>
+<style>
+:root{
+  --bg:#101014; --panel:#1a1a21; --panel2:#22222c; --txt:#f2f1ec; --dim:#9a97a3;
+  --org:#ff6b2c; --cyn:#57d7ff; --line:rgba(242,241,236,.13);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:clip;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Archivo,"Arial Black","Helvetica Neue",Arial,sans-serif;font-weight:900;line-height:.98;letter-spacing:-.015em;text-transform:uppercase}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
+.label{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--org)}
+section{padding-top:96px;padding-bottom:96px}
+section h2{font-size:clamp(34px,6vw,60px);margin:12px 0 18px}
+section .lede{color:var(--dim);font-size:17px;line-height:1.55;max-width:56ch}
+/* NAV */
+nav{position:fixed;inset:12px 12px auto 12px;z-index:60;display:flex;justify-content:space-between;align-items:center;background:rgba(16,16,20,.85);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px}
+nav .brand{font-family:Archivo,"Arial Black",Arial,sans-serif;font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-size:17px}
+nav .brand i{color:var(--org);font-style:normal}
+nav .links{display:flex;gap:22px;font-size:15px;font-weight:500;align-items:center}
+nav .links a{color:var(--txt);text-decoration:none}
+nav .links a:hover{color:var(--cyn)}
+nav .cta{background:var(--org);color:#16100b;padding:10px 18px;border-radius:999px;font-size:16px;font-weight:700;text-decoration:none;min-height:40px;display:inline-flex;align-items:center}
+@media(max-width:640px){nav .links a:not(.cta){display:none}}
+/* HERO */
+.hero{padding-top:140px;padding-bottom:80px;position:relative}
+.hero h1{font-size:clamp(36px,9.5vw,120px)}
+.hero h1 .ol{color:transparent;-webkit-text-stroke:1.5px var(--txt)}
+.hero h1 em{font-style:italic;color:var(--org)}
+.hero .sub{margin-top:22px;font-size:clamp(16px,2vw,20px);color:var(--dim);max-width:56ch;line-height:1.55}
+.ctarow{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:13px 26px;border-radius:999px;font-size:16px;font-weight:700;text-decoration:none;cursor:pointer;border:1px solid var(--line);font-family:inherit}
+.btn.primary{background:var(--org);color:#16100b;border-color:var(--org)}
+.btn.ghost{background:transparent;color:var(--txt)}
+.btn.ghost:hover{border-color:var(--cyn);color:var(--cyn)}
+.btn.primary:hover{background:var(--cyn);border-color:var(--cyn);color:#0b1418}
+/* HOW IT WORKS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:24px}
+.step .num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;color:var(--cyn);letter-spacing:.2em}
+.step h3{font-size:22px;margin:12px 0 8px}
+.step p{font-size:16px;color:var(--dim);line-height:1.55}
+/* SIGNATURE — SEQUENCER */
+.sigwrap{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;margin-top:34px;align-items:start}
+@media(max-width:920px){.sigwrap{grid-template-columns:1fr}}
+.seq{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:22px}
+.seq .top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.playbtn{display:inline-flex;align-items:center;gap:10px;background:var(--org);color:#16100b;border:none;border-radius:999px;padding:13px 26px;font-weight:800;font-size:16px;cursor:pointer;font-family:Archivo,"Arial Black",Arial,sans-serif;letter-spacing:.04em;min-height:48px}
+.tempo{display:flex;align-items:center;gap:12px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;color:var(--dim)}
+.tempo input{accent-color:var(--org);width:140px;height:30px}
+.tempo b{color:var(--txt);font-weight:500;min-width:74px;font-size:14px}
+.presets{display:flex;gap:8px;flex-wrap:wrap}
+.preset{border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:999px;padding:10px 16px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;min-height:42px}
+.preset[aria-pressed="true"]{background:var(--txt);color:var(--bg);font-weight:700}
+.seqgrid{display:flex;flex-direction:column;gap:8px}
+.seqrow{display:grid;grid-template-columns:76px repeat(8,1fr);gap:8px;align-items:center}
+.seqrow .rlabel{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+.pad{aspect-ratio:1.15;border-radius:10px;border:1px solid var(--line);background:var(--panel2);cursor:pointer;padding:0;color:var(--txt);font-size:16px;transition:transform .06s;min-height:34px}
+.pad.on[data-row="0"]{background:var(--org);border-color:var(--org)}
+.pad.on[data-row="1"]{background:var(--cyn);border-color:var(--cyn)}
+.pad.on[data-row="2"]{background:#f2f1ec;border-color:#f2f1ec}
+.pad.now{box-shadow:0 0 0 2px var(--txt) inset;transform:scale(1.05)}
+.pad.on.now{box-shadow:0 0 22px rgba(255,255,255,.35)}
+@media(max-width:560px){
+  .seq{padding:14px}
+  .seqrow{grid-template-columns:52px repeat(8,1fr);gap:5px}
+  .seqrow .rlabel{font-size:9.5px;letter-spacing:.04em}
+  .pad{aspect-ratio:.72;border-radius:8px;min-height:40px}
+  .tempo input{width:110px}
+}
+.seq .hint{font-size:13px;color:var(--dim);margin-top:14px;line-height:1.5}
+.wave{display:flex;gap:3px;align-items:flex-end;height:44px;margin-top:20px}
+.wave i{flex:1;background:var(--panel2);border-radius:2px;min-height:4px}
+.wave i.hot{background:var(--org)}
+/* PAGE MOCK */
+.mock{border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:18px;position:sticky;top:84px}
+@media(max-width:920px){.mock{position:static}}
+.mock .chrome{display:flex;gap:6px;align-items:center;margin-bottom:14px}
+.mock .chrome i{width:10px;height:10px;border-radius:50%;background:var(--panel2);border:1px solid var(--line)}
+.mock .chrome .url{flex:1;margin-left:6px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;overflow:hidden}
+.mockblocks{display:flex;flex-direction:column;gap:10px}
+.mblock{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:12px;transition:box-shadow .15s,border-color .15s}
+.mblock .mtitle{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);display:flex;justify-content:space-between}
+.mblock .mtitle b{color:var(--txt);font-weight:500}
+.mblock .cells{display:flex;gap:4px;margin-top:10px}
+.mblock .cells i{flex:1;height:16px;border-radius:4px;background:var(--bg);border:1px solid var(--line)}
+.mblock[data-mrow="0"].lit{border-color:var(--org)}
+.mblock[data-mrow="1"].lit{border-color:var(--cyn)}
+.mblock[data-mrow="2"].lit{border-color:var(--txt)}
+.mblock[data-mrow="0"] .cells i.on{background:var(--org);border-color:var(--org)}
+.mblock[data-mrow="1"] .cells i.on{background:var(--cyn);border-color:var(--cyn)}
+.mblock[data-mrow="2"] .cells i.on{background:#f2f1ec;border-color:#f2f1ec}
+.mblock .cells i.now{box-shadow:0 0 0 2px var(--txt) inset}
+.mock .mocknote{font-size:12.5px;color:var(--dim);margin-top:12px;line-height:1.5}
+/* THREE WAYS IN */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+@media(max-width:860px){.cards{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:24px}
+.card .face{height:110px;border-radius:12px;background:var(--panel2);position:relative;overflow:hidden;margin-bottom:16px}
+.card .face::after{content:"";position:absolute;inset:auto 14px 14px 14px;height:24px;border-radius:6px;background:repeating-linear-gradient(90deg,var(--bg) 0 10px,var(--line) 10px 12px)}
+.card .knobs{position:absolute;top:14px;left:14px;display:flex;gap:8px}
+.card .knobs i{width:22px;height:22px;border-radius:50%;background:var(--bg);border:2px solid var(--dim)}
+.card .knobs i.hot{border-color:var(--org)}
+.card .knobs i.hot2{border-color:var(--cyn)}
+.card h3{font-size:21px}
+.card p{font-size:16px;color:var(--dim);line-height:1.55;margin-top:8px}
+.card .go{margin-top:18px;background:transparent;color:var(--txt);border:1px solid var(--line);border-radius:999px;padding:11px 20px;font-weight:600;font-size:16px;cursor:pointer;font-family:inherit;min-height:44px}
+.card .go:hover{background:var(--org);color:#16100b;border-color:var(--org)}
+/* WHAT YOU CAN BUILD */
+.buildlist{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:34px}
+@media(max-width:860px){.buildlist{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.buildlist{grid-template-columns:1fr}}
+.builditem{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:20px;font-family:Archivo,"Arial Black",Arial,sans-serif;font-weight:800;text-transform:uppercase;font-size:18px;display:flex;align-items:center;gap:12px;min-height:64px}
+.builditem i{font-style:normal;color:var(--org);font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;font-weight:400}
+/* PRICING */
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:34px;max-width:860px}
+@media(max-width:700px){.plans{grid-template-columns:1fr}}
+.plan{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:26px}
+.plan.pro{border-color:var(--org)}
+.plan .pname{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyn)}
+.plan.pro .pname{color:var(--org)}
+.plan .amt{font-family:Archivo,"Arial Black",Arial,sans-serif;font-weight:900;font-size:44px;margin:10px 0 4px}
+.plan .amt span{font-size:17px;color:var(--dim);font-weight:600}
+.plan ul{list-style:none;margin:16px 0 22px}
+.plan li{font-size:16px;color:var(--dim);line-height:1.5;padding:7px 0;border-top:1px solid var(--line)}
+.plan li b{color:var(--txt);font-weight:600}
+/* FINAL CTA */
+.final{text-align:left}
+.final h2{font-size:clamp(38px,7.5vw,84px)}
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding-top:44px;padding-bottom:60px;color:var(--dim);font-size:15px;line-height:1.7}
+footer .big{font-family:Archivo,"Arial Black",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,4vw,38px);color:var(--txt);margin-bottom:12px}
+footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
+footer .flinks a{color:var(--txt);text-decoration:none;font-size:16px}
+footer .flinks a:hover{color:var(--org)}
+@media(max-width:480px){.label{letter-spacing:.16em}}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important;animation:none!important}
+  .pad.now{transform:none}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">Make<i>asy</i></div>
+  <div class="links">
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#start">Sign in</a>
+    <a class="cta" href="#start">Start building</a>
+  </div>
+</nav>
+
+<header class="hero wrap">
+  <div class="label">Makeasy — AI app &amp; website builder</div>
+  <h1>Describe it.<br><span class="ol">Makeasy</span> <em>builds</em> it.</h1>
+  <p class="sub">Makeasy turns a plain description into a working website or app — built in a real terminal, finished in the studio, published under your own domain. No code to write, nothing to install.</p>
+  <div class="ctarow">
+    <a class="btn primary" href="#start">Start building</a>
+    <a class="btn ghost" href="#examples">See examples</a>
+  </div>
+</header>
+
+<section class="wrap" id="how" style="padding-top:20px">
+  <div class="label">How it works</div>
+  <h2>Three steps.<br>No code.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="num">STEP 01</div>
+      <h3>Describe</h3>
+      <p>Say what you want in plain words.</p>
+    </div>
+    <div class="step">
+      <div class="num">STEP 02</div>
+      <h3>Build</h3>
+      <p>Makeasy builds it in a real terminal while you watch, then you finish the details in the studio.</p>
+    </div>
+    <div class="step">
+      <div class="num">STEP 03</div>
+      <h3>Publish</h3>
+      <p>One tap puts it live on your own domain.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="assemble" style="padding-top:20px">
+  <div class="label">Try the rhythm</div>
+  <h2>Assemble a page,<br>step by step.</h2>
+  <p class="lede">Every page has a rhythm — a hero that lands, features that answer, a booking that closes. Tap the pads: each row is a part of the page, and the mock beside it builds as you play.</p>
+  <div class="sigwrap">
+    <div class="seq" id="play">
+      <div class="top">
+        <button class="playbtn" id="playBtn">▶ Play</button>
+        <div class="presets" id="presets">
+          <button class="preset" data-preset="landing" aria-pressed="true">Landing page</button>
+          <button class="preset" data-preset="storefront" aria-pressed="false">Storefront</button>
+          <button class="preset" data-preset="booking" aria-pressed="false">Booking page</button>
+          <button class="preset" data-preset="clear" aria-pressed="false">Clear</button>
+        </div>
+        <div class="tempo"><span>TEMPO</span><input type="range" id="tempo" min="70" max="150" value="112" aria-label="Tempo in BPM"><b id="tempoVal">112 BPM</b></div>
+      </div>
+      <div class="seqgrid" id="seqGrid"></div>
+      <div class="wave" id="wave"></div>
+      <p class="hint">Rows: <b style="color:var(--org)">HERO</b> · <b style="color:var(--cyn)">FEATURES</b> · <b>BOOKING</b>. Sound runs entirely in your browser — the same way Makeasy assembles a real page: part by part, in time.</p>
+    </div>
+    <div class="mock" aria-label="Live page mock">
+      <div class="chrome"><i></i><i></i><i></i><span class="url">yourpage.com — assembling…</span></div>
+      <div class="mockblocks" id="mockBlocks"></div>
+      <p class="mocknote">This is the page your pattern makes. Light a row on the sequencer and its block lights here — press play and watch the rhythm run down the page.</p>
+    </div>
+  </div>
+
+  <div class="label" style="margin-top:56px">Three ways in</div>
+  <h2 style="font-size:clamp(30px,5vw,48px)">Pick a door.<br>Same engine.</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="face"><div class="knobs"><i class="hot"></i><i></i><i></i><i></i></div></div>
+      <h3>Website</h3>
+      <p>A working website for your business — pages, words and pictures in place, live on your own domain.</p>
+      <button class="go" data-goto="#pricing">Start with this</button>
+    </div>
+    <div class="card">
+      <div class="face"><div class="knobs"><i></i><i class="hot2"></i><i></i><i></i><i></i></div></div>
+      <h3>Online store</h3>
+      <p>Your products on the page and a checkout that takes payment — described by you, assembled by Makeasy.</p>
+      <button class="go" data-goto="#pricing">Start with this</button>
+    </div>
+    <div class="card">
+      <div class="face"><div class="knobs"><i></i><i></i><i class="hot"></i><i></i></div></div>
+      <h3>App with accounts</h3>
+      <p>An app your customers sign in to — accounts, their own pages, their own data, from one plain description.</p>
+      <button class="go" data-goto="#pricing">Start with this</button>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="examples" style="padding-top:20px">
+  <div class="label">What you can build</div>
+  <h2>If you can<br>describe it…</h2>
+  <div class="buildlist">
+    <div class="builditem"><i>01</i>Business websites</div>
+    <div class="builditem"><i>02</i>Online stores</div>
+    <div class="builditem"><i>03</i>Booking pages</div>
+    <div class="builditem"><i>04</i>Portfolios</div>
+    <div class="builditem"><i>05</i>Apps with accounts</div>
+    <div class="builditem"><i>06</i>Landing pages</div>
+  </div>
+</section>
+
+<section class="wrap" id="pricing" style="padding-top:20px">
+  <div class="label">Pricing</div>
+  <h2>Two plans.<br>Plain numbers.</h2>
+  <div class="plans">
+    <div class="plan">
+      <div class="pname">Maker</div>
+      <div class="amt">$19<span>/mo</span></div>
+      <ul>
+        <li><b>50</b> build credits</li>
+        <li><b>600</b> terminal minutes</li>
+        <li>Publish to your domain</li>
+      </ul>
+      <a class="btn ghost" href="#start" style="width:100%">Start building</a>
+    </div>
+    <div class="plan pro">
+      <div class="pname">Pro</div>
+      <div class="amt">$49<span>/mo</span></div>
+      <ul>
+        <li><b>160</b> build credits</li>
+        <li><b>1,800</b> terminal minutes</li>
+        <li>Publish to your domain</li>
+        <li>Priority builds</li>
+      </ul>
+      <a class="btn primary" href="#start" style="width:100%">Start building</a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap final" id="start">
+  <div class="label">Start</div>
+  <h2>Your idea is the<br>only <em style="color:var(--org)">missing</em> part.</h2>
+  <div class="ctarow">
+    <a class="btn primary" href="#assemble">Start building</a>
+    <a class="btn ghost" href="#pricing">See pricing</a>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">Describe it. Makeasy builds it.</div>
+  <div class="flinks">
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Makeasy</a>
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#start">Sign in</a>
+  </div>
+</div></footer>
+
+<script>
+(function(){
+  var STEPS=8, ROWS=3;
+  var labels=['HERO','FEATURES','BOOKING'];
+  var blockNames=['Hero','Features','Booking'];
+  var presets={
+    landing:{tempo:112, order:[0,1,2], grid:[[1,0,0,0,1,0,0,0],[0,0,1,0,0,1,0,0],[0,0,0,0,0,0,1,0]]},
+    storefront:{tempo:124, order:[1,0,2], grid:[[1,0,0,1,0,0,0,0],[1,1,0,1,1,0,1,0],[0,0,1,0,0,0,1,1]]},
+    booking:{tempo:96, order:[2,0,1], grid:[[1,0,0,0,0,0,0,0],[0,1,0,0,1,0,0,0],[1,0,1,0,1,0,1,0]]},
+    clear:{tempo:112, order:[0,1,2], grid:[[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]}
+  };
+  var grid=presets.landing.grid.map(function(r){return r.slice()});
+
+  /* sequencer grid */
+  var seqGrid=document.getElementById('seqGrid'), pads=[];
+  for(var r=0;r<ROWS;r++){
+    var row=document.createElement('div'); row.className='seqrow';
+    var lab=document.createElement('div'); lab.className='rlabel'; lab.textContent=labels[r]; row.appendChild(lab);
+    pads[r]=[];
+    for(var s=0;s<STEPS;s++){
+      var b=document.createElement('button'); b.className='pad'; b.dataset.row=r; b.dataset.step=s;
+      b.setAttribute('aria-label', labels[r]+' step '+(s+1));
+      row.appendChild(b); pads[r][s]=b;
+    }
+    seqGrid.appendChild(row);
+  }
+
+  /* page mock */
+  var mockBlocks=document.getElementById('mockBlocks'), blocks=[], cells=[];
+  for(var m=0;m<ROWS;m++){
+    var blk=document.createElement('div'); blk.className='mblock'; blk.dataset.mrow=m;
+    var t=document.createElement('div'); t.className='mtitle';
+    t.innerHTML='<span>'+blockNames[m]+'</span><b data-count>0 ON</b>';
+    blk.appendChild(t);
+    var cw=document.createElement('div'); cw.className='cells'; cells[m]=[];
+    for(var c=0;c<STEPS;c++){ var cell=document.createElement('i'); cw.appendChild(cell); cells[m][c]=cell; }
+    blk.appendChild(cw);
+    mockBlocks.appendChild(blk); blocks[m]=blk;
+  }
+  function applyOrder(order){
+    for(var i=0;i<order.length;i++) blocks[order[i]].style.order=i;
+  }
+  function paint(){
+    for(var r=0;r<ROWS;r++){
+      var count=0;
+      for(var s=0;s<STEPS;s++){
+        var on=!!grid[r][s];
+        pads[r][s].classList.toggle('on', on);
+        cells[r][s].classList.toggle('on', on);
+        if(on) count++;
+      }
+      blocks[r].classList.toggle('lit', count>0);
+      blocks[r].querySelector('[data-count]').textContent=count+' ON';
+    }
+  }
+  seqGrid.addEventListener('click',function(e){
+    var b=e.target.closest('.pad'); if(!b) return;
+    var r=+b.dataset.row, s=+b.dataset.step; grid[r][s]=grid[r][s]?0:1; paint();
+    if(grid[r][s]) blip(r);
+  });
+
+  /* decorative wave */
+  var wave=document.getElementById('wave'), bars=[];
+  for(var i=0;i<32;i++){ var w=document.createElement('i'); w.style.height=(6+Math.random()*30)+'px'; wave.appendChild(w); bars.push(w); }
+
+  /* audio — same voices as the reference: sawtooth bass / triangle lead / noise hat */
+  var ctx=null, playing=false, step=0, timer=null, tempo=112;
+  var bassNotes=[55,55,65.4,49], leadNotes=[220,261.6,329.6,392,329.6,261.6,220,196];
+  function ac(){ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); return ctx; }
+  function tone(freq, dur, type, gain, when){
+    var a=ac(), o=a.createOscillator(), g=a.createGain();
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(gain, when); g.gain.exponentialRampToValueAtTime(.0001, when+dur);
+    o.connect(g); g.connect(a.destination); o.start(when); o.stop(when+dur+.02);
+  }
+  function hat(when){
+    var a=ac(), len=a.sampleRate*.05, buf=a.createBuffer(1,len,a.sampleRate), d=buf.getChannelData(0);
+    for(var i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+    var src=a.createBufferSource(); src.buffer=buf;
+    var f=a.createBiquadFilter(); f.type='highpass'; f.frequency.value=7000;
+    var g=a.createGain(); g.gain.value=.12;
+    src.connect(f); f.connect(g); g.connect(a.destination); src.start(when);
+  }
+  function blip(r){ var a=ac(), t=a.currentTime;
+    if(r===0) tone(55,.25,'sawtooth',.20,t); if(r===1) tone(329.6,.2,'triangle',.18,t); if(r===2) hat(t); }
+  function clearNow(){
+    document.querySelectorAll('.pad.now').forEach(function(p){p.classList.remove('now')});
+    cells.forEach(function(rowCells){ rowCells.forEach(function(c){ c.classList.remove('now'); }); });
+  }
+  function tick(){
+    var a=ac(), t=a.currentTime+.03;
+    clearNow();
+    for(var r=0;r<ROWS;r++){
+      pads[r][step].classList.add('now');
+      cells[r][step].classList.add('now');
+    }
+    if(grid[0][step]) tone(bassNotes[step%4],.28,'sawtooth',.22,t);
+    if(grid[1][step]) tone(leadNotes[step],.22,'triangle',.16,t);
+    if(grid[2][step]) hat(t);
+    bars.forEach(function(b,i){ b.classList.toggle('hot', (i%8)===step && Math.random()>.35); });
+    step=(step+1)%STEPS;
+  }
+  var playBtn=document.getElementById('playBtn');
+  function setPlay(on){
+    playing=on; playBtn.textContent=on?'❚❚ Pause':'▶ Play';
+    if(on){ ac(); tick(); timer=setInterval(tick, 60000/tempo/2); }
+    else { clearInterval(timer); clearNow(); }
+  }
+  playBtn.addEventListener('click',function(){ setPlay(!playing); });
+  var tempoEl=document.getElementById('tempo'), tempoVal=document.getElementById('tempoVal');
+  function setTempo(v){
+    tempo=v; tempoEl.value=v; tempoVal.textContent=v+' BPM';
+    if(playing){ clearInterval(timer); timer=setInterval(tick, 60000/tempo/2); }
+  }
+  tempoEl.addEventListener('input',function(){ setTempo(+tempoEl.value); });
+  document.getElementById('presets').addEventListener('click',function(e){
+    var b=e.target.closest('.preset'); if(!b) return;
+    this.querySelectorAll('.preset').forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    var p=presets[b.dataset.preset];
+    grid=p.grid.map(function(r){return r.slice()});
+    applyOrder(p.order);
+    setTempo(p.tempo);
+    paint();
+  });
+
+  /* card buttons scroll to pricing */
+  document.querySelectorAll('[data-goto]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var target=document.querySelector(b.dataset.goto);
+      if(target) target.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  applyOrder(presets.landing.order);
+  paint();
+})();
+</script>
+</body>
+</html>
