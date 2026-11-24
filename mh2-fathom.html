@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makeasy — Build websites and apps by just describing them.</title>
+<style>
+:root{
+  --deep:#051019; --panel:#0a1e2e; --foam:#e9f4f5; --lume:#6ff2c4; --dim:#7d97a5; --line:rgba(233,244,245,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:clip;scroll-behavior:smooth}
+html.paused{scroll-behavior:auto}
+html.paused *,html.paused *::before,html.paused *::after{animation-play-state:paused !important;transition:none !important}
+body{background:var(--deep);color:var(--foam);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+h1,h2{font-family:Archivo,"Arial Narrow","Helvetica Neue",Arial,sans-serif;font-weight:900;line-height:.98;letter-spacing:-.015em;text-transform:uppercase}
+.wrap{max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px}
+.label{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--lume)}
+section[id],header[id]{scroll-margin-top:96px}
+.sec{padding-top:100px;padding-bottom:90px}
+.sec h2{font-size:clamp(34px,6vw,62px);margin-top:12px;margin-bottom:14px}
+.sec .intro{color:var(--dim);line-height:1.65;max-width:62ch;font-size:17px}
+.mascot{width:100%;display:block;object-fit:cover;border-radius:18px;border:1px solid var(--line);background:var(--panel)}
+/* TICKER */
+.ticker{background:#02090f;border-bottom:1px solid var(--line);overflow:hidden;padding-top:9px;padding-bottom:9px}
+.ticker .track{display:flex;width:max-content;animation:tick 48s linear infinite}
+.ticker .grp{display:flex;align-items:center}
+.ticker .it{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding-left:20px;padding-right:20px;white-space:nowrap}
+.ticker .dotsep{color:var(--lume);font-size:11px}
+@keyframes tick{to{transform:translateX(-50%)}}
+/* NAV */
+nav{position:sticky;top:12px;margin-top:12px;margin-left:12px;margin-right:12px;z-index:60;display:flex;justify-content:space-between;align-items:center;background:rgba(5,16,25,.82);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding-top:8px;padding-bottom:8px;padding-left:18px;padding-right:10px}
+nav .brand{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;letter-spacing:.14em;font-size:17px;color:var(--foam)}
+nav .brand i{color:var(--lume);font-style:normal}
+nav .links{display:flex;gap:22px;font-size:16px;font-weight:500;align-items:center}
+nav .links a{color:var(--foam);text-decoration:none;display:inline-flex;align-items:center;min-height:40px}
+nav .cta{background:var(--lume);color:#04241a;padding-left:18px;padding-right:18px;border-radius:999px;font-size:16px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:760px){nav .links a.plain{display:none}}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--lume);color:#04241a;padding-left:26px;padding-right:26px;min-height:48px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;border:none;cursor:pointer;font-family:inherit}
+.btn.ghostb{background:transparent;color:var(--foam);border:1px solid rgba(233,244,245,.4)}
+/* HERO */
+.hero{padding-top:64px;padding-bottom:70px;position:relative;background:radial-gradient(900px 480px at 78% 8%,rgba(111,242,196,.13),transparent 60%),linear-gradient(180deg,#071a29,var(--deep))}
+.hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:38px;align-items:center}
+@media(max-width:900px){.hero .grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(40px,7.6vw,104px);margin-top:16px}
+.hero h1 .thin{color:transparent;-webkit-text-stroke:1.5px var(--foam)}
+.hero h1 .lm{color:var(--lume);font-style:italic}
+.hero .sub{margin-top:22px;font-size:clamp(16px,2vw,20px);color:var(--dim);max-width:52ch;line-height:1.6}
+.hero .row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.hero .mascot{height:150px;margin-bottom:16px}
+.scrollcue{margin-top:44px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--lume)}
+/* DEMO CARD */
+.mock{width:100%;border-radius:18px;border:1px solid rgba(233,244,245,.25);background:#0a1e2e;box-shadow:0 40px 80px rgba(0,0,0,.55);overflow:hidden}
+.mock .bar{display:flex;align-items:center;gap:7px;padding-top:10px;padding-bottom:10px;padding-left:14px;padding-right:14px;border-bottom:1px solid var(--line);background:rgba(5,16,25,.6)}
+.mock .bar .d{width:10px;height:10px;border-radius:50%;background:rgba(233,244,245,.3)}
+.mock .bar .d.lm{background:var(--lume)}
+.mock .url{margin-left:8px;flex:1;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);background:rgba(233,244,245,.07);border-radius:999px;padding-top:5px;padding-bottom:5px;padding-left:12px;padding-right:12px;white-space:nowrap;overflow:hidden}
+.demo .dbody{padding-top:18px;padding-bottom:18px;padding-left:18px;padding-right:18px;min-height:330px;display:flex;flex-direction:column;justify-content:center}
+.demo-empty{text-align:center;color:var(--dim)}
+.demo-empty .big{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:22px;color:var(--foam);letter-spacing:.02em}
+.demo-empty p{margin-top:10px;font-size:16px;line-height:1.6}
+.demo-site{display:none}
+.demo.done .demo-empty{display:none}
+.demo.done .demo-site{display:block;animation:fadein .7s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.site{background:var(--foam);color:#0a1e2e;border-radius:14px;padding-top:18px;padding-bottom:18px;padding-left:18px;padding-right:18px}
+.site .snav{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.08em;color:#33505f;text-transform:uppercase}
+.site .snav b{color:#0a1e2e;font-size:13px}
+.site h3{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;font-size:24px;line-height:1.1;margin-top:14px;text-transform:none;letter-spacing:0}
+.site .ssub{color:#33505f;font-size:14px;margin-top:5px;line-height:1.5}
+.site .srow{display:flex;justify-content:space-between;gap:12px;font-size:15px;padding-top:9px;padding-bottom:9px;border-top:1px solid rgba(10,30,46,.14)}
+.site .srow b{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-weight:600}
+.site .sorder{margin-top:12px;background:#0a1e2e;color:var(--foam);border-radius:10px;padding-top:11px;padding-bottom:11px;padding-left:13px;padding-right:13px;font-size:13.5px;line-height:1.55}
+.site .sorder .nl{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--lume)}
+.site .slive{margin-top:12px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.16em;color:#0d7a52;font-weight:700}
+.chips{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;align-items:center}
+.chips .clabel{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.chip{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;color:var(--lume);border:1px solid rgba(111,242,196,.45);border-radius:999px;padding-top:7px;padding-bottom:7px;padding-left:13px;padding-right:13px;background:rgba(111,242,196,.07)}
+/* CARDS / STEPS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}}
+.step{border:1px solid var(--line);border-radius:18px;padding-top:24px;padding-bottom:24px;padding-left:22px;padding-right:22px;background:var(--panel)}
+.step .num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;color:var(--lume);letter-spacing:.2em}
+.step h3{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:24px;margin-top:12px}
+.step p{color:var(--dim);line-height:1.6;margin-top:8px;font-size:16px}
+.bubble{margin-top:16px;background:rgba(111,242,196,.09);border:1px solid rgba(111,242,196,.35);border-radius:12px;padding-top:12px;padding-bottom:12px;padding-left:14px;padding-right:14px;font-size:15px;line-height:1.55;color:var(--foam)}
+.step .note{margin-top:14px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.06em;color:var(--lume);line-height:1.6}
+.stamp{display:inline-block;margin-top:16px;border:2px solid var(--lume);color:var(--lume);border-radius:8px;padding-top:7px;padding-bottom:7px;padding-left:14px;padding-right:14px;font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;letter-spacing:.14em;font-size:15px;transform:rotate(-5deg)}
+/* DESCENT */
+.descent{height:420vh;position:relative}
+.descent .stage{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center}
+.descent .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;width:100%}
+@media(max-width:820px){.descent .grid{grid-template-columns:1fr;gap:14px}.descent .stage{padding-top:64px}}
+.depthnum{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:clamp(76px,13vw,150px);line-height:1;color:var(--foam)}
+.depthnum small{font-size:.28em;color:var(--lume);letter-spacing:.1em}
+.zonename{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(22px,3.4vw,38px);margin-top:8px}
+.zonedesc{color:var(--dim);line-height:1.6;margin-top:10px;max-width:42ch;font-size:16px}
+.gauges{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap}
+.gauge .glabel{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+.gauge .gval{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:22px;margin-top:4px;color:var(--foam)}
+.depthrail{position:absolute;right:26px;top:50%;transform:translateY(-50%);height:52vh;width:2px;background:rgba(233,244,245,.15);border-radius:2px}
+.depthrail i{position:absolute;top:0;left:0;width:100%;background:var(--lume);border-radius:2px;height:0}
+.depthrail .dot{position:absolute;left:50%;top:0;width:12px;height:12px;border-radius:50%;background:var(--lume);transform:translate(-50%,-50%);box-shadow:0 0 18px rgba(111,242,196,.8)}
+@media(max-width:640px){.depthrail{display:none}}
+.mockbox{display:flex;justify-content:center}
+.descent .mock{width:min(430px,88vw)}
+.mock .body{padding-top:16px;padding-bottom:16px;padding-left:16px;padding-right:16px;display:flex;flex-direction:column;gap:10px;min-height:300px}
+.blk{border-radius:10px;background:rgba(233,244,245,.08);opacity:.12;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease;padding-top:10px;padding-bottom:10px;padding-left:12px;padding-right:12px}
+.blk.on{opacity:1;transform:none}
+.blk .t{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--lume)}
+.blk .h{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:17px;margin-top:4px;color:var(--foam)}
+.blk .p{font-size:12px;color:var(--dim);line-height:1.5;margin-top:3px}
+.blk.hero-b{background:linear-gradient(135deg,rgba(111,242,196,.22),rgba(233,244,245,.05))}
+.blkrow{display:flex;gap:10px}
+.blkrow .blk{flex:1}
+.blk.pub{background:var(--lume)}
+.blk.pub .t{color:#04241a}
+.blk.pub .h{color:#04241a;font-size:15px}
+/* CONFIGURATOR */
+.vessel{padding-top:90px;padding-bottom:110px}
+.vessel .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px;align-items:start}
+@media(max-width:820px){.vessel .grid{grid-template-columns:1fr}}
+.vessel h2{font-size:clamp(34px,5.4vw,58px);margin-top:12px;margin-bottom:8px}
+.vessel .lede{color:var(--dim);line-height:1.6;max-width:50ch;font-size:16px}
+.optgroup{margin-bottom:24px}
+.optgroup .label{margin-bottom:10px;display:block}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{border:1px solid var(--line);background:var(--panel);color:var(--foam);border-radius:999px;padding-left:18px;padding-right:18px;min-height:44px;font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center}
+.opt[aria-pressed="true"]{background:var(--lume);color:#04241a;border-color:var(--lume);font-weight:700}
+.summary{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding-top:22px;padding-bottom:22px;padding-left:22px;padding-right:22px}
+.summary .label{margin-bottom:10px;display:block}
+.summary .line{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:17px;line-height:1.6;color:var(--foam)}
+.summary .note{font-size:13px;color:var(--dim);margin-top:10px;line-height:1.6}
+.sidewatch{display:flex;flex-direction:column;align-items:center;gap:14px;border:1px solid var(--line);border-radius:24px;background:var(--panel);padding-top:30px;padding-bottom:30px;padding-left:22px;padding-right:22px;text-align:center}
+.sidewatch .rname{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase;font-size:20px}
+.sidewatch .rmeta{color:var(--dim);font-size:14px;line-height:1.6}
+.sidewatch .ring{width:120px;height:120px;border-radius:50%;border:8px solid #1b3448;background:radial-gradient(circle at 50% 42%,#122c40,#081a29 70%);display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;color:var(--lume);font-size:15px}
+/* DOORS */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
+@media(max-width:900px){.doors{grid-template-columns:1fr}}
+.door{border:1px solid var(--line);border-radius:18px;padding-top:24px;padding-bottom:24px;padding-left:22px;padding-right:22px;background:var(--panel)}
+.door h3{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:23px}
+.door p{color:var(--dim);line-height:1.65;margin-top:10px;font-size:16px}
+.sketchline{margin-top:16px;border:1.5px dashed rgba(111,242,196,.5);border-radius:12px;padding-top:12px;padding-bottom:12px;padding-left:14px;padding-right:14px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;color:var(--foam);display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.sketchline .lv{color:#04241a;background:var(--lume);border-radius:6px;padding-top:3px;padding-bottom:3px;padding-left:8px;padding-right:8px;font-weight:700;letter-spacing:.1em}
+.chat{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.msg{border-radius:12px;padding-top:10px;padding-bottom:10px;padding-left:13px;padding-right:13px;font-size:14.5px;line-height:1.55;max-width:92%}
+.msg.me{background:rgba(233,244,245,.09);align-self:flex-end;color:var(--foam)}
+.msg.mk{background:rgba(111,242,196,.13);align-self:flex-start;color:var(--foam)}
+.door .mascot{height:130px;margin-top:16px}
+/* BUILDER */
+.builder .grid{display:grid;grid-template-columns:1fr 1.1fr;gap:36px;margin-top:34px;align-items:start}
+@media(max-width:900px){.builder .grid{grid-template-columns:1fr}}
+.builder .copy{color:var(--dim);line-height:1.7;font-size:17px}
+.checks{list-style:none;margin-top:22px}
+.checks li{color:var(--foam);font-size:16px;line-height:1.55;padding-top:11px;padding-bottom:11px;border-top:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.checks li .ck{color:var(--lume);font-weight:700;flex:none}
+.builder .mascot{height:190px;margin-top:24px}
+.term{background:#02090f;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.term .thead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:11px;padding-bottom:11px;padding-left:16px;padding-right:16px;border-bottom:1px solid var(--line);font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.term .thead .live{color:var(--lume)}
+.term pre{padding-top:16px;padding-bottom:16px;padding-left:16px;padding-right:16px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;line-height:1.75;color:#cfe8dd;white-space:pre-wrap;word-break:break-word}
+.codecard{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.codecard pre{padding-top:16px;padding-bottom:16px;padding-left:16px;padding-right:16px;font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:13px;line-height:1.75;color:var(--dim);white-space:pre-wrap;word-break:break-word}
+.codecard pre .cm{color:var(--lume)}
+.builder .under{margin-top:18px;font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:19px;letter-spacing:.02em}
+.builder .line2{margin-top:12px;color:var(--dim);line-height:1.65;font-size:16px;max-width:72ch}
+/* WALL */
+.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+@media(max-width:1100px){.tools{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tools{grid-template-columns:1fr}}
+.tool{border:1px solid var(--line);border-radius:18px;padding-top:24px;padding-bottom:24px;padding-left:22px;padding-right:22px;background:var(--panel)}
+.tool h3{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:21px}
+.tool p{color:var(--dim);line-height:1.65;margin-top:9px;font-size:16px}
+.pricetag{margin-top:16px;background:var(--lume);color:#04241a;border-radius:12px;padding-top:14px;padding-bottom:14px;padding-left:14px;padding-right:14px;text-align:center}
+.pricetag .amt{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;font-size:26px}
+.pricetag .cap{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px;line-height:1.6}
+/* GONE */
+.steps6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
+@media(max-width:900px){.steps6{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.steps6{grid-template-columns:1fr}}
+.gone .mascot{height:170px;margin-top:30px}
+.phone{max-width:380px;margin-left:auto;margin-right:auto;margin-top:38px;border:1px solid rgba(233,244,245,.3);border-radius:38px;background:#02090f;padding-top:20px;padding-bottom:20px;padding-left:18px;padding-right:18px;box-shadow:0 40px 80px rgba(0,0,0,.55)}
+.pmsg{background:var(--lume);color:#04241a;border-radius:16px;border-bottom-right-radius:4px;padding-top:11px;padding-bottom:11px;padding-left:14px;padding-right:14px;font-size:15px;font-weight:600;line-height:1.5}
+.psent{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim);margin-top:8px;text-align:right;letter-spacing:.04em}
+.psent b{color:var(--lume);font-weight:500}
+.lock{text-align:center;padding-top:26px;padding-bottom:20px}
+.lock .time{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;font-size:52px;line-height:1}
+.lock .date{color:var(--dim);font-size:14px;margin-top:6px}
+.lock .building{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--lume);margin-top:16px}
+.notif{background:rgba(233,244,245,.08);border:1px solid var(--line);border-radius:16px;padding-top:13px;padding-bottom:13px;padding-left:15px;padding-right:15px}
+.notif .nh{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--lume);display:flex;justify-content:space-between}
+.notif .nt{font-weight:700;font-size:16px;margin-top:6px}
+.notif .nb{color:var(--dim);font-size:14px;line-height:1.55;margin-top:3px}
+.bakery{margin-top:14px;background:var(--foam);color:#0a1e2e;border-radius:16px;padding-top:16px;padding-bottom:16px;padding-left:16px;padding-right:16px}
+.bakery .bh{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:16px}
+.bakery .bh .bl{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.12em;color:#0d7a52;font-weight:700}
+.bakery .bs{color:#33505f;font-size:13.5px;margin-top:4px;line-height:1.5}
+.bakery .brow{display:flex;justify-content:space-between;font-size:14px;padding-top:8px;padding-bottom:8px;border-top:1px solid rgba(10,30,46,.14)}
+.bakery .brow b{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-weight:600}
+/* GALLERY */
+.frames{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
+@media(max-width:900px){.frames{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.frames{grid-template-columns:1fr}}
+.frame{border:1px solid var(--line);border-radius:18px;padding-top:24px;padding-bottom:24px;padding-left:22px;padding-right:22px;background:var(--panel);cursor:pointer;transition:transform .35s ease,border-color .35s ease}
+.frame:hover,.frame.lift{transform:translateY(-8px);border-color:rgba(111,242,196,.55)}
+.frame .tag{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--lume)}
+.frame h3{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:21px;margin-top:10px}
+.frame p{color:var(--dim);line-height:1.6;margin-top:7px;font-size:16px}
+.galmascot{height:150px;margin-top:30px}
+/* STARTERS */
+.starters h3.big{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(28px,4.6vw,44px);margin-top:12px}
+.starters h4{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--lume);margin-top:36px;margin-bottom:14px}
+.tplgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:900px){.tplgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tplgrid{grid-template-columns:1fr}}
+.tpl{border:1px solid var(--line);border-radius:18px;padding-top:20px;padding-bottom:20px;padding-left:20px;padding-right:20px;background:var(--panel)}
+.tpl .tn{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:19px}
+.tpl .tb{display:block;font-size:14px;color:var(--dim);margin-top:6px;line-height:1.55}
+.tpl .use{display:inline-flex;align-items:center;min-height:40px;margin-top:10px;color:var(--lume);font-size:16px;font-weight:600;text-decoration:none}
+/* PRICING */
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:34px}
+@media(max-width:820px){.plans{grid-template-columns:1fr}}
+.plan{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding-top:28px;padding-bottom:28px;padding-left:26px;padding-right:26px}
+.plan.pro{border-color:rgba(111,242,196,.55)}
+.plan .pname{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:22px}
+.plan .price{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:40px;margin-top:10px;color:var(--foam)}
+.plan .price small{font-size:16px;color:var(--dim)}
+.plan ul{list-style:none;margin-top:16px}
+.plan li{color:var(--dim);font-size:16px;line-height:1.5;padding-top:9px;padding-bottom:9px;border-top:1px solid var(--line)}
+.plan li b{color:var(--foam);font-weight:600}
+.plan .btn{margin-top:20px}
+.pin{margin-top:16px;border:1.5px dashed rgba(111,242,196,.55);border-radius:14px;padding-top:15px;padding-bottom:15px;padding-left:18px;padding-right:18px;text-align:center;font-size:16px;color:var(--foam);line-height:1.6}
+/* FAQ */
+.faq h3.big{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(28px,4.6vw,44px);margin-top:12px;margin-bottom:26px}
+.qa{border:1px solid var(--line);border-radius:16px;background:var(--panel);margin-bottom:10px;overflow:hidden}
+.qa button{width:100%;background:none;border:none;color:var(--foam);font-family:inherit;font-size:17px;font-weight:600;text-align:left;padding-top:18px;padding-bottom:18px;padding-left:20px;padding-right:20px;min-height:52px;cursor:pointer;display:flex;justify-content:space-between;gap:14px;align-items:center}
+.qa .pm{color:var(--lume);font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-size:20px;flex:none}
+.qa .pm::after{content:"+"}
+.qa.open .pm::after{content:"–"}
+.qa .ans{display:none;padding-bottom:19px;padding-left:20px;padding-right:20px;color:var(--dim);line-height:1.7;font-size:16px;max-width:68ch}
+.qa.open .ans{display:block}
+/* FINAL */
+.final{padding-top:110px;padding-bottom:120px;text-align:center;position:relative;background:radial-gradient(700px 380px at 50% 100%,rgba(111,242,196,.12),transparent 60%)}
+.final .mascot{max-width:520px;height:180px;margin-left:auto;margin-right:auto;margin-bottom:34px}
+.final h2{font-size:clamp(36px,7vw,76px);max-width:18ch;margin-left:auto;margin-right:auto}
+.final .fline{color:var(--dim);font-size:19px;margin-top:16px}
+.final .row{display:flex;gap:14px;justify-content:center;margin-top:32px;flex-wrap:wrap}
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding-top:44px;padding-bottom:60px;color:var(--dim);font-size:14px;line-height:1.7}
+footer .fbrand{font-family:Archivo,"Arial Narrow",Arial,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,4vw,38px);color:var(--foam);margin-bottom:8px}
+footer .fbrand i{color:var(--lume);font-style:normal}
+footer .flinks{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;align-items:center}
+footer .flinks a{color:var(--foam);text-decoration:none;font-size:16px;display:inline-flex;align-items:center;min-height:40px}
+.pbtn{background:none;border:1px solid var(--line);color:var(--foam);border-radius:999px;padding-left:16px;padding-right:16px;min-height:40px;font-size:16px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .blk,.frame{transition:none}
+  .ticker .track{animation:none;width:auto}
+  .ticker .grp{flex-wrap:wrap}
+  .demo-site{animation:none}
+}
+@media(max-width:480px){.label{letter-spacing:.16em}}
+</style>
+</head>
+<body id="top">
+<!-- 0 · PROMISES TICKER -->
+<div class="ticker" aria-label="Makeasy promises"><div class="track">
+  <div class="grp">
+    <span class="it">Broken output is always free</span><span class="dotsep">●</span>
+    <span class="it">Your work is always exportable</span><span class="dotsep">●</span>
+    <span class="it">Builds keep going while your phone is locked</span><span class="dotsep">●</span>
+    <span class="it">A real terminal, inside the app</span><span class="dotsep">●</span>
+    <span class="it">You see the price before anything is charged</span><span class="dotsep">●</span>
+    <span class="it">One-click rewind to any version</span><span class="dotsep">●</span>
+    <span class="it">No code. No setup. No lock-in.</span><span class="dotsep">●</span>
+  </div>
+  <div class="grp" aria-hidden="true">
+    <span class="it">Broken output is always free</span><span class="dotsep">●</span>
+    <span class="it">Your work is always exportable</span><span class="dotsep">●</span>
+    <span class="it">Builds keep going while your phone is locked</span><span class="dotsep">●</span>
+    <span class="it">A real terminal, inside the app</span><span class="dotsep">●</span>
+    <span class="it">You see the price before anything is charged</span><span class="dotsep">●</span>
+    <span class="it">One-click rewind to any version</span><span class="dotsep">●</span>
+    <span class="it">No code. No setup. No lock-in.</span><span class="dotsep">●</span>
+  </div>
+</div></div>
+
+<!-- 1 · NAV -->
+<nav>
+  <div class="brand">MAKE<i>A</i>SY</div>
+  <div class="links">
+    <a class="plain" href="#how">How it works</a>
+    <a class="plain" href="#examples">Examples</a>
+    <a class="plain" href="#pricing">Pricing</a>
+    <a class="plain" href="#questions">Questions</a>
+    <a class="cta" href="#vessel">Start building</a>
+  </div>
+</nav>
+
+<!-- 2 · HERO -->
+<header class="hero"><div class="wrap">
+  <div class="grid">
+    <div>
+      <div class="label">The Makeasy Workshop</div>
+      <h1>Build websites and apps by just <span class="lm">describing</span> <span class="thin">them.</span></h1>
+      <p class="sub">One sentence in. A working site out. The crew below is already on it — scroll, and watch your words get carried onto the bench.</p>
+      <div class="row">
+        <a class="btn" href="#vessel">Start building</a>
+        <a class="btn ghostb" href="#examples">See examples</a>
+      </div>
+    </div>
+    <div>
+      <img class="mascot" src="https://edge.makeasy.app/mascot/hero.webp?v=637f9a9" alt="" loading="lazy" onerror="this.style.display='none'">
+      <div class="mock demo" id="demoCard">
+        <div class="bar"><span class="d lm"></span><span class="d"></span><span class="d"></span><span class="url">your-site.makeasy.app</span></div>
+        <div class="dbody">
+          <div class="demo-empty">
+            <div class="big">The bench is empty.</div>
+            <p>Your words are on their way…</p>
+          </div>
+          <div class="demo-site">
+            <div class="site">
+              <div class="snav"><b>☀ Sunrise Bakery</b><span>Home · Menu · Order</span></div>
+              <h3>Fresh bread, every morning.</h3>
+              <p class="ssub">Order by 9pm, pick up warm. ☕</p>
+              <div class="srow"><span>Sourdough loaf</span><b>$6.50</b></div>
+              <div class="srow"><span>Butter croissant</span><b>$3.75</b></div>
+              <div class="srow"><span>Cinnamon roll</span><b>$4.25</b></div>
+              <div class="sorder"><span class="nl">New order</span><br>2 sourdough, 1 croissant · pickup 8:15am</div>
+              <div class="slive">● LIVE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="clabel">Words being carried:</span>
+        <span class="chip">“bakery”</span>
+        <span class="chip">“online orders”</span>
+      </div>
+    </div>
+  </div>
+  <div class="scrollcue">Scroll — the crew starts carrying ↓</div>
+</div></header>
+
+<!-- 3 · HOW IT WORKS -->
+<section class="sec wrap" id="how">
+  <div class="label">How it works</div>
+  <h2>Three benches. One walk down the floor.</h2>
+  <p class="intro">No code, no setup, no waiting room. You describe it, you shape it, you publish it — the crew carries your page from bench to bench.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="num">BENCH 01</div><h3>Describe it</h3>
+      <p>Type it, say it, or sketch it. Plain words are the whole instruction manual — the agent on this bench takes the order exactly as you give it.</p>
+      <div class="bubble">“A bakery site with online orders, please.”</div>
+    </div>
+    <div class="step">
+      <div class="num">BENCH 02</div><h3>See it &amp; shape it</h3>
+      <p>Your site appears on the board in front of you. Tap anything to change it — words, colours, layout — and it moves the moment you do.</p>
+      <div class="note">Keep scrolling — the tiles swap, the accent changes.</div>
+    </div>
+    <div class="step">
+      <div class="num">BENCH 03</div><h3>Publish it</h3>
+      <p>One press of the lever and it is live on the web, on every phone and computer. The stamp is the receipt — it stays yours.</p>
+      <span class="stamp">LIVE ✓</span>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE · DESCENT (addition) -->
+<section class="descent" id="descent">
+  <div class="stage" id="dStage">
+    <div class="wrap grid">
+      <div>
+        <div class="label">Descend through a build · keep scrolling</div>
+        <div class="depthnum"><span id="depthNum">0</span><small> M</small></div>
+        <div class="zonename" id="zoneName">Surface — the idea</div>
+        <p class="zonedesc" id="zoneDesc">You say what you want in plain words. Nothing is built yet — this is the one part only you can do, and it takes a sentence.</p>
+        <div class="gauges">
+          <div class="gauge"><div class="glabel">Depth</div><div class="gval" id="gDepth">0 m</div></div>
+          <div class="gauge"><div class="glabel">Pages</div><div class="gval" id="gPages">1</div></div>
+          <div class="gauge"><div class="glabel">Features</div><div class="gval" id="gFeat">0</div></div>
+          <div class="gauge"><div class="glabel">Readiness</div><div class="gval" id="gReady">0%</div></div>
+        </div>
+      </div>
+      <div class="mockbox">
+        <div class="mock" id="mock">
+          <div class="bar"><span class="d lm"></span><span class="d"></span><span class="d"></span><span class="url">your-site — building…</span></div>
+          <div class="body">
+            <div class="blk hero-b" data-at="0.02"><div class="t">Your site</div><div class="h">The headline you asked for</div><div class="p">Your words, your name, your colours.</div></div>
+            <div class="blk" data-at="0.30"><div class="t">Pages</div><div class="h">Home · About · Contact</div><div class="p">The layout takes shape in the studio.</div></div>
+            <div class="blkrow">
+              <div class="blk" data-at="0.58"><div class="t">Booking</div><div class="p">Appointments, wired in.</div></div>
+              <div class="blk" data-at="0.66"><div class="t">Payments</div><div class="p">Cards accepted.</div></div>
+              <div class="blk" data-at="0.74"><div class="t">Accounts</div><div class="p">Sign-in for your people.</div></div>
+            </div>
+            <div class="blk pub" data-at="0.92"><div class="t">Published</div><div class="h">Live on your own domain ✓</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="depthrail"><i id="railFill"></i><div class="dot" id="railDot"></div></div>
+  </div>
+</section>
+
+<!-- SIGNATURE · CONFIGURATOR (addition) -->
+<section class="vessel wrap" id="vessel">
+  <div class="label">Choose your vessel</div>
+  <h2>Pick the build.<br>We take it down.</h2>
+  <p class="lede">Every Makeasy build rides the same descent — describe, build, publish. Choose what you are making and which working parts it needs; the summary follows you.</p>
+  <div class="grid">
+    <div class="sidewatch">
+      <div class="ring" id="ringDepth">0 M</div>
+      <div class="rname" id="rName">Makeasy · Website</div>
+      <div class="rmeta">Built in a real terminal, finished in the studio, published under your own domain.</div>
+    </div>
+    <div>
+      <div class="optgroup"><span class="label">Build type</span>
+        <div class="opts" id="typeOpts">
+          <button class="opt" data-name="Website" aria-pressed="true">Website</button>
+          <button class="opt" data-name="Online store" aria-pressed="false">Online store</button>
+          <button class="opt" data-name="App with accounts" aria-pressed="false">App with accounts</button>
+        </div>
+      </div>
+      <div class="optgroup"><span class="label">Add-ons</span>
+        <div class="opts" id="addOpts">
+          <button class="opt" data-name="Blog" aria-pressed="false">Blog +0</button>
+          <button class="opt" data-name="Online payments" aria-pressed="false">Online payments</button>
+          <button class="opt" data-name="Booking" aria-pressed="false">Booking</button>
+        </div>
+      </div>
+      <div class="summary">
+        <span class="label">Build summary</span>
+        <div class="line" id="buildSummary">Your build: Website — no add-ons yet.</div>
+        <div class="note">That is the whole order. Describe it in the terminal and Makeasy takes it from the surface to rated depth.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · THE THREE DOORS -->
+<section class="sec wrap" id="doors">
+  <div class="label">The three doors</div>
+  <h2>Three ways to build</h2>
+  <p class="intro">However your idea arrives — as a sentence, a sketch in your head, or a picture you can see — Makeasy meets you there.</p>
+  <div class="doors">
+    <div class="door">
+      <h3>Sketch first</h3>
+      <p>Before anything is built, you see the layout as a simple sketch — for 1 credit. Move things around, say yes, and only then does Makeasy build the real thing. No surprises, no wasted builds.</p>
+      <div class="sketchline"><span>Your page, real &amp; ready</span><span class="lv">LIVE</span></div>
+    </div>
+    <div class="door">
+      <h3>Talk it into shape</h3>
+      <p>No menus to learn, no settings to hunt. You chat with Makeasy the way you'd talk to a person — type it, speak it, or start from a photo — and it follows you everywhere in the app, so help is never more than a sentence away.</p>
+      <div class="chat">
+        <div class="msg me">Make the heading bigger and add a prices section</div>
+        <div class="msg mk">Done ✓ Heading is bigger, prices are in. Anything else?</div>
+        <div class="msg me">Perfect. Publish it.</div>
+      </div>
+    </div>
+    <div class="door">
+      <h3>Graphics included</h3>
+      <p>Every page needs pictures — and hunting for stock photos is nobody's job. Makeasy creates the images your page needs, matched to your style, as part of the build.</p>
+      <img class="mascot" src="https://edge.makeasy.app/mascot/work.webp?v=637f9a9" alt="" loading="lazy" onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
+
+<!-- 5 · INSIDE EVERY BUILD -->
+<section class="sec wrap builder" id="builder">
+  <div class="label">Inside every build</div>
+  <h2>Say hello to your builder.</h2>
+  <div class="grid">
+    <div>
+      <p class="copy">This little chip is the engine behind Makeasy — here it is, mid-build, doing the coding so you don't have to. You bring the words; it brings the wiring: pages, pictures, buttons, all connected and checked before anything goes live.</p>
+      <ul class="checks">
+        <li><span class="ck">✓</span><span>wakes up the moment you describe an idea</span></li>
+        <li><span class="ck">✓</span><span>shows you the layout before it builds</span></li>
+        <li><span class="ck">✓</span><span>checks its own work — broken means free</span></li>
+        <li><span class="ck">✓</span><span>hands you the whole project when you ask</span></li>
+      </ul>
+      <img class="mascot" src="https://edge.makeasy.app/mascot/build.webp?v=637f9a9" alt="" loading="lazy" onerror="this.style.display='none'">
+    </div>
+    <div>
+      <div class="term">
+        <div class="thead"><span>makeasy — in-app terminal</span><span>Phase 5</span><span class="live">● Live in the app</span></div>
+        <pre>$ makeasy new "booking site for my barbershop"
+→ sketching layout... done (1 credit)
+→ layout preview ready — approve? yes
+→ building page... writing index.html
+→ checking: fits phone width ✓ · no broken parts ✓
+→ publishing...
+✓ live: fadeforever.makeasy.app (charged 1 credit)
+$ makeasy change "add a prices section"
+→ test version updated — approve to go live?
+→ nothing reaches your live site without your yes.</pre>
+      </div>
+      <div class="codecard">
+        <pre><span class="cm">// index.html — written for you, yours to export</span>
+&lt;section class="hero"&gt;
+  &lt;h1&gt;Look sharp. Feel sharper.&lt;/h1&gt;
+  &lt;p&gt;Walk-ins welcome, bookings preferred.&lt;/p&gt;
+  &lt;a class="book-btn" href="/book"&gt;Book now&lt;/a&gt;
+&lt;/section&gt;</pre>
+      </div>
+    </div>
+  </div>
+  <div class="under">One file. No lock-in. Export it all, any time.</div>
+  <p class="line2">A real terminal, inside the app. Prefer talking? The chat builds it for you. Prefer the keys? They're yours.</p>
+</section>
+
+<!-- 6 · ON THE WALL -->
+<section class="sec wrap" id="wall">
+  <div class="label">On the wall, always in reach</div>
+  <h2>The four tools every build gets</h2>
+  <div class="tools">
+    <div class="tool">
+      <h3>Beautiful by default</h3>
+      <p>Every build comes out clean, balanced and phone-ready — before you touch a thing. Good taste is the starting point, not an upgrade.</p>
+    </div>
+    <div class="tool">
+      <h3>Honest pricing</h3>
+      <p>The price on the board is the price you pay. No surprise charges, no per-click tolls, and broken output is always free.</p>
+      <div class="pricetag"><div class="amt">$19 / month</div><div class="cap">Maker — this tag never changes</div></div>
+    </div>
+    <div class="tool">
+      <h3>One-click rewind</h3>
+      <p>Changed your mind? The dial turns back. One tap returns your site to any earlier version — nothing is ever lost.</p>
+    </div>
+    <div class="tool">
+      <h3>Yours to keep</h3>
+      <p>The box opens both ways. Export your whole site any time and take it anywhere — no lock-in, ever.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · WHILE YOU WERE GONE -->
+<section class="sec wrap gone" id="gone">
+  <div class="label">While you were gone</div>
+  <h2>Put the phone down. The workshop doesn't.</h2>
+  <p class="intro">Start a build, lock your phone, take a call, live your life. The work runs on its own — and taps you on the shoulder when it's done.</p>
+  <div class="steps6">
+    <div class="step"><div class="num">1</div><h3>You send it</h3><p>One sentence, sent from the couch.</p></div>
+    <div class="step"><div class="num">2</div><h3>Phone down</h3><p>You lock the screen. The room goes quiet.</p></div>
+    <div class="step"><div class="num">3</div><h3>Life happens</h3><p>A call comes in. You take it. Nothing stops.</p></div>
+    <div class="step"><div class="num">4</div><h3>Still building</h3><p>Behind the lock screen, the crew keeps working in the dark.</p></div>
+    <div class="step"><div class="num">5</div><h3>A tap on the shoulder</h3><p>“Your site is live.” That's the only interruption.</p></div>
+    <div class="step"><div class="num">6</div><h3>It's just… there</h3><p>Open the phone and the finished site is waiting.</p></div>
+  </div>
+  <img class="mascot" src="https://edge.makeasy.app/mascot/wave.webp?v=637f9a9" alt="" loading="lazy" onerror="this.style.display='none'">
+  <div class="phone">
+    <div class="pmsg">a bakery site with online orders</div>
+    <div class="psent">Sent · Makeasy is on it <b>✓✓</b></div>
+    <div class="lock">
+      <div class="time">9:41</div>
+      <div class="date">Friday, November 20</div>
+      <div class="building">Building your site…</div>
+    </div>
+    <div class="notif">
+      <div class="nh"><span>Makeasy</span><span>now</span></div>
+      <div class="nt">Your site is live</div>
+      <div class="nb">Sunrise Bakery is on the web.</div>
+    </div>
+    <div class="bakery">
+      <div class="bh"><span>☀ Sunrise Bakery</span><span class="bl">● LIVE</span></div>
+      <p class="bs">Fresh bread, every morning.<br>Order by 9pm, pick up warm. ☕</p>
+      <div class="brow"><span>Sourdough loaf</span><b>$6.50</b></div>
+      <div class="brow"><span>Butter croissant</span><b>$3.75</b></div>
+      <div class="brow"><span>Cinnamon roll</span><b>$4.25</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · FRESH OFF THE BENCH -->
+<section class="sec wrap" id="examples">
+  <div class="label">Fresh off the bench</div>
+  <h2>Finished work, hung on the wall</h2>
+  <p class="intro">Every frame below is alive — because every site Makeasy ships stays alive. Tap a frame to lift it off the wall.</p>
+  <div class="frames">
+    <div class="frame" tabindex="0"><div class="tag">Template · portfolio</div><h3>Photographer</h3><p>Filterable gallery and date checker.</p></div>
+    <div class="frame" tabindex="0"><div class="tag">Template · business</div><h3>Real estate agent</h3><p>Listings plus a payment calculator.</p></div>
+    <div class="frame" tabindex="0"><div class="tag">Template · event</div><h3>Conference</h3><p>Schedule, speakers, and tickets.</p></div>
+    <div class="frame" tabindex="0"><div class="tag">Template · nonprofit</div><h3>Animal shelter</h3><p>Adoptable pets and monthly giving.</p></div>
+    <div class="frame" tabindex="0"><div class="tag">Template · link-in-bio</div><h3>Link in bio</h3><p>One page for all your links.</p></div>
+    <div class="frame" tabindex="0"><div class="tag">Template · store</div><h3>Candle store</h3><p>Product grid with a working cart.</p></div>
+  </div>
+  <img class="mascot galmascot" src="https://edge.makeasy.app/mascot/live.webp?v=637f9a9" alt="" loading="lazy" onerror="this.style.display='none'">
+</section>
+
+<!-- 9 · STARTER BENCHES -->
+<section class="sec wrap starters" id="starters">
+  <div class="label">Starters</div>
+  <h3 class="big">Starter benches</h3>
+  <p class="intro" style="margin-top:12px">Don't start from an empty bench. Pick a starter and make it yours — every one is free to try.</p>
+  <h4>Website starters</h4>
+  <div class="tplgrid">
+    <div class="tpl"><div class="tn">Corner café</div><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Designer portfolio</div><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">App landing page</div><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Restaurant</div><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Newsletter blog</div><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Consulting firm</div><a class="use" href="#start">Use template →</a></div>
+  </div>
+  <h4>App starters</h4>
+  <div class="tplgrid">
+    <div class="tpl"><div class="tn">Bookings</div><span class="tb">Service and slot picker.</span><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Fitness coach</div><span class="tb">Programs, results, and a fit quiz.</span><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Candle store</div><span class="tb">Product grid with a working cart.</span><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Analytics dashboard</div><span class="tb">MRR, charts, and account health.</span><a class="use" href="#start">Use template →</a></div>
+    <div class="tpl"><div class="tn">Admin panel</div><span class="tb">Orders, stock, and staff on one screen.</span><a class="use" href="#start">Use template →</a></div>
+  </div>
+</section>
+
+<!-- 10 · THE ORDER BOARD -->
+<section class="sec wrap" id="pricing">
+  <div class="label">The order board</div>
+  <h2>Two plans. Pinned up where everyone can see them.</h2>
+  <div class="plans">
+    <div class="plan">
+      <div class="pname">Maker</div>
+      <div class="price">$19<small> / month</small></div>
+      <ul>
+        <li><b>50 credits</b> every month</li>
+        <li><b>600</b> terminal minutes</li>
+        <li>Websites and apps</li>
+        <li>One-click rewind</li>
+        <li>Full export</li>
+      </ul>
+      <a class="btn" href="#start">Start with Maker</a>
+    </div>
+    <div class="plan pro">
+      <div class="pname">Pro</div>
+      <div class="price">$49<small> / month</small></div>
+      <ul>
+        <li><b>160 credits</b> every month</li>
+        <li><b>1,800</b> terminal minutes</li>
+        <li>Everything in Maker</li>
+        <li>Room for bigger, busier builds</li>
+      </ul>
+      <a class="btn" href="#start">Start with Pro</a>
+    </div>
+  </div>
+  <div class="pin">📌 Broken output is always free — you never pay for our mistakes.</div>
+</section>
+
+<!-- 11 · THE NOTICE BOARD -->
+<section class="sec wrap faq" id="questions">
+  <div class="label">The notice board</div>
+  <h3 class="big">Questions, answered plainly</h3>
+  <div class="qa">
+    <button aria-expanded="false">Do I need to know how to code?<span class="pm"></span></button>
+    <div class="ans">No. Not one line. You describe what you want in plain words, and the workshop builds it. If you can write a sentence, you can build a website here.</div>
+  </div>
+  <div class="qa">
+    <button aria-expanded="false">What does it cost to start?<span class="pm"></span></button>
+    <div class="ans">Nothing. Your first 3 builds are free and no card is needed. Plans start at $19/month only when you decide you want more.</div>
+  </div>
+  <div class="qa">
+    <button aria-expanded="false">What if a build comes out broken?<span class="pm"></span></button>
+    <div class="ans">Then it's free. Broken output never costs you a credit — you only pay for work that works. And one-click rewind takes you back to any version that did.</div>
+  </div>
+  <div class="qa">
+    <button aria-expanded="false">Can I take my website with me?<span class="pm"></span></button>
+    <div class="ans">Yes. Export your whole site at any time and host it anywhere. It's yours — Makeasy never holds your work hostage.</div>
+  </div>
+  <div class="qa">
+    <button aria-expanded="false">Does it work on my phone?<span class="pm"></span></button>
+    <div class="ans">Fully. Describe, shape and publish from your phone, and every site Makeasy builds is made to look right on phones, tablets and computers alike.</div>
+  </div>
+</section>
+
+<!-- 12 · FINAL + FOOTER -->
+<section class="final wrap" id="start">
+  <img class="mascot" src="https://edge.makeasy.app/mascot/final/work.webp?v=637f9a9" alt="" loading="lazy" onerror="this.style.display='none'">
+  <div class="label">The Makeasy Workshop</div>
+  <h2>The next bench is empty.</h2>
+  <p class="fline">Your idea is one sentence away.</p>
+  <div class="row">
+    <a class="btn" href="#vessel">Start building</a>
+    <a class="btn ghostb" href="#descent">Take the descent ↓</a>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="fbrand">M · Make<i>a</i>sy</div>
+  <div>© 2026 Makeasy. Build it easy.</div>
+  <div class="flinks">
+    <button class="pbtn" id="pauseBtn" aria-pressed="false">Pause motion</button>
+    <a href="#how">How it works</a>
+    <a href="#examples">Examples</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#questions">Questions</a>
+    <a href="#top">Back to the bench ↑</a>
+  </div>
+</div></footer>
+
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* ---------- HERO DEMO REVEAL ---------- */
+  var demo=document.getElementById('demoCard');
+  if(demo){ if(reduce){ demo.classList.add('done'); } else { setTimeout(function(){ demo.classList.add('done'); },1600); } }
+  /* ---------- DESCENT ---------- */
+  var zones=[
+    {to:.28,name:'Surface — the idea',desc:'You say what you want in plain words. Nothing is built yet — this is the one part only you can do, and it takes a sentence.'},
+    {to:.58,name:'Structure — pages and layout',desc:'Makeasy lays out the pages and arranges them in the studio — home, about, contact — until the shape of the site stands up.'},
+    {to:.86,name:'Features — booking, payments, accounts',desc:'The working parts go in: booking, payments, accounts. Real features, wired to real tools, tested as they land.'},
+    {to:1.01,name:'Rated depth — ready to publish',desc:'Checked top to bottom and holding pressure. One tap puts it live on your own domain — this is where a description becomes a business.'}
+  ];
+  var descent=document.querySelector('.descent'), stage=document.getElementById('dStage'),
+      depthNum=document.getElementById('depthNum'), zoneName=document.getElementById('zoneName'), zoneDesc=document.getElementById('zoneDesc'),
+      gDepth=document.getElementById('gDepth'), gPages=document.getElementById('gPages'), gFeat=document.getElementById('gFeat'), gReady=document.getElementById('gReady'),
+      railFill=document.getElementById('railFill'), railDot=document.getElementById('railDot'),
+      ringDepth=document.getElementById('ringDepth');
+  var blocks=[].slice.call(document.querySelectorAll('#mock .blk'));
+  function lerp(a,b,t){return a+(b-a)*t}
+  function frame(){
+    var r=descent.getBoundingClientRect(), total=r.height-window.innerHeight;
+    var p=total>0?Math.min(1,Math.max(0,-r.top/total)):0;
+    var depth=Math.round(lerp(0,200,Math.pow(p,1.1)));
+    depthNum.textContent=depth;
+    gDepth.textContent=depth+' m';
+    gPages.textContent=String(1+Math.round(p*11));
+    gFeat.textContent=String(Math.round(p*9));
+    gReady.textContent=Math.round(p*100)+'%';
+    ringDepth.textContent=depth+' M';
+    railFill.style.height=(p*100)+'%'; railDot.style.top=(p*100)+'%';
+    stage.style.background='linear-gradient(180deg, rgb(7,'+(26-Math.round(p*16))+','+(41-Math.round(p*22))+'), rgb(2,6,'+Math.round(lerp(10,2,p))+'))';
+    blocks.forEach(function(b){ b.classList.toggle('on', p>=parseFloat(b.dataset.at)); });
+    for(var i=0;i<zones.length;i++){ if(p<zones[i].to){ if(zoneName.textContent!==zones[i].name){zoneName.textContent=zones[i].name; zoneDesc.textContent=zones[i].desc;} break; } }
+  }
+  var ticking=false;
+  window.addEventListener('scroll',function(){ if(!ticking){ticking=true; requestAnimationFrame(function(){frame(); ticking=false;});} },{passive:true});
+  window.addEventListener('resize',frame);
+  frame();
+  /* ---------- CONFIGURATOR ---------- */
+  var state={type:'Website', adds:[]};
+  var buildSummary=document.getElementById('buildSummary'), rName=document.getElementById('rName');
+  function render(){
+    rName.textContent='Makeasy · '+state.type;
+    buildSummary.textContent='Your build: '+state.type+(state.adds.length? ' — with '+state.adds.join(', ')+'.' : ' — no add-ons yet.');
+  }
+  var typeOpts=document.getElementById('typeOpts');
+  typeOpts.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b)return;
+    typeOpts.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true'); state.type=b.dataset.name; render(); });
+  var addOpts=document.getElementById('addOpts');
+  addOpts.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b)return;
+    var on=b.getAttribute('aria-pressed')==='true'; b.setAttribute('aria-pressed', on?'false':'true');
+    var n=b.dataset.name;
+    if(on){ state.adds=state.adds.filter(function(x){return x!==n}); } else { state.adds.push(n); }
+    render(); });
+  render();
+  /* ---------- FAQ ACCORDIONS ---------- */
+  document.querySelectorAll('.qa > button').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var qa=btn.parentElement, open=qa.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open?'true':'false');
+    });
+  });
+  /* ---------- GALLERY LIFT ---------- */
+  document.querySelectorAll('.frame').forEach(function(f){
+    f.addEventListener('click',function(){ f.classList.toggle('lift'); });
+  });
+  /* ---------- PAUSE MOTION ---------- */
+  var pauseBtn=document.getElementById('pauseBtn');
+  pauseBtn.addEventListener('click',function(){
+    var paused=document.documentElement.classList.toggle('paused');
+    pauseBtn.setAttribute('aria-pressed', paused?'true':'false');
+    pauseBtn.textContent=paused?'Resume motion':'Pause motion';
+  });
+})();
+</script>
+</body>
+</html>
