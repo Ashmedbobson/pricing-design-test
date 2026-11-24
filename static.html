@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STATIC — Synths you can hear before you buy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#101014; --panel:#1a1a21; --panel2:#22222c; --txt:#f2f1ec; --dim:#9a97a3;
+  --org:#ff6b2c; --cyn:#57d7ff; --line:rgba(242,241,236,.13);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:Archivo,sans-serif;font-weight:900;line-height:.96;letter-spacing:-.015em;text-transform:uppercase}
+.mono{font-family:"IBM Plex Mono",monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--org)}
+nav{position:fixed;inset:12px 12px auto 12px;z-index:60;display:flex;justify-content:space-between;align-items:center;background:rgba(16,16,20,.82);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px}
+nav .brand{font-family:Archivo,sans-serif;font-weight:900;letter-spacing:.16em}
+nav .brand i{color:var(--org);font-style:normal}
+nav .links{display:flex;gap:22px;font-size:13px;font-weight:500}
+nav .links a{color:var(--txt);text-decoration:none}
+nav .cta{background:var(--org);color:#16100b;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none}
+@media(max-width:640px){nav .links{display:none}}
+.hero{padding:130px 0 30px;position:relative}
+.hero h1{font-size:clamp(52px,11vw,148px)}
+.hero h1 .ol{color:transparent;-webkit-text-stroke:1.5px var(--txt)}
+.hero h1 .og{color:var(--org)}
+.hero .sub{margin-top:20px;font-size:clamp(16px,2vw,20px);color:var(--dim);max-width:50ch;line-height:1.55}
+/* SEQUENCER */
+.seq{margin-top:38px;border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:22px}
+.seq .top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.playbtn{display:inline-flex;align-items:center;gap:10px;background:var(--org);color:#16100b;border:none;border-radius:999px;padding:13px 26px;font-weight:800;font-size:15px;cursor:pointer;font-family:Archivo,sans-serif;letter-spacing:.04em}
+.tempo{display:flex;align-items:center;gap:12px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--dim)}
+.tempo input{accent-color:var(--org);width:150px;height:30px}
+.tempo b{color:var(--txt);font-weight:500;min-width:74px}
+.presets{display:flex;gap:8px;flex-wrap:wrap}
+.preset{border:1px solid var(--line);background:var(--panel2);color:var(--txt);border-radius:999px;padding:8px 15px;font-size:13px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif}
+.preset[aria-pressed="true"]{background:var(--txt);color:var(--bg);font-weight:700}
+.seqgrid{display:flex;flex-direction:column;gap:8px}
+.seqrow{display:grid;grid-template-columns:64px repeat(8,1fr);gap:8px;align-items:center}
+@media(max-width:560px){.seqrow{grid-template-columns:44px repeat(8,1fr);gap:5px}}
+.seqrow .rlabel{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.pad{aspect-ratio:1.15;border-radius:10px;border:1px solid var(--line);background:var(--panel2);cursor:pointer;padding:0;transition:transform .06s}
+.pad.on[data-row="0"]{background:var(--org);border-color:var(--org)}
+.pad.on[data-row="1"]{background:var(--cyn);border-color:var(--cyn)}
+.pad.on[data-row="2"]{background:#f2f1ec;border-color:#f2f1ec}
+.pad.now{box-shadow:0 0 0 2px var(--txt) inset;transform:scale(1.05)}
+.pad.on.now{box-shadow:0 0 22px rgba(255,255,255,.35)}
+.seq .hint{font-size:12.5px;color:var(--dim);margin-top:14px;line-height:1.5}
+.wave{display:flex;gap:3px;align-items:flex-end;height:44px;margin-top:20px}
+.wave i{flex:1;background:var(--panel2);border-radius:2px;min-height:4px}
+.wave i.hot{background:var(--org)}
+/* MACHINES */
+.machines{padding:100px 0 110px}
+.machines h2{font-size:clamp(36px,6vw,62px);margin:12px 0 26px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.cards{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:22px}
+.card .face{height:120px;border-radius:12px;background:var(--panel2);position:relative;overflow:hidden;margin-bottom:16px}
+.card .face::after{content:"";position:absolute;inset:auto 14px 14px 14px;height:26px;border-radius:6px;background:repeating-linear-gradient(90deg,var(--bg) 0 10px,var(--line) 10px 12px)}
+.card .knobs{position:absolute;top:14px;left:14px;display:flex;gap:8px}
+.card .knobs i{width:22px;height:22px;border-radius:50%;background:var(--bg);border:2px solid var(--dim)}
+.card .knobs i.hot{border-color:var(--org)}
+.card h3{font-family:Archivo,sans-serif;font-weight:800;text-transform:uppercase;font-size:20px}
+.card p{font-size:14px;color:var(--dim);line-height:1.55;margin-top:6px}
+.card .pr{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.card .pr .amt{font-family:"IBM Plex Mono",monospace;font-size:19px}
+.card .pr button{border:1px solid var(--line);background:transparent;color:var(--txt);border-radius:999px;padding:8px 16px;font-weight:600;font-size:13px;cursor:pointer;font-family:Inter,sans-serif}
+.card .pr button:hover{background:var(--org);color:#16100b;border-color:var(--org)}
+.card .try{font-size:12px;color:var(--cyn);font-family:"IBM Plex Mono",monospace;margin-top:10px}
+footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--dim);font-size:14px;line-height:1.7}
+footer .big{font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,4vw,38px);color:var(--txt);margin-bottom:10px}
+.honest{margin-top:18px;font-size:12px}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">STAT<i>I</i>C</div>
+  <div class="links"><a href="#play">Play</a><a href="#machines">Machines</a></div>
+  <a class="cta" href="#machines">Shop synths</a>
+</nav>
+
+<header class="hero wrap">
+  <div class="label">Synth store · Hear everything first</div>
+  <h1>Don't read<br><span class="ol">about</span> <span class="og">sound.</span><br>Make some.</h1>
+  <p class="sub">Every synth shop on earth describes tone with adjectives. Ours hands you a working sequencer instead. This is the STATIC-1's actual voice — tap the pads, press play, turn it up.</p>
+
+  <div class="seq" id="play">
+    <div class="top">
+      <button class="playbtn" id="playBtn">▶ Play</button>
+      <div class="presets" id="presets">
+        <button class="preset" data-preset="warehouse" aria-pressed="true">Warehouse</button>
+        <button class="preset" data-preset="daydream" aria-pressed="false">Daydream</button>
+        <button class="preset" data-preset="skeleton" aria-pressed="false">Skeleton</button>
+        <button class="preset" data-preset="clear" aria-pressed="false">Clear</button>
+      </div>
+      <div class="tempo"><span>TEMPO</span><input type="range" id="tempo" min="70" max="150" value="112"><b id="tempoVal">112 BPM</b></div>
+    </div>
+    <div class="seqgrid" id="seqGrid"></div>
+    <div class="wave" id="wave"></div>
+    <p class="hint">Rows: <b style="color:var(--org)">BASS</b> · <b style="color:var(--cyn)">LEAD</b> · <b>HAT</b>. Sound runs entirely in your browser — the same engine voices the demo units in store.</p>
+  </div>
+</header>
+
+<section class="machines wrap" id="machines">
+  <div class="label">The machines</div>
+  <h2>Three synths,<br>zero adjectives</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="face"><div class="knobs"><i class="hot"></i><i></i><i></i><i></i></div></div>
+      <h3>Static-1</h3>
+      <p>The one you just played. A monosynth with a filter that growls politely and a sequencer that never sleeps.</p>
+      <div class="pr"><span class="amt">$549</span><button data-buy="Static-1">Add to rig</button></div>
+      <div class="try">↑ ITS VOICE IS THE SEQUENCER ABOVE</div>
+    </div>
+    <div class="card">
+      <div class="face"><div class="knobs"><i></i><i class="hot"></i><i></i><i></i><i></i></div></div>
+      <h3>Static-2 Duo</h3>
+      <p>Two voices that detune against each other like they are arguing beautifully. Pads for days, bass when asked.</p>
+      <div class="pr"><span class="amt">$879</span><button data-buy="Static-2 Duo">Add to rig</button></div>
+      <div class="try">TRY IT: DAYDREAM PRESET, TEMPO 84</div>
+    </div>
+    <div class="card">
+      <div class="face"><div class="knobs"><i></i><i></i><i class="hot"></i><i></i></div></div>
+      <h3>Static Drum</h3>
+      <p>Analog drums with a temper. Kick, snare and hats synthesized from raw circuits — no samples, no mercy.</p>
+      <div class="pr"><span class="amt">$649</span><button data-buy="Static Drum">Add to rig</button></div>
+      <div class="try">TRY IT: SKELETON PRESET, TEMPO 128</div>
+    </div>
+  </div>
+  <p id="buyNote" style="font-size:14px;color:var(--cyn);margin-top:18px" class="mono"></p>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">If it doesn't move you here, it won't at home.</div>
+  STATIC · Demo units on every counter, headphones that get cleaned · 30-day home trial, we pay the return shipping if your ears vote no.
+  <div class="honest">STATIC is a fictional synth store, designed as a concept. The sequencer above, however, really plays.</div>
+</div></footer>
+
+<script>
+(function(){
+  var STEPS=8, ROWS=3;
+  var presets={
+    warehouse:{tempo:112, grid:[[1,0,0,0,1,0,0,0],[0,0,1,0,0,0,1,0],[1,1,0,1,1,1,0,1]]},
+    daydream:{tempo:84, grid:[[1,0,0,0,0,0,1,0],[1,0,0,1,0,0,0,1],[0,1,0,1,0,1,0,1]]},
+    skeleton:{tempo:128, grid:[[1,0,1,0,1,0,1,0],[0,0,0,0,1,0,0,0],[1,0,1,0,1,0,1,1]]},
+    clear:{tempo:112, grid:[[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0]]}
+  };
+  var grid=presets.warehouse.grid.map(function(r){return r.slice()});
+  var seqGrid=document.getElementById('seqGrid'), labels=['BASS','LEAD','HAT'], pads=[];
+  for(var r=0;r<ROWS;r++){
+    var row=document.createElement('div'); row.className='seqrow';
+    var lab=document.createElement('div'); lab.className='rlabel'; lab.textContent=labels[r]; row.appendChild(lab);
+    pads[r]=[];
+    for(var s=0;s<STEPS;s++){
+      var b=document.createElement('button'); b.className='pad'; b.dataset.row=r; b.dataset.step=s;
+      b.setAttribute('aria-label', labels[r]+' step '+(s+1));
+      row.appendChild(b); pads[r][s]=b;
+    }
+    seqGrid.appendChild(row);
+  }
+  var wave=document.getElementById('wave'), bars=[];
+  for(var i=0;i<32;i++){ var w=document.createElement('i'); w.style.height=(6+Math.random()*30)+'px'; wave.appendChild(w); bars.push(w); }
+  function paint(){
+    for(var r=0;r<ROWS;r++) for(var s=0;s<STEPS;s++)
+      pads[r][s].classList.toggle('on', !!grid[r][s]);
+  }
+  seqGrid.addEventListener('click',function(e){
+    var b=e.target.closest('.pad'); if(!b) return;
+    var r=+b.dataset.row, s=+b.dataset.step; grid[r][s]=grid[r][s]?0:1; paint();
+    if(grid[r][s]) blip(r);
+  });
+  /* audio */
+  var ctx=null, playing=false, step=0, timer=null, tempo=112;
+  var bassNotes=[55,55,65.4,49], leadNotes=[220,261.6,329.6,392,329.6,261.6,220,196];
+  function ac(){ if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)(); if(ctx.state==='suspended') ctx.resume(); return ctx; }
+  function tone(freq, dur, type, gain, when){
+    var a=ac(), o=a.createOscillator(), g=a.createGain();
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(gain, when); g.gain.exponentialRampToValueAtTime(.0001, when+dur);
+    o.connect(g); g.connect(a.destination); o.start(when); o.stop(when+dur+.02);
+  }
+  function hat(when){
+    var a=ac(), len=a.sampleRate*.05, buf=a.createBuffer(1,len,a.sampleRate), d=buf.getChannelData(0);
+    for(var i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+    var src=a.createBufferSource(); src.buffer=buf;
+    var f=a.createBiquadFilter(); f.type='highpass'; f.frequency.value=7000;
+    var g=a.createGain(); g.gain.value=.12;
+    src.connect(f); f.connect(g); g.connect(a.destination); src.start(when);
+  }
+  function blip(r){ var a=ac(), t=a.currentTime;
+    if(r===0) tone(55,.25,'sawtooth',.20,t); if(r===1) tone(329.6,.2,'triangle',.18,t); if(r===2) hat(t); }
+  function tick(){
+    var a=ac(), t=a.currentTime+.03;
+    for(var r=0;r<ROWS;r++){
+      pads[r].forEach(function(p){p.classList.remove('now')});
+      pads[r][step].classList.add('now');
+    }
+    if(grid[0][step]) tone(bassNotes[step%4],.28,'sawtooth',.22,t);
+    if(grid[1][step]) tone(leadNotes[step],.22,'triangle',.16,t);
+    if(grid[2][step]) hat(t);
+    bars.forEach(function(b,i){ b.classList.toggle('hot', (i%8)===step && Math.random()>.35); });
+    step=(step+1)%STEPS;
+  }
+  var playBtn=document.getElementById('playBtn');
+  function setPlay(on){
+    playing=on; playBtn.textContent=on?'❚❚ Pause':'▶ Play';
+    if(on){ ac(); tick(); timer=setInterval(tick, 60000/tempo/2); }
+    else { clearInterval(timer); document.querySelectorAll('.pad.now').forEach(function(p){p.classList.remove('now')}); }
+  }
+  playBtn.addEventListener('click',function(){ setPlay(!playing); });
+  var tempoEl=document.getElementById('tempo'), tempoVal=document.getElementById('tempoVal');
+  tempoEl.addEventListener('input',function(){
+    tempo=+tempoEl.value; tempoVal.textContent=tempo+' BPM';
+    if(playing){ clearInterval(timer); timer=setInterval(tick, 60000/tempo/2); }
+  });
+  document.getElementById('presets').addEventListener('click',function(e){
+    var b=e.target.closest('.preset'); if(!b) return;
+    this.querySelectorAll('.preset').forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true');
+    var p=presets[b.dataset.preset]; grid=p.grid.map(function(r){return r.slice()});
+    tempo=p.tempo; tempoEl.value=tempo; tempoVal.textContent=tempo+' BPM';
+    if(playing){ clearInterval(timer); timer=setInterval(tick, 60000/tempo/2); }
+    paint();
+  });
+  document.querySelectorAll('[data-buy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.getElementById('buyNote').textContent='→ '+b.dataset.buy+' added to your rig. 30-day home trial starts when it lands — your ears get the final vote.';
+    });
+  });
+  paint();
+})();
+</script>
+</body>
+</html>

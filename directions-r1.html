@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makeasy — Five Directions, Round 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e0e12;--panel:#17171e;--txt:#f2f1ec;--dim:#9a97a3;--line:rgba(242,241,236,.13);--acc:#ffb03a}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+header{padding:64px 0 10px}
+.label{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--acc);font-weight:700}
+h1{font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;line-height:.98;font-size:clamp(40px,8vw,84px);margin-top:14px}
+h1 .ol{color:transparent;-webkit-text-stroke:1.5px var(--txt)}
+.sub{color:var(--dim);font-size:clamp(15px,2vw,19px);line-height:1.6;max-width:56ch;margin-top:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:36px 0 20px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+a.card{display:block;text-decoration:none;color:var(--txt);border:1px solid var(--line);border-radius:22px;background:var(--panel);padding:26px;position:relative;overflow:hidden}
+a.card:active{transform:scale(.99)}
+.card .num{font-family:Archivo,sans-serif;font-weight:900;font-size:15px;color:var(--dim)}
+.card h2{font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(26px,4vw,36px);margin:8px 0 6px;line-height:1}
+.card .verb{font-size:15px;font-weight:600}
+.card p{color:var(--dim);font-size:14px;line-height:1.6;margin-top:8px}
+.card .chips{display:flex;gap:7px;margin-top:16px}
+.card .chips i{width:26px;height:26px;border-radius:8px;border:1px solid rgba(255,255,255,.18)}
+.card .open{margin-top:18px;display:inline-flex;gap:8px;align-items:center;font-weight:700;font-size:14px;color:var(--acc)}
+.card .swatchband{position:absolute;inset:auto 0 0 0;height:5px}
+.note{border:1px dashed var(--line);border-radius:16px;padding:18px 20px;color:var(--dim);font-size:14px;line-height:1.65;margin:14px 0 54px}
+.note b{color:var(--txt)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="label">Makeasy · Design directions · Round 1</div>
+    <h1>Five directions.<br><span class="ol">All clickable.</span></h1>
+    <p class="sub">Five complete, original website concepts — each built around one signature interaction you operate yourself, written to full specification density: real copy, exact palettes, working configurators with live prices. Open each one, play with it, then tell me which direction deserves to become Makeasy's standard.</p>
+  </header>
+
+  <div class="grid">
+    <a class="card" href="kiln-and-co.html">
+      <div class="num">01 · POTTERY STUDIO</div>
+      <h2>Kiln &amp; Co.</h2>
+      <div class="verb">Scroll to fire the kiln</div>
+      <p>A raw vessel rides 24° → 1,240°C as you scroll — changing colour, glowing, glazing. Then a glaze studio: pick a shape and glaze, watch the price build.</p>
+      <div class="chips"><i style="background:#f4ecdd"></i><i style="background:#2a1a10"></i><i style="background:#b5502a"></i><i style="background:#31584a"></i></div>
+      <span class="open">Open and scroll →</span>
+      <div class="swatchband" style="background:linear-gradient(90deg,#f4ecdd,#b5502a,#31584a)"></div>
+    </a>
+
+    <a class="card" href="fathom.html">
+      <div class="num">02 · DIVE WATCH</div>
+      <h2>Fathom</h2>
+      <div class="verb">Scroll to descend 200 metres</div>
+      <p>Depth, pressure, light and water temperature read live as the page sinks through the ocean's zones — and the watch's lume wakes as the light dies.</p>
+      <div class="chips"><i style="background:#051019"></i><i style="background:#0a1e2e"></i><i style="background:#6ff2c4"></i><i style="background:#e9f4f5"></i></div>
+      <span class="open">Open and descend →</span>
+      <div class="swatchband" style="background:linear-gradient(90deg,#051019,#0a1e2e,#6ff2c4)"></div>
+    </a>
+
+    <a class="card" href="pressroom.html">
+      <div class="num">03 · PRINT SHOP</div>
+      <h2>Pressroom</h2>
+      <div class="verb">Drag the roller to ink the poster</div>
+      <p>One gesture explains the whole trade: drag across a blank sheet and the finished poster inks in under your finger. Then price a real job yourself, live.</p>
+      <div class="chips"><i style="background:#f7f3ea"></i><i style="background:#16130d"></i><i style="background:#d23c1e"></i><i style="background:#8b8578"></i></div>
+      <span class="open">Open and drag →</span>
+      <div class="swatchband" style="background:linear-gradient(90deg,#f7f3ea,#16130d,#d23c1e)"></div>
+    </a>
+
+    <a class="card" href="orchard-row.html">
+      <div class="num">04 · FARM BOX</div>
+      <h2>Orchard Row</h2>
+      <div class="verb">Slide the seasons, build the box</div>
+      <p>The produce changes with the season you pick — then you tap your own crate together, watch the slots fill, and the total stays at farm-gate prices.</p>
+      <div class="chips"><i style="background:#faf5e9"></i><i style="background:#2f5d33"></i><i style="background:#c8402a"></i><i style="background:#e0a526"></i></div>
+      <span class="open">Open and build →</span>
+      <div class="swatchband" style="background:linear-gradient(90deg,#7fb069,#e0a526,#c96f2e,#7d8fa3)"></div>
+    </a>
+
+    <a class="card" href="static.html">
+      <div class="num">05 · SYNTH STORE</div>
+      <h2>Static</h2>
+      <div class="verb">Play the product — a real sequencer</div>
+      <p>No adjectives about sound. The hero is a working step sequencer with the synth's actual voice: tap pads, hit play, change the tempo, load presets.</p>
+      <div class="chips"><i style="background:#101014"></i><i style="background:#ff6b2c"></i><i style="background:#57d7ff"></i><i style="background:#f2f1ec"></i></div>
+      <span class="open">Open and play →</span>
+      <div class="swatchband" style="background:linear-gradient(90deg,#101014,#ff6b2c,#57d7ff)"></div>
+    </a>
+  </div>
+
+  <div class="note"><b>How to judge:</b> each page is a full concept, not a mockup — every button works, every price computes, every interaction is the real mechanic. Judge the <b>feel</b> first (does it move like it should on your phone?), then the look. Verdicts I can use: a winner, a mix ("Kiln's warmth with Fathom's darkness"), or "none — here's what's missing."</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FATHOM — 200 metres down, still ticking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#051019; --panel:#0a1e2e; --foam:#e9f4f5; --lume:#6ff2c4; --dim:#7d97a5; --line:rgba(233,244,245,.14);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--deep);color:var(--foam);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.mono{font-family:"IBM Plex Mono",monospace}
+h1,h2{font-family:Archivo,sans-serif;font-weight:900;line-height:.98;letter-spacing:-.015em;text-transform:uppercase}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--lume)}
+nav{position:fixed;inset:12px 12px auto 12px;z-index:60;display:flex;justify-content:space-between;align-items:center;background:rgba(5,16,25,.8);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px}
+nav .brand{font-family:Archivo,sans-serif;font-weight:900;letter-spacing:.14em}
+nav .brand i{color:var(--lume);font-style:normal}
+nav .links{display:flex;gap:22px;font-size:13px;font-weight:500}
+nav .links a{color:var(--foam);text-decoration:none}
+nav .cta{background:var(--lume);color:#04241a;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none}
+@media(max-width:640px){nav .links{display:none}}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 54px;position:relative;
+  background:radial-gradient(900px 480px at 78% 18%,rgba(111,242,196,.13),transparent 60%),linear-gradient(180deg,#071a29,var(--deep))}
+.hero h1{font-size:clamp(56px,12vw,160px)}
+.hero h1 .thin{color:transparent;-webkit-text-stroke:1.5px var(--foam)}
+.hero h1 .lm{color:var(--lume)}
+.hero .sub{margin-top:20px;font-size:clamp(16px,2vw,20px);color:var(--dim);max-width:48ch;line-height:1.55}
+.hero .row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--lume);color:#04241a;padding:14px 26px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:none;cursor:pointer}
+.btn.ghostb{background:transparent;color:var(--foam);border:1px solid rgba(233,244,245,.4)}
+.hero .meta{display:flex;gap:28px;margin-top:42px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--dim);flex-wrap:wrap}
+.hero .meta b{color:var(--foam);font-size:16px;display:block;font-family:"IBM Plex Mono",monospace;font-weight:500}
+/* DESCENT */
+.descent{height:420vh;position:relative}
+.descent .stage{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center}
+.descent .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;width:100%}
+@media(max-width:820px){.descent .grid{grid-template-columns:1fr;gap:14px}.descent .stage{padding-top:64px}}
+.depthnum{font-family:"IBM Plex Mono",monospace;font-size:clamp(76px,13vw,150px);line-height:1;color:var(--foam)}
+.depthnum small{font-size:.28em;color:var(--lume);letter-spacing:.1em}
+.zonename{font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,3.6vw,40px);margin-top:8px}
+.zonedesc{color:var(--dim);line-height:1.6;margin-top:10px;max-width:42ch}
+.gauges{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap}
+.gauge .glabel{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.22em;color:var(--dim);text-transform:uppercase}
+.gauge .gval{font-family:"IBM Plex Mono",monospace;font-size:22px;margin-top:4px}
+.depthrail{position:absolute;right:26px;top:50%;transform:translateY(-50%);height:52vh;width:2px;background:rgba(233,244,245,.15);border-radius:2px}
+.depthrail i{position:absolute;top:0;left:0;width:100%;background:var(--lume);border-radius:2px}
+.depthrail .dot{position:absolute;left:50%;width:12px;height:12px;border-radius:50%;background:var(--lume);transform:translate(-50%,-50%);box-shadow:0 0 18px rgba(111,242,196,.8)}
+@media(max-width:640px){.depthrail{display:none}}
+.watchbox{display:flex;justify-content:center}
+.watch{width:min(320px,70vw);aspect-ratio:1;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 50% 42%,#122c40,#081a29 68%,#051019);
+  border:10px solid #1b3448;box-shadow:0 40px 80px rgba(0,0,0,.55),inset 0 0 60px rgba(0,0,0,.6)}
+.watch .bezel{position:absolute;inset:-10px;border-radius:50%;border:2px solid rgba(111,242,196,.25)}
+.watch .tick{position:absolute;left:50%;top:50%;width:4px;height:14px;border-radius:2px;background:var(--foam);transform-origin:50% 0}
+.watch .hand{position:absolute;left:50%;top:50%;transform-origin:50% 0;border-radius:4px;background:var(--foam)}
+.watch .hand.h{width:7px;height:26%}
+.watch .hand.m{width:5px;height:38%;background:#cfe6ea}
+.watch .hand.s{width:2px;height:42%;background:var(--lume)}
+.watch .hub{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;background:var(--lume);transform:translate(-50%,-50%)}
+.watch .wlabel{position:absolute;left:0;right:0;top:26%;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.3em;color:var(--dim)}
+.watch .wdepth{position:absolute;left:0;right:0;bottom:24%;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--lume)}
+/* SPECS + RESERVE */
+.specs{padding:110px 0 30px}
+.specs h2{font-size:clamp(36px,6vw,64px);margin:12px 0 26px}
+.specgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:900px){.specgrid{grid-template-columns:repeat(2,1fr)}}
+.spec{border:1px solid var(--line);border-radius:18px;padding:20px;background:var(--panel)}
+.spec .v{font-family:"IBM Plex Mono",monospace;font-size:26px;color:var(--lume)}
+.spec .k{font-size:13px;color:var(--dim);margin-top:6px;line-height:1.5}
+.reserve{padding:70px 0 110px}
+.reserve .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px;align-items:start}
+@media(max-width:820px){.reserve .grid{grid-template-columns:1fr}}
+.reserve h2{font-size:clamp(34px,5.4vw,58px);margin:12px 0 8px}
+.reserve .lede{color:var(--dim);line-height:1.6;max-width:50ch}
+.optgroup{margin-bottom:24px}
+.optgroup .label{margin-bottom:10px;display:block}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{border:1px solid var(--line);background:var(--panel);color:var(--foam);border-radius:999px;padding:10px 18px;font-size:14px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif}
+.opt[aria-pressed="true"]{background:var(--lume);color:#04241a;border-color:var(--lume);font-weight:700}
+.total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:20px}
+.total .amt{font-family:"IBM Plex Mono",monospace;font-size:38px}
+.total .note{font-size:12px;color:var(--dim)}
+.rwatch{display:flex;flex-direction:column;align-items:center;gap:14px;border:1px solid var(--line);border-radius:24px;background:var(--panel);padding:30px}
+.rwatch .rname{font-family:Archivo,sans-serif;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.strapwatch{width:170px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 42%,#122c40,#081a29 70%);border:8px solid #1b3448;position:relative}
+.strapwatch::before,.strapwatch::after{content:"";position:absolute;left:50%;transform:translateX(-50%);width:56px;height:52px;background:var(--strap,#31485c);z-index:-1}
+.strapwatch::before{top:-56px;border-radius:10px 10px 4px 4px}
+.strapwatch::after{bottom:-56px;border-radius:4px 4px 10px 10px}
+footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--dim);font-size:14px;line-height:1.7}
+footer .big{font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,4vw,38px);color:var(--foam);margin-bottom:10px}
+.honest{margin-top:18px;font-size:12px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">FATH<i>O</i>M</div>
+  <div class="links"><a href="#descent">The Descent</a><a href="#specs">Specs</a><a href="#reserve">Reserve</a></div>
+  <a class="cta" href="#reserve">Reserve yours</a>
+</nav>
+
+<header class="hero wrap">
+  <div class="label">Dive instrument · 200 m rated</div>
+  <h1>Two hundred<br><span class="thin">metres</span> <span class="lm">down,</span><br>still ticking.</h1>
+  <p class="sub">A mechanical dive watch built for the part of the ocean where the light gives up. Scroll to take it down — depth, pressure and darkness, all the way to its rating.</p>
+  <div class="row">
+    <a class="btn" href="#descent">Start the descent ↓</a>
+    <a class="btn ghostb" href="#specs">Read the specs</a>
+  </div>
+  <div class="meta">
+    <div><b>200 m</b>water resistance</div>
+    <div><b>21 atm</b>pressure at rating</div>
+    <div><b>60 hr</b>power reserve</div>
+    <div><b>Grade A</b>lume, 8-hour glow</div>
+  </div>
+</header>
+
+<section class="descent" id="descent">
+  <div class="stage" id="dStage">
+    <div class="wrap grid">
+      <div>
+        <div class="label">Live descent · keep scrolling</div>
+        <div class="depthnum"><span id="depthNum">0</span><small> M</small></div>
+        <div class="zonename" id="zoneName">The Sunlight Zone</div>
+        <p class="zonedesc" id="zoneDesc">Bright water. Snorkellers above you, reef below. The Fathom's lume is asleep — it is saving itself for where it is needed.</p>
+        <div class="gauges">
+          <div class="gauge"><div class="glabel">Pressure</div><div class="gval" id="gPress">1.0 atm</div></div>
+          <div class="gauge"><div class="glabel">Light</div><div class="gval" id="gLight">100%</div></div>
+          <div class="gauge"><div class="glabel">Water temp</div><div class="gval" id="gTemp">24°C</div></div>
+          <div class="gauge"><div class="glabel">Lume</div><div class="gval" id="gLume">Standby</div></div>
+        </div>
+      </div>
+      <div class="watchbox">
+        <div class="watch" id="watch">
+          <div class="bezel"></div>
+          <div class="wlabel">FATHOM · 200M</div>
+          <div class="hand h" id="handH"></div>
+          <div class="hand m" id="handM"></div>
+          <div class="hand s" id="handS"></div>
+          <div class="hub"></div>
+          <div class="wdepth" id="wDepth">0 M</div>
+        </div>
+      </div>
+    </div>
+    <div class="depthrail"><i id="railFill"></i><div class="dot" id="railDot"></div></div>
+  </div>
+</section>
+
+<section class="specs wrap" id="specs">
+  <div class="label">Specifications</div>
+  <h2>Built like a <span style="color:var(--lume)">pressure hull</span></h2>
+  <div class="specgrid">
+    <div class="spec"><div class="v">41 mm</div><div class="k">316L steel case, brushed, with a helium escape valve it will almost certainly never need.</div></div>
+    <div class="spec"><div class="v">4.5 mm</div><div class="k">Domed sapphire crystal — thick enough that pressure makes it stronger, not weaker.</div></div>
+    <div class="spec"><div class="v">−4/+6 s</div><div class="k">Daily rate of the in-house calibre F-200, regulated in five positions before it ships.</div></div>
+    <div class="spec"><div class="v">120</div><div class="k">Clicks on the unidirectional bezel. Gloved-hand sized, zero back-play, audible at depth.</div></div>
+  </div>
+</section>
+
+<section class="reserve wrap" id="reserve">
+  <div class="label">Reserve · Batch of 300</div>
+  <h2>Choose your strap.<br>We build to order.</h2>
+  <p class="lede">Each Fathom is assembled when its order lands and pressure-tested twice — once dry, once wet. Pick a strap and a bezel; the total follows you.</p>
+  <div class="grid">
+    <div class="rwatch">
+      <div class="strapwatch" id="strapWatch"></div>
+      <div class="rname" id="rName">Fathom · Steel Bracelet</div>
+      <div class="mono" style="color:var(--dim);font-size:13px" id="rMeta">Batch 07 · ships in 3 weeks</div>
+    </div>
+    <div>
+      <div class="optgroup"><span class="label">Strap</span>
+        <div class="opts" id="strapOpts">
+          <button class="opt" data-name="Steel Bracelet" data-price="1150" data-color="#31485c" aria-pressed="true">Steel Bracelet · $1,150</button>
+          <button class="opt" data-name="Rubber Dive Strap" data-price="980" data-color="#0d2b23" aria-pressed="false">Rubber Dive · $980</button>
+          <button class="opt" data-name="Canvas Expedition" data-price="1020" data-color="#5c4a31" aria-pressed="false">Canvas Expedition · $1,020</button>
+        </div>
+      </div>
+      <div class="optgroup"><span class="label">Bezel insert</span>
+        <div class="opts" id="bezelOpts">
+          <button class="opt" data-name="Abyss Black" data-add="0" aria-pressed="true">Abyss Black · incl.</button>
+          <button class="opt" data-name="Lume Pip Full" data-add="60" aria-pressed="false">Full Lume · +$60</button>
+          <button class="opt" data-name="Coral Marker" data-add="45" aria-pressed="false">Coral Marker · +$45</button>
+        </div>
+      </div>
+      <div class="optgroup"><span class="label">Engraving</span>
+        <div class="opts" id="engOpts">
+          <button class="opt" data-add="0" aria-pressed="true">None</button>
+          <button class="opt" data-add="35" aria-pressed="false">Caseback initials · +$35</button>
+        </div>
+      </div>
+      <div class="total">
+        <div><div class="amt" id="totalAmt">$1,150</div><div class="note">Pressure test certificate included</div></div>
+        <button class="btn" id="reserveBtn">Reserve →</button>
+      </div>
+      <p id="reserveNote" style="font-size:13px;color:var(--dim);margin-top:12px"></p>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">The deep is not dark. It is just honest.</div>
+  Fathom Watch Co. · Assembled in a workshop two streets from the harbour · Every watch is tested to 25% past its rating before it leaves.
+  <div class="honest">Fathom is a fictional watch, designed as a concept. The ocean zones, pressures and light figures on this page are real.</div>
+</div></footer>
+
+<script>
+(function(){
+  /* watch ticks */
+  var watch = document.getElementById('watch');
+  for(var i=0;i<12;i++){
+    var t=document.createElement('div'); t.className='tick';
+    var ang=i*30; t.style.height=(i%3===0?18:11)+'px';
+    t.style.transform='rotate('+ang+'deg) translateY(-' + (watch.clientWidth/2 - 26) + 'px)';
+    t.style.background = i===0 ? 'var(--lume)' : 'var(--foam)';
+    watch.appendChild(t);
+  }
+  var zones=[
+    {to:.30,name:'The Sunlight Zone',desc:'Bright water. Snorkellers above you, reef below. The Fathom\u2019s lume is asleep — it is saving itself for where it is needed.'},
+    {to:.62,name:'The Twilight Zone',desc:'The blue thins to a rumour. Reds are gone by 15 metres, then oranges, then yellow. What remains is the colour of deep water itself — and lume, waking up.'},
+    {to:.88,name:'The Edge of Midnight',desc:'No sunlight has ever reached here. At 150 metres the pressure is sixteen atmospheres — a tonne on every fingernail of case. The sapphire does not care.'},
+    {to:1.01,name:'200 Metres — Rated Depth',desc:'This is where the Fathom stops being tested and starts being trusted. Everything below this line is somebody else\u2019s watch\u2019s problem.'}
+  ];
+  var descent=document.querySelector('.descent'), stage=document.getElementById('dStage'),
+      depthNum=document.getElementById('depthNum'), zoneName=document.getElementById('zoneName'), zoneDesc=document.getElementById('zoneDesc'),
+      gPress=document.getElementById('gPress'), gLight=document.getElementById('gLight'), gTemp=document.getElementById('gTemp'), gLume=document.getElementById('gLume'),
+      railFill=document.getElementById('railFill'), railDot=document.getElementById('railDot'), wDepth=document.getElementById('wDepth');
+  var handH=document.getElementById('handH'), handM=document.getElementById('handM'), handS=document.getElementById('handS');
+  function lerp(a,b,t){return a+(b-a)*t}
+  function frame(){
+    var r=descent.getBoundingClientRect(), total=r.height-window.innerHeight;
+    var p=Math.min(1,Math.max(0,-r.top/total));
+    var depth=Math.round(lerp(0,200,Math.pow(p,1.1)));
+    depthNum.textContent=depth; wDepth.textContent=depth+' M';
+    gPress.textContent=(1+depth/10).toFixed(1)+' atm';
+    gLight.textContent=Math.max(0,Math.round(100*Math.pow(1-p,2.4)))+'%';
+    gTemp.textContent=Math.round(lerp(24,4,p))+'°C';
+    gLume.textContent = p<.3 ? 'Standby' : (p<.62 ? 'Waking' : (p<.88 ? 'Full glow' : 'Full glow · 8h'));
+    railFill.style.height=(p*100)+'%'; railDot.style.top=(p*100)+'%';
+    var dark = Math.round(lerp(10,2,p));
+    stage.style.background='linear-gradient(180deg, rgb(7,'+(26-Math.round(p*16))+','+(41-Math.round(p*22))+'), rgb(2,6,'+dark+'))';
+    watch.style.boxShadow='0 40px 80px rgba(0,0,0,.55), inset 0 0 60px rgba(0,0,0,.6), 0 0 '+(Math.round(p*70))+'px rgba(111,242,196,'+(p*.5)+')';
+    for(var i=0;i<zones.length;i++){ if(p<zones[i].to){ if(zoneName.textContent!==zones[i].name){zoneName.textContent=zones[i].name; zoneDesc.textContent=zones[i].desc;} break; } }
+    /* hands sweep with descent */
+    handS.style.transform='translateX(-50%) rotate('+(p*720)+'deg)';
+    handM.style.transform='translateX(-50%) rotate('+(35+p*120)+'deg)';
+    handH.style.transform='translateX(-50%) rotate('+(305+p*40)+'deg)';
+  }
+  var ticking=false;
+  window.addEventListener('scroll',function(){ if(!ticking){ticking=true; requestAnimationFrame(function(){frame(); ticking=false;});} },{passive:true});
+  window.addEventListener('resize',function(){ location.reload; frame(); });
+  frame();
+  /* ---------- RESERVE ---------- */
+  var state={strap:'Steel Bracelet', base:1150, bezelAdd:0, engAdd:0, bezel:'Abyss Black'};
+  var totalAmt=document.getElementById('totalAmt'), rName=document.getElementById('rName'), strapWatch=document.getElementById('strapWatch');
+  function render(){ totalAmt.textContent='$'+(state.base+state.bezelAdd+state.engAdd).toLocaleString(); rName.textContent='Fathom · '+state.strap; }
+  function bind(id,fn){ var box=document.getElementById(id); box.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b)return;
+    box.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')}); b.setAttribute('aria-pressed','true'); fn(b); render(); }); }
+  bind('strapOpts',function(b){ state.strap=b.dataset.name; state.base=+b.dataset.price; strapWatch.style.setProperty('--strap', b.dataset.color); });
+  bind('bezelOpts',function(b){ state.bezel=b.dataset.name; state.bezelAdd=+b.dataset.add; });
+  bind('engOpts',function(b){ state.engAdd=+b.dataset.add; });
+  document.getElementById('reserveBtn').addEventListener('click',function(){
+    document.getElementById('reserveNote').textContent='Reserved: Fathom on the '+state.strap.toLowerCase()+' with the '+state.bezel.toLowerCase()+' bezel. Your pressure-test certificate is printed the day it ships.';
+  });
+  render();
+})();
+</script>
+</body>
+</html>

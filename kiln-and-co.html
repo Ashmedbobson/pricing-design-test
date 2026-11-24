@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiln &amp; Co. — Stoneware fired at 1,240°</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4ecdd; --paper2:#ede1c9; --ink:#2a1a10; --clay:#b5502a; --clay-deep:#8f3c1e;
+  --sand:#e0cda6; --smoke:#6f5b47; --line:rgba(42,26,16,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,.serif{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.02;letter-spacing:-.01em}
+em{font-style:italic;font-weight:500}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--clay-deep);font-weight:600}
+nav{position:fixed;inset:12px 12px auto 12px;z-index:50;display:flex;justify-content:space-between;align-items:center;background:rgba(244,236,221,.86);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px}
+nav .brand{font-family:Fraunces,serif;font-size:19px;font-weight:600}
+nav .brand b{color:var(--clay)}
+nav .links{display:flex;gap:22px;font-size:13px;font-weight:500}
+nav .links a{color:var(--ink);text-decoration:none}
+nav .cta{background:var(--ink);color:var(--paper);padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
+@media(max-width:640px){nav .links{display:none}}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 56px;position:relative}
+.hero .ghost{position:absolute;top:8%;right:-2%;font-family:Fraunces,serif;font-size:clamp(120px,26vw,340px);color:transparent;-webkit-text-stroke:1px rgba(42,26,16,.13);line-height:1;pointer-events:none;user-select:none}
+.hero h1{font-size:clamp(52px,10.5vw,138px);max-width:12ch}
+.hero h1 .hot{color:var(--clay)}
+.hero .sub{margin-top:22px;font-size:clamp(16px,2vw,20px);color:var(--smoke);max-width:46ch;line-height:1.55}
+.hero .row{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--clay);color:#fff;padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:none;cursor:pointer}
+.btn.ghostb{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+.hero .meta{display:flex;gap:28px;margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--smoke);flex-wrap:wrap}
+.hero .meta b{color:var(--ink);font-size:15px;display:block}
+/* FIRE RUNWAY */
+.fire{height:340vh;position:relative}
+.fire .stage{position:sticky;top:0;height:100svh;display:flex;align-items:center;overflow:hidden;background:var(--bg,#efe3cb);transition:background .2s linear}
+.fire .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;width:100%}
+@media(max-width:760px){.fire .grid{grid-template-columns:1fr;gap:8px}.fire .stage{padding-top:70px}}
+.kilnbox{position:relative;display:flex;justify-content:center}
+.vessel{width:min(300px,62vw);filter:drop-shadow(0 30px 30px rgba(42,26,16,.25))}
+.temp{font-family:Fraunces,serif;font-size:clamp(64px,10vw,120px);line-height:1}
+.temp small{font-size:.35em;color:var(--clay-deep)}
+.fire .stagename{font-family:Fraunces,serif;font-style:italic;font-size:clamp(22px,3vw,32px);margin-top:6px}
+.fire p.desc{color:var(--smoke);line-height:1.6;margin-top:12px;max-width:40ch}
+.firebar{height:6px;background:rgba(42,26,16,.14);border-radius:99px;margin-top:26px;overflow:hidden;max-width:420px}
+.firebar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--sand),var(--clay),#ff7a29);border-radius:99px}
+.fire .ticks{display:flex;justify-content:space-between;max-width:420px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);margin-top:8px}
+/* CONFIGURATOR */
+.config{padding:110px 0}
+.config h2{font-size:clamp(38px,6vw,64px);margin:12px 0 8px}
+.config .lede{color:var(--smoke);max-width:52ch;line-height:1.6}
+.config .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;align-items:start}
+@media(max-width:820px){.config .grid{grid-template-columns:1fr}}
+.preview{background:var(--paper2);border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.preview .pvessel{width:200px;transition:filter .3s}
+.preview .pname{font-family:Fraunces,serif;font-size:22px}
+.preview .pprice{font-size:15px;color:var(--smoke)}
+.optgroup{margin-bottom:26px}
+.optgroup .label{margin-bottom:10px;display:block}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{border:1px solid var(--line);background:#fff8ec;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif}
+.opt[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.swatches{display:flex;gap:12px;flex-wrap:wrap}
+.swatch{width:52px;height:52px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
+.swatch[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.08)}
+.total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:20px;margin-top:6px}
+.total .amt{font-family:Fraunces,serif;font-size:40px}
+.total .note{font-size:12px;color:var(--smoke)}
+/* SHELF */
+.shelf{padding:30px 0 110px}
+.shelf h2{font-size:clamp(34px,5vw,54px);margin:10px 0 30px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:820px){.cards{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:20px;padding:22px;background:#fbf6ea}
+.card .blob{height:150px;border-radius:14px;margin-bottom:16px}
+.card h3{font-family:Fraunces,serif;font-size:21px;font-weight:600}
+.card p{font-size:14px;color:var(--smoke);line-height:1.55;margin-top:6px}
+.card .pr{display:flex;justify-content:space-between;margin-top:14px;font-weight:600;font-size:15px}
+.card .pr span{color:var(--clay-deep);font-weight:500;font-size:13px}
+footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--smoke);font-size:14px;line-height:1.7}
+footer .big{font-family:Fraunces,serif;font-size:clamp(26px,4vw,40px);color:var(--ink);margin-bottom:10px}
+.honest{margin-top:18px;font-size:12px;letter-spacing:.06em}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">Kiln <b>&amp;</b> Co.</div>
+  <div class="links"><a href="#fire">The Firing</a><a href="#studio">Glaze Studio</a><a href="#shelf">The Shelf</a></div>
+  <a class="cta" href="#studio">Make yours</a>
+</nav>
+
+<header class="hero wrap">
+  <div class="ghost">1240°</div>
+  <div class="label">Stoneware studio · Portland, OR</div>
+  <h1>Clay in.<br><span class="hot">Fire</span> decides<br>the rest.</h1>
+  <p class="sub">Small-batch stoneware thrown on the wheel Monday, fired Friday. Scroll and watch a raw vessel ride the kiln from cold clay to glaze — the same 1,240 degrees every piece on our shelf survived.</p>
+  <div class="row">
+    <a class="btn" href="#studio">Glaze your own →</a>
+    <a class="btn ghostb" href="#fire">Watch a firing</a>
+  </div>
+  <div class="meta">
+    <div><b>1,240°C</b>peak firing temp</div>
+    <div><b>38 hrs</b>door to door, one firing</div>
+    <div><b>~200</b>pieces per kiln load</div>
+    <div><b>Est. 2016</b>two wheels, one kiln</div>
+  </div>
+</header>
+
+<section class="fire" id="fire">
+  <div class="stage" id="fireStage">
+    <div class="wrap grid">
+      <div class="kilnbox">
+        <svg class="vessel" viewBox="0 0 200 240" aria-label="A stoneware vessel heating in the kiln">
+          <defs>
+            <linearGradient id="vgrad" x1="0" y1="0" x2="0" y2="1">
+              <stop id="gs1" offset="0" stop-color="#9a8874"/>
+              <stop id="gs2" offset="1" stop-color="#7d6a56"/>
+            </linearGradient>
+          </defs>
+          <path d="M70 18 h60 c-3 14-8 22-8 34 c0 8 6 12 10 20 c14 26 20 52 20 82 c0 40-22 68-52 68 s-52-28-52-68 c0-30 6-56 20-82 c4-8 10-12 10-20 c0-12-5-20-8-34 z" fill="url(#vgrad)"/>
+          <ellipse cx="100" cy="18" rx="30" ry="6" fill="#5d4c3a"/>
+          <ellipse id="glow" cx="100" cy="150" rx="58" ry="70" fill="#ff6a1f" opacity="0"/>
+        </svg>
+      </div>
+      <div>
+        <div class="label">The firing · keep scrolling</div>
+        <div class="temp"><span id="tempNum">24</span><small>°C</small></div>
+        <div class="stagename" id="stageName">Greenware — still just mud</div>
+        <p class="desc" id="stageDesc">The vessel is bone dry and fragile enough to snap with two fingers. Everything that happens next is heat, time, and patience.</p>
+        <div class="firebar"><i id="fireFill"></i></div>
+        <div class="ticks"><span>Load</span><span>Bisque 980°</span><span>Glaze 1,240°</span><span>Cool</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="config wrap" id="studio">
+  <div class="label">Glaze studio</div>
+  <h2>Pick a shape.<br>Pick a <em>glaze</em>.</h2>
+  <p class="lede">Every piece is made to order and fired in the Friday kiln. Choose below — the price updates as you build, and what you see is the glaze as it comes out of the fire, not a filter.</p>
+  <div class="grid">
+    <div class="preview">
+      <svg class="pvessel" id="pVessel" viewBox="0 0 200 240" aria-label="Your configured vessel">
+        <defs><linearGradient id="pgrad" x1="0" y1="0" x2="0" y2="1">
+          <stop id="ps1" offset="0" stop-color="#31584a"/><stop id="ps2" offset="1" stop-color="#1e3a30"/>
+        </linearGradient></defs>
+        <path id="pShape" d="M70 18 h60 c-3 14-8 22-8 34 c0 8 6 12 10 20 c14 26 20 52 20 82 c0 40-22 68-52 68 s-52-28-52-68 c0-30 6-56 20-82 c4-8 10-12 10-20 c0-12-5-20-8-34 z" fill="url(#pgrad)"/>
+        <ellipse cx="100" cy="18" rx="30" ry="6" fill="rgba(0,0,0,.25)"/>
+      </svg>
+      <div class="pname" id="pName">Bud Vase · Deep Fir</div>
+      <div class="pprice" id="pMeta">Fired Friday · ships in 2 weeks</div>
+    </div>
+    <div>
+      <div class="optgroup"><span class="label">Shape</span>
+        <div class="opts" id="shapeOpts">
+          <button class="opt" data-shape="vase" data-price="64" aria-pressed="true">Bud Vase · $64</button>
+          <button class="opt" data-shape="bowl" data-price="48" aria-pressed="false">Soup Bowl · $48</button>
+          <button class="opt" data-shape="mug" data-price="38" aria-pressed="false">Kiln Mug · $38</button>
+        </div>
+      </div>
+      <div class="optgroup"><span class="label">Glaze</span>
+        <div class="swatches" id="glazeOpts">
+          <button class="swatch" data-glaze="Deep Fir" data-add="0" aria-pressed="true" style="background:linear-gradient(160deg,#31584a,#1e3a30)" aria-label="Deep Fir"></button>
+          <button class="swatch" data-glaze="Ember Rust" data-add="6" aria-pressed="false" style="background:linear-gradient(160deg,#c65a2e,#8f3c1e)" aria-label="Ember Rust"></button>
+          <button class="swatch" data-glaze="Ash White" data-add="4" aria-pressed="false" style="background:linear-gradient(160deg,#f1ead9,#d8cbae)" aria-label="Ash White"></button>
+          <button class="swatch" data-glaze="Midnight Pool" data-add="8" aria-pressed="false" style="background:linear-gradient(160deg,#274b63,#122a3a)" aria-label="Midnight Pool"></button>
+        </div>
+      </div>
+      <div class="optgroup"><span class="label">Set of</span>
+        <div class="opts" id="qtyOpts">
+          <button class="opt" data-qty="1" aria-pressed="true">1 piece</button>
+          <button class="opt" data-qty="2" aria-pressed="false">2 pieces</button>
+          <button class="opt" data-qty="4" aria-pressed="false">4 pieces</button>
+        </div>
+      </div>
+      <div class="total">
+        <div><div class="amt" id="totalAmt">$64</div><div class="note">Glaze and firing included · no two alike</div></div>
+        <button class="btn" id="orderBtn">Reserve for Friday's kiln →</button>
+      </div>
+      <p class="note" id="orderNote" style="font-size:13px;color:var(--smoke);margin-top:12px"></p>
+    </div>
+  </div>
+</section>
+
+<section class="shelf wrap" id="shelf">
+  <div class="label">From last Friday's kiln</div>
+  <h2>The shelf, <em>this week</em></h2>
+  <div class="cards">
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#31584a,#16281f)"></div>
+      <h3>Deep Fir Dinner Set</h3><p>Four plates, four bowls. The glaze breaks green over every edge the wheel left behind.</p>
+      <div class="pr">$210 <span>6 left</span></div></div>
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#c65a2e,#7e3418)"></div>
+      <h3>Ember Rust Pitcher</h3><p>Thrown thick, fired hot. The rust blooms where the flame licked the shoulder.</p>
+      <div class="pr">$86 <span>3 left</span></div></div>
+    <div class="card"><div class="blob" style="background:linear-gradient(150deg,#f1ead9,#cdbd97)"></div>
+      <h3>Ash White Serving Bowl</h3><p>Wood-ash glaze, matte as river stone. Made for the middle of a crowded table.</p>
+      <div class="pr">$72 <span>9 left</span></div></div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">Come watch a kiln opening.</div>
+  Saturdays 10am · 214 SE Clay St, Portland · The door opens, the heat rolls out, and nobody talks for a full minute.
+  <div class="honest">Kiln &amp; Co. is a fictional studio, designed as a concept. Every temperature on this page is real kiln practice.</div>
+</div></footer>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* ---------- FIRE RUNWAY ---------- */
+  var fire = document.querySelector('.fire'), stage = document.getElementById('fireStage'),
+      tempNum = document.getElementById('tempNum'), stageName = document.getElementById('stageName'),
+      stageDesc = document.getElementById('stageDesc'), fill = document.getElementById('fireFill'),
+      gs1 = document.getElementById('gs1'), gs2 = document.getElementById('gs2'), glow = document.getElementById('glow');
+  var stages = [
+    {to:.18, name:'Greenware — still just mud', desc:'The vessel is bone dry and fragile enough to snap with two fingers. Everything that happens next is heat, time, and patience.'},
+    {to:.42, name:'The climb — water leaves for good', desc:'Past 200° the last physical water steams off. Past 573° the clay itself changes crystal — quartz inversion — and can never be clay again.'},
+    {to:.62, name:'Bisque — 980° and holding', desc:'First fire done. The piece is now ceramic: hard, pinkish, porous enough to drink glaze like a sponge. One wrong knock still ends it.'},
+    {to:.86, name:'Glaze fire — 1,240°, the melt', desc:'The glaze coating melts into glass and fuses to the body. Inside the kiln everything glows the colour of a sunset you cannot look at directly.'},
+    {to:1.01, name:'The cool — do not open that door', desc:'Thirty hours of cooling. Open early and the thermal shock cracks every piece in the load. The best sound in pottery is silence from a closed kiln.'}
+  ];
+  function lerp(a,b,t){return a+(b-a)*t}
+  function mix(c1,c2,t){return [Math.round(lerp(c1[0],c2[0],t)),Math.round(lerp(c1[1],c2[1],t)),Math.round(lerp(c1[2],c2[2],t))]}
+  function rgb(c){return 'rgb('+c[0]+','+c[1]+','+c[2]+')'}
+  var raw=[154,136,116], rawD=[125,106,86], hot=[255,110,30], hotD=[214,72,20], glaze=[49,88,74], glazeD=[30,58,48];
+  function fireFrame(){
+    var r = fire.getBoundingClientRect(), total = r.height - window.innerHeight;
+    var p = Math.min(1, Math.max(0, -r.top/total));
+    var temp = Math.round(lerp(24,1240, Math.pow(p,1.15)));
+    if(p>.93) temp = Math.round(lerp(1240,60,(p-.93)/.07));
+    tempNum.textContent = temp.toLocaleString();
+    fill.style.width = (p*100)+'%';
+    var c1,c2,g=0;
+    if(p<.55){ var t=p/.55; c1=mix(raw,hot,t); c2=mix(rawD,hotD,t); g=t*.55; }
+    else if(p<.8){ c1=hot; c2=hotD; g=.55; }
+    else { var t2=(p-.8)/.2; c1=mix(hot,glaze,t2); c2=mix(hotD,glazeD,t2); g=.55*(1-t2); }
+    gs1.setAttribute('stop-color', rgb(c1)); gs2.setAttribute('stop-color', rgb(c2));
+    glow.setAttribute('opacity', g.toFixed(2));
+    stage.style.setProperty('--bg', p<.5 ? '#efe3cb' : (p<.8 ? '#f3ddba' : '#efe3cb'));
+    for(var i=0;i<stages.length;i++){ if(p<stages[i].to){ if(stageName.textContent!==stages[i].name){stageName.textContent=stages[i].name; stageDesc.textContent=stages[i].desc;} break; } }
+  }
+  var ticking=false;
+  window.addEventListener('scroll', function(){ if(!ticking){ ticking=true; requestAnimationFrame(function(){ fireFrame(); ticking=false; }); } }, {passive:true});
+  fireFrame();
+  /* ---------- CONFIGURATOR ---------- */
+  var shapes = {
+    vase:{name:'Bud Vase', d:'M70 18 h60 c-3 14-8 22-8 34 c0 8 6 12 10 20 c14 26 20 52 20 82 c0 40-22 68-52 68 s-52-28-52-68 c0-30 6-56 20-82 c4-8 10-12 10-20 c0-12-5-20-8-34 z'},
+    bowl:{name:'Soup Bowl', d:'M28 92 h144 c-2 62-30 108-72 108 s-70-46-72-108 z M28 92 h144 c0 8-6 12-14 12 h-116 c-8 0-14-4-14-12 z'},
+    mug:{name:'Kiln Mug', d:'M62 60 h76 v96 c0 26-16 40-38 40 s-38-14-38-40 z M138 84 c22-4 34 10 34 26 s-12 30-34 26 M62 60 h76 v10 h-76 z'}
+  };
+  var glazes = {
+    'Deep Fir':['#31584a','#1e3a30'], 'Ember Rust':['#c65a2e','#8f3c1e'],
+    'Ash White':['#f1ead9','#d8cbae'], 'Midnight Pool':['#274b63','#122a3a']
+  };
+  var state = {shape:'vase', shapeName:'Bud Vase', base:64, glaze:'Deep Fir', add:0, qty:1};
+  var pShape=document.getElementById('pShape'), ps1=document.getElementById('ps1'), ps2=document.getElementById('ps2'),
+      pName=document.getElementById('pName'), totalAmt=document.getElementById('totalAmt');
+  function render(){
+    pShape.setAttribute('d', shapes[state.shape].d);
+    ps1.setAttribute('stop-color', glazes[state.glaze][0]); ps2.setAttribute('stop-color', glazes[state.glaze][1]);
+    pName.textContent = state.shapeName + ' · ' + state.glaze;
+    totalAmt.textContent = '$' + ((state.base + state.add) * state.qty);
+  }
+  function bindOpts(id, fn){
+    var box = document.getElementById(id);
+    box.addEventListener('click', function(e){
+      var b = e.target.closest('button'); if(!b) return;
+      box.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true'); fn(b); render();
+    });
+  }
+  bindOpts('shapeOpts', function(b){ state.shape=b.dataset.shape; state.shapeName=shapes[state.shape].name; state.base=+b.dataset.price; });
+  bindOpts('glazeOpts', function(b){ state.glaze=b.dataset.glaze; state.add=+b.dataset.add; });
+  bindOpts('qtyOpts', function(b){ state.qty=+b.dataset.qty; });
+  document.getElementById('orderBtn').addEventListener('click', function(){
+    document.getElementById('orderNote').textContent = 'Held: one ' + state.shapeName + ' in ' + state.glaze + ' (set of ' + state.qty + ') joins Friday\u2019s kiln load. We email you a photo at the kiln opening.';
+  });
+  render();
+})();
+</script>
+</body>
+</html>

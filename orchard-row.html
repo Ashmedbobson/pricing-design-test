@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orchard Row — The farm box that follows the season</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#faf5e9; --leaf:#2f5d33; --leaf-deep:#1e4023; --apple:#c8402a; --soil:#4a3421; --mut:#6d6152; --line:rgba(74,52,33,.16);
+  --season:#7fb069;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--soil);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:Fraunces,Georgia,serif;font-weight:700;line-height:1.02;letter-spacing:-.01em}
+em{font-style:italic;font-weight:500}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+.label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--apple);font-weight:700}
+nav{position:fixed;inset:12px 12px auto 12px;z-index:60;display:flex;justify-content:space-between;align-items:center;background:rgba(250,245,233,.88);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;padding:10px 18px}
+nav .brand{font-family:Fraunces,serif;font-size:19px;font-weight:700}
+nav .brand b{color:var(--apple)}
+nav .links{display:flex;gap:22px;font-size:13px;font-weight:500}
+nav .links a{color:var(--soil);text-decoration:none}
+nav .cta{background:var(--leaf);color:#fff;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
+@media(max-width:640px){nav .links{display:none}}
+.hero{min-height:96svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 54px;position:relative}
+.hero .sun{position:absolute;top:12%;right:6%;width:clamp(120px,20vw,220px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#ffd98a,#f5a83d);opacity:.85;box-shadow:0 0 90px rgba(245,168,61,.5)}
+.hero h1{font-size:clamp(50px,10vw,128px);max-width:11ch}
+.hero h1 .ap{color:var(--apple)}
+.hero .sub{margin-top:20px;font-size:clamp(16px,2vw,20px);color:var(--mut);max-width:48ch;line-height:1.55}
+.hero .row{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--leaf);color:#fff;padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:none;cursor:pointer}
+.btn.ghostb{background:transparent;color:var(--soil);border:1px solid var(--soil)}
+.hero .meta{display:flex;gap:28px;margin-top:42px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--mut);flex-wrap:wrap}
+.hero .meta b{color:var(--soil);font-size:15px;display:block}
+/* SEASONS */
+.seasons{padding:96px 0 20px}
+.seasons h2{font-size:clamp(36px,6vw,62px);margin:12px 0 10px}
+.seasons .lede{color:var(--mut);line-height:1.6;max-width:54ch}
+.seasonbar{display:flex;gap:8px;margin-top:30px;background:#f1e8d2;border:1px solid var(--line);border-radius:999px;padding:6px;max-width:560px;overflow-x:auto}
+.seasonbar button{flex:1;border:none;background:transparent;padding:11px 10px;border-radius:999px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;color:var(--mut);cursor:pointer;white-space:nowrap}
+.seasonbar button[aria-pressed="true"]{background:var(--leaf);color:#fff}
+.seasongrid{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:34px;align-items:center}
+@media(max-width:820px){.seasongrid{grid-template-columns:1fr}}
+.seasoncard{border-radius:24px;padding:30px;color:#fff;min-height:300px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(160deg,var(--season),var(--leaf-deep));transition:background .5s}
+.seasoncard .sname{font-family:Fraunces,serif;font-size:clamp(34px,5vw,52px);font-weight:700}
+.seasoncard .stag{font-size:15px;opacity:.92;line-height:1.55;margin-top:8px;max-width:38ch}
+.seasonlist{list-style:none}
+.seasonlist li{display:flex;justify-content:space-between;padding:13px 2px;border-bottom:1px solid var(--line);font-size:15px}
+.seasonlist li b{font-weight:600}
+.seasonlist li span{color:var(--mut)}
+/* BUILD YOUR BOX */
+.build{padding:90px 0 110px}
+.build h2{font-size:clamp(36px,6vw,62px);margin:12px 0 10px}
+.build .lede{color:var(--mut);line-height:1.6;max-width:54ch}
+.build .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:38px;margin-top:36px;align-items:start}
+@media(max-width:820px){.build .grid{grid-template-columns:1fr}}
+.items{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:480px){.items{grid-template-columns:1fr}}
+.item{border:1px solid var(--line);background:#fffdf4;border-radius:16px;padding:16px;text-align:left;cursor:pointer;font-family:Inter,sans-serif;color:var(--soil);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.item .nm{font-weight:600;font-size:15px}
+.item .pr{font-size:13px;color:var(--mut)}
+.item .add{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--leaf);color:var(--leaf);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;background:#fff}
+.item.in{border-color:var(--leaf);background:#eef4e4}
+.item.in .add{background:var(--leaf);color:#fff}
+.boxcard{border:2px solid var(--soil);border-radius:22px;padding:24px;background:#fffdf4;position:sticky;top:90px}
+.boxslots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0}
+.slot{aspect-ratio:1;border-radius:12px;border:1.5px dashed rgba(74,52,33,.3);display:flex;align-items:center;justify-content:center;font-size:11px;text-align:center;padding:4px;color:var(--mut);line-height:1.25}
+.slot.full{border-style:solid;border-color:var(--leaf);background:#eef4e4;color:var(--leaf-deep);font-weight:600}
+.boxcard .rowline{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.boxcard .rowline span{color:var(--mut)}
+.boxcard .grand{display:flex;justify-content:space-between;align-items:baseline;padding-top:14px}
+.boxcard .grand .amt{font-family:Fraunces,serif;font-size:38px;font-weight:700}
+.freq{display:flex;gap:8px;margin-top:14px}
+.freq button{flex:1;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px;font-family:Inter,sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(--soil)}
+.freq button[aria-pressed="true"]{background:var(--soil);color:var(--cream)}
+footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--mut);font-size:14px;line-height:1.7}
+footer .big{font-family:Fraunces,serif;font-size:clamp(26px,4vw,40px);color:var(--soil);margin-bottom:10px;font-weight:700}
+.honest{margin-top:18px;font-size:12px}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">Orchard <b>Row</b></div>
+  <div class="links"><a href="#seasons">Seasons</a><a href="#build">Build a Box</a></div>
+  <a class="cta" href="#build">Start a box</a>
+</nav>
+
+<header class="hero wrap">
+  <div class="sun"></div>
+  <div class="label">Farm box · Picked Thursday, at your door Friday</div>
+  <h1>The box follows<br>the <em>season</em>,<br>not the <span class="ap">shelf</span>.</h1>
+  <p class="sub">Eleven farms, one row of orchards, zero warehouses. Slide through the year to see what the land is actually offering — then build the box you'd like to open on Friday.</p>
+  <div class="row">
+    <a class="btn" href="#build">Build your box →</a>
+    <a class="btn ghostb" href="#seasons">Walk the seasons</a>
+  </div>
+  <div class="meta">
+    <div><b>11 farms</b>within 40 miles</div>
+    <div><b>36 hrs</b>field to doorstep</div>
+    <div><b>$0</b>plastic in the box</div>
+    <div><b>Skip anytime</b>no lock-in, ever</div>
+  </div>
+</header>
+
+<section class="seasons wrap" id="seasons">
+  <div class="label">The year, in food</div>
+  <h2>Pick a season.<br>See what's <em>honest</em>.</h2>
+  <p class="lede">We never fly in asparagus in December and call it local. Each season's box is only what these fields are giving up that month — which is why it tastes like it does.</p>
+  <div class="seasonbar" id="seasonBar" role="group" aria-label="Choose a season">
+    <button data-season="spring" aria-pressed="true">Spring</button>
+    <button data-season="summer" aria-pressed="false">Summer</button>
+    <button data-season="autumn" aria-pressed="false">Autumn</button>
+    <button data-season="winter" aria-pressed="false">Winter</button>
+  </div>
+  <div class="seasongrid">
+    <div class="seasoncard" id="seasonCard">
+      <div class="sname" id="sName">Spring</div>
+      <div class="stag" id="sTag">The ground wakes up hungry and generous. Everything is green, tender, and slightly impatient.</div>
+    </div>
+    <ul class="seasonlist" id="seasonList"></ul>
+  </div>
+</section>
+
+<section class="build wrap" id="build">
+  <div class="label">Build your box</div>
+  <h2>Tap what you'd<br><em>actually</em> eat.</h2>
+  <p class="lede">The standard box is the season's best eight. Or build your own — tap items in and out, watch the crate fill, and the price stays honest at farm-gate rates.</p>
+  <div class="grid">
+    <div class="items" id="itemGrid"></div>
+    <div class="boxcard">
+      <div class="label" style="color:var(--leaf)">Your crate</div>
+      <div class="boxslots" id="boxSlots"></div>
+      <div class="rowline"><span>Items</span><b id="bCount">0 of 8 slots</b></div>
+      <div class="rowline"><span>Delivery</span><b>Friday · free over $35</b></div>
+      <div class="freq" id="freqRow">
+        <button data-mult="1" aria-pressed="true">Weekly</button>
+        <button data-mult="0.95" aria-pressed="false">Every 2 weeks · −5%</button>
+      </div>
+      <div class="grand"><div class="amt" id="bTotal">$0</div><button class="btn" id="boxBtn">Set up this box →</button></div>
+      <p id="boxNote" style="font-size:13px;color:var(--mut);margin-top:10px"></p>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <div class="big">Eat the month you're in.</div>
+  Orchard Row Cooperative · 11 farms, one packing barn · Rain checks are literal here — if a crop fails, the box note says so and your bill shrinks.
+  <div class="honest">Orchard Row is a fictional farm cooperative, designed as a concept. The seasons above are real growing seasons for the northern US.</div>
+</div></footer>
+
+<script>
+(function(){
+  var seasons={
+    spring:{name:'Spring', color:'#7fb069', deep:'#2f5d33',
+      tag:'The ground wakes up hungry and generous. Everything is green, tender, and slightly impatient.',
+      items:[['Asparagus','first spears, cut at dawn'],['Spring peas','sweet enough to eat in the field'],['Radishes','peppery, with their tops on'],['Rhubarb','for one good crumble'],['Free-range eggs','yolks the colour of marigolds'],['Wild garlic','two weeks only, then gone']]},
+    summer:{name:'Summer', color:'#e0a526', deep:'#8a5a12',
+      tag:'The loud season. Tomatoes that argue with the knife, corn that should be eaten the hour it is picked.',
+      items:[['Heirloom tomatoes','ugly and perfect'],['Sweetcorn','picked Thursday, eaten Friday'],['Courgettes','before they become marrows'],['Strawberries','the small, serious kind'],['New potatoes','soil still on them'],['Basil','a bunch, not a garnish']]},
+    autumn:{name:'Autumn', color:'#c96f2e', deep:'#7a3d14',
+      tag:'The orchard\u2019s whole reason for existing. Apples with names, squash with weight, and the last of the plums.',
+      items:[['Orchard apples','three varieties, labelled'],['Butternut squash','one will feed four'],['Plums','dark, jammy, brief'],['Leeks','sweet after the first frost'],['Celeriac','the beautiful ugly one'],['Pressed apple juice','this week\u2019s crush']]},
+    winter:{name:'Winter', color:'#7d8fa3', deep:'#3c4c5e',
+      tag:'The quiet, honest season. Roots, brassicas and stored apples — food that keeps, for the months that keep you in.',
+      items:[['Parsnips','sweeter after frost'],['Savoy cabbage','a two-week vegetable'],['Stored apples','from the cold room'],['Carrots','the winter-sweet kind'],['Jerusalem artichokes','handle with optimism'],['Dried beans','for the long stews']]}
+  };
+  var sCard=document.getElementById('seasonCard'), sName=document.getElementById('sName'),
+      sTag=document.getElementById('sTag'), sList=document.getElementById('seasonList');
+  function setSeason(key){
+    var s=seasons[key];
+    sCard.style.background='linear-gradient(160deg,'+s.color+','+s.deep+')';
+    sName.textContent=s.name; sTag.textContent=s.tag;
+    sList.innerHTML=s.items.map(function(it){return '<li><b>'+it[0]+'</b><span>'+it[1]+'</span></li>'}).join('');
+  }
+  document.getElementById('seasonBar').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    this.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true'); setSeason(b.dataset.season);
+  });
+  setSeason('spring');
+  /* ---------- BUILD YOUR BOX ---------- */
+  var produce=[
+    ['Heirloom tomatoes',6],['Free-range eggs ×12',7],['Sourdough loaf',8],['Orchard apples 2kg',9],
+    ['Raw honey jar',11],['Aged farmhouse cheese',13],['Sweetcorn ×6',5],['Seasonal jam',8],
+    ['Fresh pasta',9],['Apple juice 1L',6],['Garden herb bundle',4],['Butter, cultured',7]
+  ];
+  var picked=new Set(), freqMult=1;
+  var grid=document.getElementById('itemGrid'), slots=document.getElementById('boxSlots');
+  produce.forEach(function(p, i){
+    var b=document.createElement('button'); b.className='item'; b.dataset.idx=i;
+    b.innerHTML='<span><span class="nm">'+p[0]+'</span><br><span class="pr">$'+p[1]+'</span></span><span class="add">+</span>';
+    grid.appendChild(b);
+  });
+  for(var s=0;s<8;s++){ var d=document.createElement('div'); d.className='slot'; d.textContent='empty'; slots.appendChild(d); }
+  function renderBox(){
+    var names=[...picked].map(function(i){return produce[i][0]});
+    var sum=[...picked].reduce(function(a,i){return a+produce[i][1]},0);
+    slots.querySelectorAll('.slot').forEach(function(sl, i){
+      if(i<names.length){ sl.className='slot full'; sl.textContent=names[i].split(' ')[0]; }
+      else { sl.className='slot'; sl.textContent='empty'; }
+    });
+    document.getElementById('bCount').textContent=picked.size+' of 8 slots';
+    document.getElementById('bTotal').textContent='$'+Math.round(sum*freqMult);
+    document.getElementById('boxNote').textContent = picked.size>8 ? 'That is more than one crate — we will pack a second crate at no extra delivery cost.' :
+      (picked.size===0 ? 'Tap items on the left to start your crate.' : '');
+  }
+  grid.addEventListener('click',function(e){
+    var b=e.target.closest('.item'); if(!b) return;
+    var i=+b.dataset.idx;
+    if(picked.has(i)){ picked.delete(i); b.classList.remove('in'); b.querySelector('.add').textContent='+'; }
+    else { picked.add(i); b.classList.add('in'); b.querySelector('.add').textContent='✓'; }
+    renderBox();
+  });
+  document.getElementById('freqRow').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    this.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+    b.setAttribute('aria-pressed','true'); freqMult=+b.dataset.mult; renderBox();
+  });
+  document.getElementById('boxBtn').addEventListener('click',function(){
+    document.getElementById('boxNote').textContent = picked.size===0 ? 'Your crate is empty — tap a few things you would actually eat first.' :
+      'Box set: '+picked.size+' items, first delivery this Friday. The packing note will name the farm each item came from.';
+  });
+  renderBox();
+})();
+</script>
+</body>
+</html>
