@@ -12,7 +12,8 @@
   --org:#ff6b2c; --cyn:#57d7ff; --line:rgba(242,241,236,.13);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html{overflow-x:clip}
+body{background:var(--bg);color:var(--txt);font-family:Inter,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
 h1,h2{font-family:Archivo,sans-serif;font-weight:900;line-height:.96;letter-spacing:-.015em;text-transform:uppercase}
 .mono{font-family:"IBM Plex Mono",monospace}
 .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
@@ -24,8 +25,8 @@ nav .links{display:flex;gap:22px;font-size:13px;font-weight:500}
 nav .links a{color:var(--txt);text-decoration:none}
 nav .cta{background:var(--org);color:#16100b;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none}
 @media(max-width:640px){nav .links{display:none}}
-.hero{padding:130px 0 30px;position:relative}
-.hero h1{font-size:clamp(52px,11vw,148px)}
+.hero{padding-top:130px;padding-bottom:30px;position:relative}
+.hero h1{font-size:clamp(34px,10vw,148px)}
 .hero h1 .ol{color:transparent;-webkit-text-stroke:1.5px var(--txt)}
 .hero h1 .og{color:var(--org)}
 .hero .sub{margin-top:20px;font-size:clamp(16px,2vw,20px);color:var(--dim);max-width:50ch;line-height:1.55}
@@ -54,7 +55,7 @@ nav .cta{background:var(--org);color:#16100b;padding:8px 16px;border-radius:999p
 .wave i{flex:1;background:var(--panel2);border-radius:2px;min-height:4px}
 .wave i.hot{background:var(--org)}
 /* MACHINES */
-.machines{padding:100px 0 110px}
+.machines{padding-top:100px;padding-bottom:110px}
 .machines h2{font-size:clamp(36px,6vw,62px);margin:12px 0 26px}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media(max-width:860px){.cards{grid-template-columns:1fr}}
@@ -74,6 +75,7 @@ nav .cta{background:var(--org);color:#16100b;padding:8px 16px;border-radius:999p
 footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--dim);font-size:14px;line-height:1.7}
 footer .big{font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,4vw,38px);color:var(--txt);margin-bottom:10px}
 .honest{margin-top:18px;font-size:12px}
+@media(max-width:480px){.label{letter-spacing:.16em}}
 </style>
 </head>
 <body>

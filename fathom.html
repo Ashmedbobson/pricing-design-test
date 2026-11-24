@@ -11,7 +11,8 @@
   --deep:#051019; --panel:#0a1e2e; --foam:#e9f4f5; --lume:#6ff2c4; --dim:#7d97a5; --line:rgba(233,244,245,.14);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--deep);color:var(--foam);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html{overflow-x:clip}
+body{background:var(--deep);color:var(--foam);font-family:Inter,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
 .mono{font-family:"IBM Plex Mono",monospace}
 h1,h2{font-family:Archivo,sans-serif;font-weight:900;line-height:.98;letter-spacing:-.015em;text-transform:uppercase}
 .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
@@ -23,9 +24,9 @@ nav .links{display:flex;gap:22px;font-size:13px;font-weight:500}
 nav .links a{color:var(--foam);text-decoration:none}
 nav .cta{background:var(--lume);color:#04241a;padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none}
 @media(max-width:640px){nav .links{display:none}}
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 54px;position:relative;
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:120px;padding-bottom:54px;position:relative;
   background:radial-gradient(900px 480px at 78% 18%,rgba(111,242,196,.13),transparent 60%),linear-gradient(180deg,#071a29,var(--deep))}
-.hero h1{font-size:clamp(56px,12vw,160px)}
+.hero h1{font-size:clamp(44px,12vw,160px)}
 .hero h1 .thin{color:transparent;-webkit-text-stroke:1.5px var(--foam)}
 .hero h1 .lm{color:var(--lume)}
 .hero .sub{margin-top:20px;font-size:clamp(16px,2vw,20px);color:var(--dim);max-width:48ch;line-height:1.55}
@@ -64,14 +65,14 @@ nav .cta{background:var(--lume);color:#04241a;padding:8px 16px;border-radius:999
 .watch .wlabel{position:absolute;left:0;right:0;top:26%;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.3em;color:var(--dim)}
 .watch .wdepth{position:absolute;left:0;right:0;bottom:24%;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--lume)}
 /* SPECS + RESERVE */
-.specs{padding:110px 0 30px}
+.specs{padding-top:110px;padding-bottom:30px}
 .specs h2{font-size:clamp(36px,6vw,64px);margin:12px 0 26px}
 .specgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 @media(max-width:900px){.specgrid{grid-template-columns:repeat(2,1fr)}}
 .spec{border:1px solid var(--line);border-radius:18px;padding:20px;background:var(--panel)}
 .spec .v{font-family:"IBM Plex Mono",monospace;font-size:26px;color:var(--lume)}
 .spec .k{font-size:13px;color:var(--dim);margin-top:6px;line-height:1.5}
-.reserve{padding:70px 0 110px}
+.reserve{padding-top:70px;padding-bottom:110px}
 .reserve .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px;align-items:start}
 @media(max-width:820px){.reserve .grid{grid-template-columns:1fr}}
 .reserve h2{font-size:clamp(34px,5.4vw,58px);margin:12px 0 8px}
@@ -94,6 +95,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--dim);fon
 footer .big{font-family:Archivo,sans-serif;font-weight:900;text-transform:uppercase;font-size:clamp(24px,4vw,38px);color:var(--foam);margin-bottom:10px}
 .honest{margin-top:18px;font-size:12px}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+@media(max-width:480px){.label{letter-spacing:.16em}}
 </style>
 </head>
 <body>

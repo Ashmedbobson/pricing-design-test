@@ -12,8 +12,8 @@
   --sand:#e0cda6; --smoke:#6f5b47; --line:rgba(42,26,16,.16);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
 h1,h2,.serif{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.02;letter-spacing:-.01em}
 em{font-style:italic;font-weight:500}
 .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
@@ -25,7 +25,7 @@ nav .links{display:flex;gap:22px;font-size:13px;font-weight:500}
 nav .links a{color:var(--ink);text-decoration:none}
 nav .cta{background:var(--ink);color:var(--paper);padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;text-decoration:none}
 @media(max-width:640px){nav .links{display:none}}
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 0 56px;position:relative}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:120px;padding-bottom:56px;position:relative;overflow:hidden}
 .hero .ghost{position:absolute;top:8%;right:-2%;font-family:Fraunces,serif;font-size:clamp(120px,26vw,340px);color:transparent;-webkit-text-stroke:1px rgba(42,26,16,.13);line-height:1;pointer-events:none;user-select:none}
 .hero h1{font-size:clamp(52px,10.5vw,138px);max-width:12ch}
 .hero h1 .hot{color:var(--clay)}
@@ -50,7 +50,7 @@ nav .cta{background:var(--ink);color:var(--paper);padding:8px 16px;border-radius
 .firebar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--sand),var(--clay),#ff7a29);border-radius:99px}
 .fire .ticks{display:flex;justify-content:space-between;max-width:420px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);margin-top:8px}
 /* CONFIGURATOR */
-.config{padding:110px 0}
+.config{padding-top:110px;padding-bottom:110px}
 .config h2{font-size:clamp(38px,6vw,64px);margin:12px 0 8px}
 .config .lede{color:var(--smoke);max-width:52ch;line-height:1.6}
 .config .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;align-items:start}
@@ -62,16 +62,16 @@ nav .cta{background:var(--ink);color:var(--paper);padding:8px 16px;border-radius
 .optgroup{margin-bottom:26px}
 .optgroup .label{margin-bottom:10px;display:block}
 .opts{display:flex;gap:10px;flex-wrap:wrap}
-.opt{border:1px solid var(--line);background:#fff8ec;border-radius:999px;padding:10px 18px;font-size:14px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif}
+.opt{border:1px solid var(--line);background:#fff8ec;color:var(--ink);border-radius:999px;padding:10px 18px;font-size:14px;font-weight:500;cursor:pointer;font-family:Inter,sans-serif}
 .opt[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .swatches{display:flex;gap:12px;flex-wrap:wrap}
 .swatch{width:52px;height:52px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
 .swatch[aria-pressed="true"]{border-color:var(--ink);transform:scale(1.08)}
-.total{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:20px;margin-top:6px}
+.total{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;border-top:1px solid var(--line);padding-top:20px;margin-top:6px}
 .total .amt{font-family:Fraunces,serif;font-size:40px}
 .total .note{font-size:12px;color:var(--smoke)}
 /* SHELF */
-.shelf{padding:30px 0 110px}
+.shelf{padding-top:30px;padding-bottom:110px}
 .shelf h2{font-size:clamp(34px,5vw,54px);margin:10px 0 30px}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media(max-width:820px){.cards{grid-template-columns:1fr}}
@@ -85,6 +85,7 @@ footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--smoke);f
 footer .big{font-family:Fraunces,serif;font-size:clamp(26px,4vw,40px);color:var(--ink);margin-bottom:10px}
 .honest{margin-top:18px;font-size:12px;letter-spacing:.06em}
 @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+@media(max-width:480px){.label{letter-spacing:.15em}}
 </style>
 </head>
 <body>
