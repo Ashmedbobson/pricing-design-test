@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Builder · White + Void</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+  .back {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #1C1C1C;
+    background: #FFFFFF;
+    border: 1px solid #E2E2E2;
+    border-radius: 999px;
+    padding: 8px 14px;
+    min-height: 36px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .saved {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6E6E6E;
+  }
+
+  /* ---------- title block ---------- */
+  h1.title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 18px 0 6px 0;
+    line-height: 1.2;
+  }
+  .meta {
+    font-size: 13.5px;
+    color: #6E6E6E;
+    margin: 0;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 4px 11px;
+    background: #1C1C1C;
+    color: #E8E8E8;
+    vertical-align: 2px;
+    margin-left: 6px;
+  }
+
+  /* ---------- action row ---------- */
+  .actions { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-preview {
+    min-height: 52px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 14px;
+    border: 1.5px solid #E2E2E2;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-share {
+    flex: 1;
+    min-height: 52px;
+    border-radius: 14px;
+    border: none;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 8px 20px rgba(28, 28, 28, 0.22);
+  }
+  .btn-share:active { transform: translateY(1px); }
+
+  /* ---------- section headings ---------- */
+  h2.section {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin: 34px 0 4px 0;
+  }
+  .sub {
+    font-size: 14.5px;
+    color: #6E6E6E;
+    margin: 0 0 14px 0;
+  }
+
+  /* ---------- question cards ---------- */
+  .qcard {
+    display: flex;
+    gap: 14px;
+    background: #FFFFFF;
+    border: 1px solid #E9E9E9;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(28, 28, 28, 0.05);
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+  }
+  .qnum {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #E8E8E8;
+    color: #1C1C1C;
+    font-size: 15px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .qbody { flex: 1; min-width: 0; }
+  .qtext { display: block; font-size: 16px; font-weight: 700; margin: 4px 0 8px 0; line-height: 1.35; }
+  .qtags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 4px 11px;
+    letter-spacing: 0.2px;
+  }
+  .tag-type { background: #F0F5F9; color: #101820; }
+  .tag-points { background: #E8E8E8; color: #1C1C1C; }
+  .tag-req { background: #F5F5F5; color: #6E6E6E; }
+
+  /* ---------- add question ---------- */
+  .addq {
+    width: 100%;
+    min-height: 56px;
+    border-radius: 18px;
+    border: 1.5px dashed #D9D9D9;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 15.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 2px;
+  }
+  .addq:active { background: #F5F5F5; }
+
+  /* ---------- settings row ---------- */
+  .settings {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #FFFFFF;
+    border: 1px solid #E9E9E9;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(28, 28, 28, 0.05);
+    padding: 16px;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+    text-align: left;
+  }
+  .settings-main { flex: 1; min-width: 0; }
+  .settings-name { display: block; font-size: 16px; font-weight: 700; margin: 0 0 3px 0; }
+  .settings-meta { display: block; font-size: 13px; color: #6E6E6E; margin: 0; }
+  .chev { font-size: 20px; color: #9A9A9A; font-weight: 700; }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%) translateY(20px);
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 13px 22px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: calc(100vw - 48px);
+    text-align: center;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <div class="topbar">
+    <button class="back" data-say="Back to your forms">&#8249; All forms</button>
+    <span class="saved">Saved</span>
+  </div>
+
+  <h1 class="title">Kitchen Hygiene Quiz<span class="badge">Published</span></h1>
+  <p class="meta">Quiz &middot; 12 responses &middot; Passing score 7/10</p>
+
+  <div class="actions">
+    <button class="btn-preview" data-say="Previewing the quiz as a respondent sees it">Preview</button>
+    <button class="btn-share" data-say="Share link copied — send it to your group">Share quiz</button>
+  </div>
+
+  <h2 class="section">Questions</h2>
+  <p class="sub">Tap a question to edit it. Drag to reorder.</p>
+
+  <button class="qcard" data-say="Editing question 1">
+    <span class="qnum">1</span>
+    <span class="qbody">
+      <span class="qtext">How long should you wash your hands with soap?</span>
+      <span class="qtags">
+        <span class="tag tag-type">Multiple choice</span>
+        <span class="tag tag-points">1 point</span>
+        <span class="tag tag-req">Required</span>
+      </span>
+    </span>
+  </button>
+
+  <button class="qcard" data-say="Editing question 2">
+    <span class="qnum">2</span>
+    <span class="qbody">
+      <span class="qtext">Raw chicken should be rinsed in the sink before cooking.</span>
+      <span class="qtags">
+        <span class="tag tag-type">True / False</span>
+        <span class="tag tag-points">1 point</span>
+        <span class="tag tag-req">Required</span>
+      </span>
+    </span>
+  </button>
+
+  <button class="qcard" data-say="Editing question 3">
+    <span class="qnum">3</span>
+    <span class="qbody">
+      <span class="qtext">What temperature should a fridge stay at or below?</span>
+      <span class="qtags">
+        <span class="tag tag-type">Short answer</span>
+        <span class="tag tag-points">1 point</span>
+      </span>
+    </span>
+  </button>
+
+  <button class="qcard" data-say="Editing question 4">
+    <span class="qnum">4</span>
+    <span class="qbody">
+      <span class="qtext">Which board should raw meat be cut on?</span>
+      <span class="qtags">
+        <span class="tag tag-type">Multiple choice</span>
+        <span class="tag tag-points">1 point</span>
+        <span class="tag tag-req">Required</span>
+      </span>
+    </span>
+  </button>
+
+  <button class="addq" data-say="Choose a question type to add">&#65291; Add a question</button>
+
+  <h2 class="section">Settings</h2>
+  <button class="settings" data-say="Opening quiz settings">
+    <span class="settings-main">
+      <span class="settings-name">Quiz settings</span>
+      <span class="settings-meta">Answer key &middot; passing score &middot; certificates</span>
+    </span>
+    <span class="chev">&#8250;</span>
+  </button>
+
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+  (function () {
+    var toast = document.getElementById('toast');
+    var timer = null;
+    function say(msg) {
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+    var buttons = document.querySelectorAll('[data-say]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function () { say(this.getAttribute('data-say')); });
+    }
+  })();
+</script>
+</body>
+</html>
