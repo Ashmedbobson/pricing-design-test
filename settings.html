@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Settings · White + Void</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+  .back {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #1C1C1C;
+    background: #FFFFFF;
+    border: 1px solid #E2E2E2;
+    border-radius: 999px;
+    padding: 8px 14px;
+    min-height: 36px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .badge {
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 5px 11px;
+    background: #1C1C1C;
+    color: #E8E8E8;
+  }
+
+  h1.title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 18px 0 6px 0;
+    line-height: 1.2;
+  }
+  .meta { font-size: 13.5px; color: #6E6E6E; margin: 0; }
+
+  h2.section {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin: 34px 0 4px 0;
+  }
+  .sub { font-size: 14.5px; color: #6E6E6E; margin: 0 0 14px 0; }
+
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E9E9E9;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(28, 28, 28, 0.05);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  /* ---------- workspace identity ---------- */
+  .ws { display: flex; align-items: center; gap: 14px; }
+  .ws-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+  .ws-name { font-size: 17px; font-weight: 800; margin: 0 0 2px 0; }
+  .ws-meta { font-size: 13px; color: #6E6E6E; margin: 0; }
+
+  /* ---------- rows ---------- */
+  .row { display: flex; align-items: center; gap: 14px; width: 100%; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; color: inherit; text-align: left; }
+  .row-main { flex: 1; min-width: 0; }
+  .row-name { font-size: 16px; font-weight: 700; margin: 0 0 3px 0; }
+  .row-meta { font-size: 13px; color: #6E6E6E; margin: 0; line-height: 1.45; }
+  .chev { font-size: 20px; color: #9A9A9A; font-weight: 700; }
+  .row-value { font-size: 13.5px; font-weight: 700; color: #6E6E6E; }
+  .toggle {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 32px;
+    border-radius: 999px;
+    border: none;
+    background: #E8E8E8;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px rgba(28, 28, 28, 0.25);
+    transition: left 0.15s ease;
+  }
+  .toggle.on { background: #1C1C1C; }
+  .toggle.on::after { left: 24px; }
+
+  .plan-row { display: flex; align-items: center; gap: 14px; }
+  .plan-chip {
+    flex: 0 0 auto;
+    font-size: 13px;
+    font-weight: 800;
+    background: #F0F5F9;
+    color: #101820;
+    border-radius: 999px;
+    padding: 7px 13px;
+  }
+  .danger-name { font-size: 16px; font-weight: 700; margin: 0 0 3px 0; color: #B3261E; }
+
+  .foot {
+    text-align: center;
+    font-size: 12px;
+    color: #9A9A9A;
+    margin-top: 28px;
+    line-height: 1.6;
+  }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%) translateY(20px);
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 13px 22px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: calc(100vw - 48px);
+    text-align: center;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <div class="topbar">
+    <button class="back" data-say="Back to your forms">&#8249; Forms</button>
+    <span class="badge">Pro</span>
+  </div>
+
+  <h1 class="title">Settings</h1>
+  <p class="meta">Your workspace, your plan, your account.</p>
+
+  <h2 class="section">Workspace</h2>
+  <div class="card">
+    <div class="ws">
+      <div class="ws-logo">KB</div>
+      <div class="row-main">
+        <p class="ws-name">KB Events &amp; Catering</p>
+        <p class="ws-meta">3 forms &middot; owned by you</p>
+      </div>
+      <button class="toggle" style="visibility:hidden"></button>
+    </div>
+  </div>
+  <div class="card">
+    <button class="row" data-say="Rename the workspace, or change its logo">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Name &amp; logo</span>
+        <span class="row-meta" style="display:block">Shown on your forms unless a form has its own</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+  <div class="card">
+    <button class="row" data-say="New forms start with your saved look — change it any time">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Default appearance</span>
+        <span class="row-meta" style="display:block">Logo, cover and colors new forms start with</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+  <div class="card">
+    <button class="row" data-say="Forms you made from templates, and templates you saved">
+      <span class="row-main">
+        <span class="row-name" style="display:block">My templates</span>
+        <span class="row-meta" style="display:block">2 saved from your own forms</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+
+  <h2 class="section">Plan &amp; billing</h2>
+  <div class="card">
+    <div class="plan-row">
+      <span class="plan-chip">PRO</span>
+      <div class="row-main">
+        <p class="row-name">$24 a month</p>
+        <p class="row-meta">Renews 24 December &middot; card on file</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <button class="row" data-say="Compare plans, change plan, or see past receipts">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Manage plan</span>
+        <span class="row-meta" style="display:block">Change plan, update card, download receipts</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+
+  <h2 class="section">Response alerts</h2>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Email me each new response</p>
+        <p class="row-meta">The moment someone submits, on every form</p>
+      </div>
+      <button class="toggle on" data-toggle aria-label="Email me each new response"></button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Daily summary instead</p>
+        <p class="row-meta">One email each morning with yesterday's responses</p>
+      </div>
+      <button class="toggle" data-toggle aria-label="Daily summary"></button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">WhatsApp alerts</p>
+        <p class="row-meta">Same alerts to your WhatsApp number</p>
+      </div>
+      <button class="toggle" data-toggle aria-label="WhatsApp alerts"></button>
+    </div>
+  </div>
+
+  <h2 class="section">Account &amp; security</h2>
+  <div class="card">
+    <button class="row" data-say="Your sign-in email — tap to change it">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Sign-in email</span>
+        <span class="row-meta" style="display:block">Codes are sent here when you sign in</span>
+      </span>
+      <span class="row-value">Change</span>
+    </button>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Two-step sign-in</p>
+        <p class="row-meta">A code from your phone as well as your email</p>
+      </div>
+      <button class="toggle on" data-toggle aria-label="Two-step sign-in"></button>
+    </div>
+  </div>
+  <div class="card">
+    <button class="row" data-say="Your own AI key for form-writing help — we never mark it up">
+      <span class="row-main">
+        <span class="row-name" style="display:block">My AI key</span>
+        <span class="row-meta" style="display:block">Bring your own key, or use plan credits</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+
+  <h2 class="section">Housekeeping</h2>
+  <div class="card">
+    <button class="row" data-say="Deleted forms stay here 30 days, then they are gone for good">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Trash</span>
+        <span class="row-meta" style="display:block">1 deleted form &middot; restores for 30 days</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+  <div class="card">
+    <button class="row" data-say="Download everything: every form and every response, in one file">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Download my data</span>
+        <span class="row-meta" style="display:block">All your forms and responses, yours to keep</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+  <div class="card">
+    <button class="row" data-say="This asks twice and waits 7 days — nothing is deleted today">
+      <span class="row-main">
+        <span class="danger-name" style="display:block">Delete workspace</span>
+        <span class="row-meta" style="display:block">Every form and response in KB Events &amp; Catering</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+
+  <p class="foot">Forms App &middot; White + Void<br>Made for one person at a time.</p>
+
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+  (function () {
+    var toast = document.getElementById('toast');
+    var timer = null;
+    function say(msg) {
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+    var buttons = document.querySelectorAll('[data-say]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function () { say(this.getAttribute('data-say')); });
+    }
+    var toggles = document.querySelectorAll('[data-toggle]');
+    for (var t = 0; t < toggles.length; t++) {
+      toggles[t].addEventListener('click', function () {
+        this.classList.toggle('on');
+        say(this.classList.contains('on') ? 'Turned on' : 'Turned off');
+      });
+    }
+  })();
+</script>
+</body>
+</html>
