@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Appearance · White + Void</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+  .back {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #1C1C1C;
+    background: #FFFFFF;
+    border: 1px solid #E2E2E2;
+    border-radius: 999px;
+    padding: 8px 14px;
+    min-height: 36px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .saved { font-size: 13px; font-weight: 600; color: #6E6E6E; }
+
+  h1.title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 18px 0 6px 0;
+    line-height: 1.2;
+  }
+  .meta { font-size: 13.5px; color: #6E6E6E; margin: 0; }
+
+  h2.section {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin: 34px 0 4px 0;
+  }
+  .sub { font-size: 14.5px; color: #6E6E6E; margin: 0 0 14px 0; }
+
+  /* ---------- live preview ---------- */
+  .pv-shell {
+    border: 1px solid #E9E9E9;
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(28, 28, 28, 0.07);
+    margin-top: 20px;
+  }
+  .pv-cover {
+    height: 84px;
+    background: #101820;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px 14px;
+  }
+  .pv-cover span {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #FFFFFF;
+    background: rgba(28, 28, 28, 0.55);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+  .pv-body { padding: 16px 18px 18px 18px; background: #FFFFFF; transition: background 0.2s ease; }
+  .pv-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -38px;
+    border: 3px solid #FFFFFF;
+    position: relative;
+  }
+  .pv-name { font-size: 13px; font-weight: 700; color: #6E6E6E; margin: 8px 0 2px 0; }
+  .pv-title { font-size: 19px; font-weight: 800; margin: 0 0 4px 0; letter-spacing: -0.2px; }
+  .pv-q { font-size: 14.5px; margin: 10px 0 6px 0; font-weight: 600; }
+  .pv-opt {
+    font-size: 13.5px;
+    border: 1.5px solid #E2E2E2;
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.65);
+  }
+  .pv-btn {
+    width: 100%;
+    min-height: 46px;
+    border: none;
+    border-radius: 12px;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    margin-top: 4px;
+    transition: background 0.2s ease;
+  }
+  .pv-note { font-size: 12.5px; color: #9A9A9A; text-align: center; margin: 10px 0 0 0; }
+
+  /* ---------- control cards ---------- */
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E9E9E9;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(28, 28, 28, 0.05);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .row { display: flex; align-items: center; gap: 14px; }
+  .row-main { flex: 1; min-width: 0; }
+  .row-name { font-size: 16px; font-weight: 700; margin: 0 0 3px 0; }
+  .row-meta { font-size: 13px; color: #6E6E6E; margin: 0; }
+  .thumb-logo {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .thumb-cover {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 48px;
+    border-radius: 12px;
+    background: #101820;
+  }
+  .btn-small {
+    flex: 0 0 auto;
+    min-height: 44px;
+    border-radius: 999px;
+    border: 1.5px solid #E2E2E2;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 14px;
+    font-weight: 600;
+    padding-left: 16px;
+    padding-right: 16px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* ---------- swatches ---------- */
+  .seg {
+    display: flex;
+    background: #F5F5F5;
+    border-radius: 999px;
+    padding: 4px;
+    margin-bottom: 14px;
+  }
+  .seg button {
+    flex: 1;
+    min-height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: #6E6E6E;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .seg button.on { background: #1C1C1C; color: #FFFFFF; font-weight: 700; }
+  .swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+  .sw {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 2px solid #E2E2E2;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+  }
+  .sw.on { border-color: #1C1C1C; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 4px #1C1C1C; }
+  .sw-custom {
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sw-label { font-size: 12.5px; color: #6E6E6E; margin: 10px 0 0 0; font-weight: 600; }
+
+  /* ---------- themes ---------- */
+  .themes { display: flex; gap: 10px; }
+  .theme {
+    flex: 1;
+    border: 1.5px solid #E2E2E2;
+    border-radius: 16px;
+    background: #FFFFFF;
+    padding: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+  }
+  .theme.on { border-color: #1C1C1C; box-shadow: 0 0 0 1px #1C1C1C; }
+  .theme-band { height: 34px; border-radius: 9px; margin-bottom: 8px; }
+  .theme-name { font-size: 13px; font-weight: 700; color: #1C1C1C; }
+
+  /* ---------- toggle ---------- */
+  .toggle {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 32px;
+    border-radius: 999px;
+    border: none;
+    background: #E8E8E8;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px rgba(28, 28, 28, 0.25);
+    transition: left 0.15s ease;
+  }
+  .toggle.on { background: #1C1C1C; }
+  .toggle.on::after { left: 24px; }
+
+  .chev { font-size: 20px; color: #9A9A9A; font-weight: 700; }
+  .tag-auto {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #1C1C1C;
+    background: #E8E8E8;
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+
+  /* ---------- link preview ---------- */
+  .linkpv {
+    display: flex;
+    gap: 12px;
+    background: #F5F5F5;
+    border-radius: 14px;
+    padding: 12px;
+    align-items: center;
+  }
+  .linkpv .thumb-logo { width: 42px; height: 42px; border-radius: 10px; font-size: 14px; }
+  .linkpv-title { font-size: 14px; font-weight: 700; margin: 0 0 2px 0; }
+  .linkpv-url { font-size: 12.5px; color: #6E6E6E; margin: 0; }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%) translateY(20px);
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 13px 22px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: calc(100vw - 48px);
+    text-align: center;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <div class="topbar">
+    <button class="back" data-say="Back to the builder">&#8249; Builder</button>
+    <span class="saved">Saved</span>
+  </div>
+
+  <h1 class="title">Appearance</h1>
+  <p class="meta">Kitchen Hygiene Quiz &middot; how respondents see your form</p>
+
+  <div class="pv-shell">
+    <div class="pv-cover"><span>COVER IMAGE</span></div>
+    <div class="pv-body" id="pvBody">
+      <div class="pv-logo">KB</div>
+      <p class="pv-name" id="pvName">KB Events &amp; Catering</p>
+      <p class="pv-title" id="pvTitle">Kitchen Hygiene Quiz</p>
+      <p class="pv-q" id="pvQ">1. How long should you wash your hands with soap?</p>
+      <div class="pv-opt" id="pvOpt1">At least 20 seconds</div>
+      <div class="pv-opt" id="pvOpt2">A quick rinse is fine</div>
+      <button class="pv-btn" id="pvBtn" data-say="This preview is exactly what respondents see">Start quiz</button>
+    </div>
+  </div>
+  <p class="pv-note">Live preview — it changes as you pick, before you save.</p>
+
+  <h2 class="section">Your brand</h2>
+  <div class="card">
+    <div class="row">
+      <div class="thumb-logo">KB</div>
+      <div class="row-main">
+        <p class="row-name">Logo</p>
+        <p class="row-meta">Shown at the top of your form and on shared links</p>
+      </div>
+      <button class="btn-small" data-say="Choose a new logo image">Change</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div class="thumb-cover"></div>
+      <div class="row-main">
+        <p class="row-name">Cover image</p>
+        <p class="row-meta">The wide picture across the top of your form</p>
+      </div>
+      <button class="btn-small" data-say="Choose a new cover image">Change</button>
+    </div>
+  </div>
+
+  <h2 class="section">Background</h2>
+  <p class="sub">Tap a color and watch the preview above.</p>
+  <div class="card">
+    <div class="seg">
+      <button class="on" data-say="Background is a plain color">Color</button>
+      <button data-say="Use one of your photos as the background">Image</button>
+    </div>
+    <div class="swatches" id="bgSwatches">
+      <button class="sw on" data-bg="#FFFFFF" data-name="White" style="background:#FFFFFF" aria-label="White"></button>
+      <button class="sw" data-bg="#F0F5F9" data-name="Frost" style="background:#F0F5F9" aria-label="Frost"></button>
+      <button class="sw" data-bg="#E8E8E8" data-name="Phantom" style="background:#E8E8E8" aria-label="Phantom"></button>
+      <button class="sw" data-bg="#101820" data-name="Shadow Navy" data-dark="1" style="background:#101820" aria-label="Shadow Navy"></button>
+      <button class="sw" data-bg="#1C1C1C" data-name="Void Gray" data-dark="1" style="background:#1C1C1C" aria-label="Void Gray"></button>
+      <button class="sw" data-bg="#234434" data-name="Deep Green" data-dark="1" style="background:#234434" aria-label="Deep Green"></button>
+      <button class="sw sw-custom" data-say="Pick any color of your own">+</button>
+    </div>
+    <p class="sw-label" id="bgLabel">Background: White</p>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Readable text, always <span class="tag-auto">AUTOMATIC</span></p>
+        <p class="row-meta">Dark background, white text. Light background, dark text. Your form can never come out unreadable.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section">Button color</h2>
+  <div class="card">
+    <div class="swatches" id="acSwatches">
+      <button class="sw on" data-ac="#1C1C1C" data-name="Void Gray" style="background:#1C1C1C" aria-label="Void Gray"></button>
+      <button class="sw" data-ac="#101820" data-name="Shadow Navy" style="background:#101820" aria-label="Shadow Navy"></button>
+      <button class="sw" data-ac="#234434" data-name="Deep Green" style="background:#234434" aria-label="Deep Green"></button>
+      <button class="sw" data-ac="#8A6D1F" data-name="Dark Gold" style="background:#8A6D1F" aria-label="Dark Gold"></button>
+      <button class="sw sw-custom" data-say="Pick any color of your own">+</button>
+    </div>
+    <p class="sw-label" id="acLabel">Buttons: Void Gray</p>
+  </div>
+
+  <h2 class="section">Ready-made themes</h2>
+  <p class="sub">One tap sets background and buttons together.</p>
+  <div class="themes">
+    <button class="theme on" data-tbg="#FFFFFF" data-tac="#1C1C1C" data-tname="Classic">
+      <div class="theme-band" style="background:#FFFFFF;border:1px solid #E2E2E2"></div>
+      <span class="theme-name">Classic</span>
+    </button>
+    <button class="theme" data-tbg="#1C1C1C" data-tac="#E8E8E8" data-tdark="1" data-tname="Midnight">
+      <div class="theme-band" style="background:#1C1C1C"></div>
+      <span class="theme-name">Midnight</span>
+    </button>
+    <button class="theme" data-tbg="#F0F5F9" data-tac="#101820" data-tname="Frost">
+      <div class="theme-band" style="background:#F0F5F9;border:1px solid #E2E2E2"></div>
+      <span class="theme-name">Frost</span>
+    </button>
+  </div>
+
+  <h2 class="section">More</h2>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Thank-you screen</p>
+        <p class="row-meta">Your logo and your own message after someone submits</p>
+      </div>
+      <span class="chev">&#8250;</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Use for all new forms</p>
+        <p class="row-meta">New forms start with this logo, cover and colors</p>
+      </div>
+      <button class="toggle on" id="wsToggle" aria-label="Use for all new forms"></button>
+    </div>
+  </div>
+  <div class="card">
+    <p class="row-name" style="margin-bottom:10px">When you share the link</p>
+    <div class="linkpv">
+      <div class="thumb-logo">KB</div>
+      <div>
+        <p class="linkpv-title">Kitchen Hygiene Quiz</p>
+        <p class="linkpv-url">KB Events &amp; Catering &middot; tap to start</p>
+      </div>
+    </div>
+    <p class="row-meta" style="margin-top:10px">On WhatsApp and Facebook, your link shows your logo and cover — never ours.</p>
+  </div>
+
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+  (function () {
+    var toast = document.getElementById('toast');
+    var timer = null;
+    function say(msg) {
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+    var buttons = document.querySelectorAll('[data-say]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function () { say(this.getAttribute('data-say')); });
+    }
+
+    var pvBody = document.getElementById('pvBody');
+    var pvBtn = document.getElementById('pvBtn');
+    var pvTexts = ['pvName', 'pvTitle', 'pvQ'];
+    function setPreview(bg, dark) {
+      pvBody.style.background = bg;
+      var color = dark ? '#FFFFFF' : '#1C1C1C';
+      for (var i = 0; i < pvTexts.length; i++) {
+        document.getElementById(pvTexts[i]).style.color = color;
+      }
+      document.getElementById('pvName').style.color = dark ? '#D9D9D9' : '#6E6E6E';
+    }
+    function markOn(container, btn) {
+      var all = container.querySelectorAll('.sw');
+      for (var i = 0; i < all.length; i++) { all[i].classList.remove('on'); }
+      btn.classList.add('on');
+    }
+
+    var bgBox = document.getElementById('bgSwatches');
+    var bgLabel = document.getElementById('bgLabel');
+    bgBox.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-bg]');
+      if (!b) { return; }
+      markOn(bgBox, b);
+      setPreview(b.getAttribute('data-bg'), b.getAttribute('data-dark') === '1');
+      bgLabel.textContent = 'Background: ' + b.getAttribute('data-name');
+      say('Preview updated — nothing is saved yet');
+    });
+
+    var acBox = document.getElementById('acSwatches');
+    var acLabel = document.getElementById('acLabel');
+    acBox.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-ac]');
+      if (!b) { return; }
+      markOn(acBox, b);
+      pvBtn.style.background = b.getAttribute('data-ac');
+      pvBtn.style.color = '#FFFFFF';
+      acLabel.textContent = 'Buttons: ' + b.getAttribute('data-name');
+      say('Preview updated — nothing is saved yet');
+    });
+
+    var themes = document.querySelectorAll('.theme');
+    for (var t = 0; t < themes.length; t++) {
+      themes[t].addEventListener('click', function () {
+        for (var j = 0; j < themes.length; j++) { themes[j].classList.remove('on'); }
+        this.classList.add('on');
+        var bg = this.getAttribute('data-tbg');
+        var ac = this.getAttribute('data-tac');
+        setPreview(bg, this.getAttribute('data-tdark') === '1');
+        pvBtn.style.background = ac;
+        pvBtn.style.color = (ac === '#E8E8E8') ? '#1C1C1C' : '#FFFFFF';
+        bgLabel.textContent = 'Background: ' + this.getAttribute('data-tname') + ' theme';
+        acLabel.textContent = 'Buttons: ' + this.getAttribute('data-tname') + ' theme';
+        say(this.getAttribute('data-tname') + ' theme applied to the preview');
+      });
+    }
+
+    var segBtns = document.querySelectorAll('.seg button');
+    for (var s = 0; s < segBtns.length; s++) {
+      segBtns[s].addEventListener('click', function () {
+        for (var j = 0; j < segBtns.length; j++) { segBtns[j].classList.remove('on'); }
+        this.classList.add('on');
+      });
+    }
+
+    var tg = document.getElementById('wsToggle');
+    tg.addEventListener('click', function () {
+      this.classList.toggle('on');
+      say(this.classList.contains('on') ? 'New forms will start with this look' : 'Each form keeps its own look');
+    });
+  })();
+</script>
+</body>
+</html>
