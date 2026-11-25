@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Share · White + Void</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+  .back {
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #1C1C1C;
+    background: #FFFFFF;
+    border: 1px solid #E2E2E2;
+    border-radius: 999px;
+    padding: 8px 14px;
+    min-height: 36px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .badge {
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 5px 11px;
+    background: #1C1C1C;
+    color: #E8E8E8;
+  }
+
+  h1.title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 18px 0 6px 0;
+    line-height: 1.2;
+  }
+  .meta { font-size: 13.5px; color: #6E6E6E; margin: 0; }
+
+  h2.section {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin: 34px 0 4px 0;
+  }
+  .sub { font-size: 14.5px; color: #6E6E6E; margin: 0 0 14px 0; }
+
+  .card {
+    background: #FFFFFF;
+    border: 1px solid #E9E9E9;
+    border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(28, 28, 28, 0.05);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  /* ---------- link ---------- */
+  .linkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .linktext {
+    flex: 1;
+    min-width: 0;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1C1C1C;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .btn-copy {
+    flex: 0 0 auto;
+    min-height: 40px;
+    border: none;
+    border-radius: 999px;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding-left: 16px;
+    padding-right: 16px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .share-row { display: flex; gap: 10px; }
+  .share-btn {
+    flex: 1;
+    min-height: 52px;
+    border-radius: 14px;
+    border: 1.5px solid #E2E2E2;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .share-btn.main {
+    background: #1C1C1C;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0 8px 20px rgba(28, 28, 28, 0.22);
+  }
+  .share-btn:active { transform: translateY(1px); }
+
+  /* ---------- QR ---------- */
+  .qr-wrap { text-align: center; }
+  .qr {
+    display: inline-grid;
+    grid-template-columns: repeat(25, 1fr);
+    gap: 0;
+    width: 196px;
+    height: 196px;
+    padding: 12px;
+    background: #FFFFFF;
+    border: 1px solid #E9E9E9;
+    border-radius: 16px;
+  }
+  .qr i { display: block; }
+  .qr i.b { background: #1C1C1C; }
+  .qr-note { font-size: 13.5px; color: #6E6E6E; margin: 12px 0 14px 0; }
+
+  /* ---------- poster ---------- */
+  .poster {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #E9E9E9;
+    margin-bottom: 14px;
+  }
+  .poster-band {
+    background: #101820;
+    color: #FFFFFF;
+    padding: 16px;
+    text-align: center;
+  }
+  .poster-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 14px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .poster-title { font-size: 18px; font-weight: 800; margin: 0 0 2px 0; }
+  .poster-sub { font-size: 12.5px; color: #D9D9D9; margin: 0; }
+  .poster-body { padding: 14px 16px; text-align: center; background: #FFFFFF; }
+  .poster-qr {
+    display: inline-block;
+    width: 74px;
+    height: 74px;
+    border: 2px solid #1C1C1C;
+    border-radius: 10px;
+    line-height: 70px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #1C1C1C;
+    letter-spacing: 0.5px;
+  }
+  .poster-scan { font-size: 13px; font-weight: 700; margin: 8px 0 0 0; }
+
+  /* ---------- rows ---------- */
+  .row { display: flex; align-items: center; gap: 14px; width: 100%; background: none; border: none; padding: 0; cursor: pointer; font-family: inherit; color: inherit; text-align: left; }
+  .row-main { flex: 1; min-width: 0; }
+  .row-name { font-size: 16px; font-weight: 700; margin: 0 0 3px 0; }
+  .row-meta { font-size: 13px; color: #6E6E6E; margin: 0; }
+  .chev { font-size: 20px; color: #9A9A9A; font-weight: 700; }
+  .toggle {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 32px;
+    border-radius: 999px;
+    border: none;
+    background: #E8E8E8;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+  }
+  .toggle::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 1px 4px rgba(28, 28, 28, 0.25);
+    transition: left 0.15s ease;
+  }
+  .toggle.on { background: #1C1C1C; }
+  .toggle.on::after { left: 24px; }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%) translateY(20px);
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 13px 22px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: calc(100vw - 48px);
+    text-align: center;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <div class="topbar">
+    <button class="back" data-say="Back to the builder">&#8249; Builder</button>
+    <span class="badge">Published</span>
+  </div>
+
+  <h1 class="title">Share</h1>
+  <p class="meta">Kitchen Hygiene Quiz &middot; 12 responses so far</p>
+
+  <h2 class="section">Your link</h2>
+  <div class="card">
+    <div class="linkbox">
+      <span class="linktext">forms-app.ashmed50.workers.dev/f/6U4C4JEW</span>
+      <button class="btn-copy" data-say="Link copied — paste it anywhere">Copy</button>
+    </div>
+    <div class="share-row">
+      <button class="share-btn main" data-say="Opening WhatsApp with your link and cover">WhatsApp</button>
+      <button class="share-btn" data-say="Opening your email with the link inside">Email</button>
+      <button class="share-btn" data-say="More ways to share">More</button>
+    </div>
+    <p class="row-meta" style="margin-top:12px">Shared links show your logo and cover image — never ours.</p>
+  </div>
+
+  <h2 class="section">QR code</h2>
+  <p class="sub">For counters, doors and tables — point a phone camera at it.</p>
+  <div class="card qr-wrap">
+    <div class="qr" id="qr" aria-label="QR code for this form"></div>
+    <p class="qr-note">Takes people straight to your quiz.</p>
+    <div class="share-row">
+      <button class="share-btn" data-say="QR code saved as an image">Download QR</button>
+      <button class="share-btn" data-say="Poster sent to your printer">Print poster</button>
+    </div>
+  </div>
+
+  <h2 class="section">Poster</h2>
+  <p class="sub">A ready-made page for printing — your brand, your quiz.</p>
+  <div class="poster">
+    <div class="poster-band">
+      <div class="poster-logo">KB</div>
+      <p class="poster-title">Kitchen Hygiene Quiz</p>
+      <p class="poster-sub">KB Events &amp; Catering</p>
+    </div>
+    <div class="poster-body">
+      <span class="poster-qr">QR</span>
+      <p class="poster-scan">Scan to take the quiz</p>
+    </div>
+  </div>
+
+  <h2 class="section">Put it on your website</h2>
+  <div class="card">
+    <button class="row" data-say="Embed code copied — the form sits inside your page">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Embed in a page</span>
+        <span class="row-meta" style="display:block">Inline, pop-up or full page — one snippet to paste</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Only on my website</p>
+        <p class="row-meta">The embed works only on sites you name</p>
+      </div>
+      <button class="toggle" data-toggle aria-label="Only on my website"></button>
+    </div>
+  </div>
+
+  <h2 class="section">Open &amp; close</h2>
+  <div class="card">
+    <div class="row">
+      <div class="row-main">
+        <p class="row-name">Open now</p>
+        <p class="row-meta">Anyone with the link can respond</p>
+      </div>
+      <button class="toggle on" data-toggle aria-label="Open now"></button>
+    </div>
+  </div>
+  <div class="card">
+    <button class="row" data-say="Set dates, or a response limit like first 100 entries">
+      <span class="row-main">
+        <span class="row-name" style="display:block">Close automatically</span>
+        <span class="row-meta" style="display:block">On a date, or after a number of responses</span>
+      </span>
+      <span class="chev">&#8250;</span>
+    </button>
+  </div>
+
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+  (function () {
+    var toast = document.getElementById('toast');
+    var timer = null;
+    function say(msg) {
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+    var buttons = document.querySelectorAll('[data-say]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function () { say(this.getAttribute('data-say')); });
+    }
+    var toggles = document.querySelectorAll('[data-toggle]');
+    for (var t = 0; t < toggles.length; t++) {
+      toggles[t].addEventListener('click', function () {
+        this.classList.toggle('on');
+        say(this.classList.contains('on') ? 'Turned on' : 'Turned off');
+      });
+    }
+
+    /* Draw a QR-style pattern: real finder squares, seeded modules. */
+    var N = 25;
+    var qr = document.getElementById('qr');
+    var seed = 42;
+    function rnd() { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; }
+    function inFinder(x, y) {
+      return (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+    }
+    function finderCell(x, y) {
+      var fx = x >= N - 8 ? x - (N - 7) : x;
+      var fy = y >= N - 8 ? y - (N - 7) : y;
+      if (fx < 0 || fy < 0 || fx > 6 || fy > 6) { return false; }
+      if (fx === 0 || fx === 6 || fy === 0 || fy === 6) { return true; }
+      if (fx >= 2 && fx <= 4 && fy >= 2 && fy <= 4) { return true; }
+      return false;
+    }
+    var html = '';
+    for (var y = 0; y < N; y++) {
+      for (var x = 0; x < N; x++) {
+        var black;
+        if (inFinder(x, y)) { black = finderCell(x, y); }
+        else { black = rnd() > 0.52; }
+        html += black ? '<i class="b"></i>' : '<i></i>';
+      }
+    }
+    qr.innerHTML = html;
+  })();
+</script>
+</body>
+</html>
