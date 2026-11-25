@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kitchen Hygiene Quiz — KB Events &amp; Catering</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+  }
+
+  /* ---------- creator cover ---------- */
+  .cover {
+    margin-left: -24px;
+    margin-right: -24px;
+    height: 110px;
+    background: #101820;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: -26px;
+  }
+  .logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #FFFFFF;
+    flex: 0 0 auto;
+  }
+  .brand-name { font-size: 15px; font-weight: 700; margin: 24px 0 0 0; }
+  h1.title {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    margin: 16px 0 4px 0;
+    line-height: 1.2;
+  }
+  .intro { font-size: 14.5px; color: #6E6E6E; margin: 0; line-height: 1.5; }
+  .resume-note {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #F5F5F5;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #454545;
+    margin-top: 16px;
+  }
+
+  /* ---------- progress + tools ---------- */
+  .tools {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .progress-text { font-size: 13px; font-weight: 700; color: #6E6E6E; }
+  .tool-btn {
+    margin-left: auto;
+    min-height: 40px;
+    border-radius: 999px;
+    border: 1.5px solid #E2E2E2;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 13px;
+    font-weight: 700;
+    padding-left: 14px;
+    padding-right: 14px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .tool-btn + .tool-btn { margin-left: 0; }
+  .tool-btn.on { background: #1C1C1C; color: #FFFFFF; border-color: #1C1C1C; }
+  .bar {
+    height: 8px;
+    border-radius: 999px;
+    background: #E8E8E8;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    width: 25%;
+    background: #1C1C1C;
+    border-radius: 999px;
+    transition: width 0.25s ease;
+  }
+
+  /* ---------- question ---------- */
+  .qstep { display: none; margin-top: 22px; }
+  .qstep.on { display: block; }
+  .qtext {
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.2px;
+    margin: 0 0 18px 0;
+  }
+  body.easy .qtext { font-size: 25px; line-height: 1.45; }
+  body.easy .opt { font-size: 18px; min-height: 62px; }
+  body.easy .intro { font-size: 17px; }
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 56px;
+    border: 1.5px solid #E2E2E2;
+    border-radius: 14px;
+    background: #FFFFFF;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: 15.5px;
+    font-weight: 500;
+    color: #1C1C1C;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+  }
+  .opt .ring {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #C9C9C9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #FFFFFF;
+  }
+  .opt.sel { border-color: #1C1C1C; background: #F5F5F5; }
+  .opt.sel .ring { background: #1C1C1C; border-color: #1C1C1C; }
+
+  .nav { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-back {
+    min-height: 54px;
+    border-radius: 14px;
+    border: 1.5px solid #E2E2E2;
+    background: #FFFFFF;
+    color: #1C1C1C;
+    font-size: 15px;
+    font-weight: 600;
+    padding-left: 20px;
+    padding-right: 20px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-next {
+    flex: 1;
+    min-height: 54px;
+    border: none;
+    border-radius: 14px;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 15.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 8px 20px rgba(28, 28, 28, 0.22);
+  }
+  .btn-next:active { transform: translateY(1px); }
+
+  /* ---------- thank you ---------- */
+  .thanks { display: none; text-align: center; margin-top: 34px; }
+  .thanks.on { display: block; }
+  .thanks .logo { margin: 0 auto; border: none; }
+  .thanks h2 { font-size: 26px; font-weight: 800; margin: 18px 0 6px 0; letter-spacing: -0.3px; }
+  .thanks-msg { font-size: 15px; color: #454545; line-height: 1.55; margin: 0 0 18px 0; }
+  .score-chip {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 800;
+    background: #1C1C1C;
+    color: #FFFFFF;
+    border-radius: 999px;
+    padding: 9px 20px;
+    margin-bottom: 22px;
+  }
+  .btn-wide {
+    display: block;
+    width: 100%;
+    min-height: 54px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 10px;
+  }
+  .btn-wide.solid { background: #1C1C1C; color: #FFFFFF; border: none; }
+  .btn-wide.plain { background: #FFFFFF; color: #1C1C1C; border: 1.5px solid #E2E2E2; }
+
+  .foot {
+    text-align: center;
+    font-size: 12px;
+    color: #9A9A9A;
+    margin-top: 30px;
+  }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%) translateY(20px);
+    background: #1C1C1C;
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 13px 22px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: calc(100vw - 48px);
+    text-align: center;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <div class="cover"></div>
+  <div class="brand">
+    <div class="logo">KB</div>
+    <p class="brand-name">KB Events &amp; Catering</p>
+  </div>
+
+  <div id="runner">
+    <h1 class="title">Kitchen Hygiene Quiz</h1>
+    <p class="intro">Four questions in this preview. Answer them all — your certificate is ready when you pass.</p>
+    <div class="resume-note"><span>&#10003;</span> Your answers save as you go — if you leave, this link picks up where you stopped.</div>
+
+    <div class="tools">
+      <span class="progress-text" id="progressText">Question 1 of 4</span>
+      <button class="tool-btn" id="listenBtn">&#128266; Listen</button>
+      <button class="tool-btn" id="easyBtn">Easy read</button>
+    </div>
+    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+
+    <div class="qstep on" data-step="0">
+      <p class="qtext">How long should you wash your hands with soap?</p>
+      <button class="opt" data-correct="1"><span class="ring">&#10003;</span>At least 20 seconds</button>
+      <button class="opt"><span class="ring">&#10003;</span>A quick rinse is enough</button>
+      <button class="opt"><span class="ring">&#10003;</span>Only before cooking starts</button>
+      <button class="opt"><span class="ring">&#10003;</span>It does not matter</button>
+    </div>
+
+    <div class="qstep" data-step="1">
+      <p class="qtext">Raw chicken should be rinsed in the sink before cooking.</p>
+      <button class="opt"><span class="ring">&#10003;</span>True</button>
+      <button class="opt" data-correct="1"><span class="ring">&#10003;</span>False</button>
+    </div>
+
+    <div class="qstep" data-step="2">
+      <p class="qtext">What temperature should a fridge stay at or below?</p>
+      <button class="opt" data-correct="1"><span class="ring">&#10003;</span>5&deg;C</button>
+      <button class="opt"><span class="ring">&#10003;</span>8&deg;C</button>
+      <button class="opt"><span class="ring">&#10003;</span>12&deg;C</button>
+      <button class="opt"><span class="ring">&#10003;</span>Room temperature</button>
+    </div>
+
+    <div class="qstep" data-step="3">
+      <p class="qtext">Which board should raw meat be cut on?</p>
+      <button class="opt"><span class="ring">&#10003;</span>Any board that is clean</button>
+      <button class="opt" data-correct="1"><span class="ring">&#10003;</span>The board kept only for raw meat</button>
+      <button class="opt"><span class="ring">&#10003;</span>The vegetable board</button>
+      <button class="opt"><span class="ring">&#10003;</span>Straight on the counter</button>
+    </div>
+
+    <div class="nav">
+      <button class="btn-back" id="backBtn" style="visibility:hidden">Back</button>
+      <button class="btn-next" id="nextBtn">Next</button>
+    </div>
+  </div>
+
+  <div class="thanks" id="thanks">
+    <div class="logo">KB</div>
+    <h2>Thank you!</h2>
+    <p class="thanks-msg">Your answers are in. Well done — food safety starts with clean hands.<br>— KB Events &amp; Catering</p>
+    <div class="score-chip" id="scoreChip">You scored 4 of 4</div>
+    <button class="btn-wide solid" data-say="Your answers were sent to your email">Email me my answers</button>
+    <button class="btn-wide plain" data-say="Your answers were downloaded as a file">Download my answers</button>
+    <button class="btn-wide plain" data-say="Starting the quiz again" onclick="location.reload()">Take it again</button>
+  </div>
+
+  <p class="foot">Made with Forms App</p>
+
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+  (function () {
+    var toast = document.getElementById('toast');
+    var timer = null;
+    function say(msg) {
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+    var buttons = document.querySelectorAll('[data-say]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function () { say(this.getAttribute('data-say')); });
+    }
+
+    var steps = document.querySelectorAll('.qstep');
+    var step = 0;
+    var total = steps.length;
+    var answers = {};
+    var progressText = document.getElementById('progressText');
+    var barFill = document.getElementById('barFill');
+    var backBtn = document.getElementById('backBtn');
+    var nextBtn = document.getElementById('nextBtn');
+
+    for (var s = 0; s < steps.length; s++) {
+      (function (idx) {
+        var opts = steps[idx].querySelectorAll('.opt');
+        for (var i = 0; i < opts.length; i++) {
+          opts[i].addEventListener('click', function () {
+            for (var j = 0; j < opts.length; j++) { opts[j].classList.remove('sel'); }
+            this.classList.add('sel');
+            answers[idx] = this.getAttribute('data-correct') === '1';
+          });
+        }
+      })(s);
+    }
+
+    function show(n) {
+      for (var i = 0; i < total; i++) { steps[i].classList.toggle('on', i === n); }
+      progressText.textContent = 'Question ' + (n + 1) + ' of ' + total;
+      barFill.style.width = ((n + 1) / total * 100) + '%';
+      backBtn.style.visibility = n === 0 ? 'hidden' : 'visible';
+      nextBtn.textContent = n === total - 1 ? 'Finish' : 'Next';
+    }
+    backBtn.addEventListener('click', function () { if (step > 0) { step--; show(step); } });
+    nextBtn.addEventListener('click', function () {
+      if (answers[step] === undefined) { say('Pick an answer first — your progress is saved'); return; }
+      if (step < total - 1) { step++; show(step); return; }
+      var score = 0;
+      for (var k in answers) { if (answers[k]) { score++; } }
+      document.getElementById('scoreChip').textContent = 'You scored ' + score + ' of ' + total + (score === total ? ' — full marks' : '');
+      document.getElementById('runner').style.display = 'none';
+      document.getElementById('thanks').classList.add('on');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('easyBtn').addEventListener('click', function () {
+      document.body.classList.toggle('easy');
+      this.classList.toggle('on');
+      say(document.body.classList.contains('easy') ? 'Easy read on — bigger text, more space' : 'Easy read off');
+    });
+    document.getElementById('listenBtn').addEventListener('click', function () {
+      var q = steps[step].querySelector('.qtext').textContent;
+      say('Reading aloud: "' + q + '"');
+    });
+  })();
+</script>
+</body>
+</html>
