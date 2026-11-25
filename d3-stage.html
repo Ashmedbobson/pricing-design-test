@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms App — Stage</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: #FBFAF8;
+    color: #201D1A;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 28px;
+    padding-bottom: 56px;
+  }
+
+  /* ---------- shared ---------- */
+  .workspace {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #6D28A8;
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-size: 34px;
+    line-height: 1.12;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+  }
+  .question {
+    font-size: 21px;
+    font-weight: 600;
+    color: #4A443E;
+    margin: 26px 0 16px;
+  }
+  .crumb {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .back-btn {
+    appearance: none;
+    border: 1px solid #E4DFD8;
+    background: #FFFFFF;
+    color: #201D1A;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 44px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .back-btn:active { background: #F1EDE6; }
+  .crumb-path {
+    font-size: 14px;
+    color: #8A8378;
+    font-weight: 500;
+  }
+  .crumb-path strong { color: #201D1A; font-weight: 700; }
+
+  /* ---------- stage cards (home) ---------- */
+  .stage-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    text-align: left;
+    appearance: none;
+    font: inherit;
+    background: #FFFFFF;
+    border: 1px solid #E7E1D8;
+    border-radius: 20px;
+    padding: 22px 20px;
+    margin: 0 0 14px;
+    cursor: pointer;
+    color: #201D1A;
+    min-height: 44px;
+  }
+  .stage-card:active { border-color: #6D28A8; background: #FBF7FE; }
+  .stage-card .glyph {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: #F3EAFB;
+    color: #6D28A8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .stage-card .glyph svg { width: 26px; height: 26px; display: block; }
+  .stage-card .txt { flex: 1 1 auto; min-width: 0; }
+  .stage-card .t {
+    display: block;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .stage-card .d {
+    display: block;
+    font-size: 14px;
+    color: #7A7368;
+    margin-top: 3px;
+  }
+  .stage-card .chev {
+    flex: 0 0 auto;
+    color: #B9B1A4;
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  /* ---------- recent activity ---------- */
+  .activity { margin-top: 34px; }
+  .activity h2 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8A8378;
+    margin: 0 0 10px;
+  }
+  .activity ul { list-style: none; margin: 0; padding: 0; }
+  .activity li {
+    font-size: 14px;
+    color: #5A544B;
+    padding: 9px 0;
+    border-top: 1px solid #EFEAE2;
+  }
+  .activity li:first-child { border-top: none; }
+  .activity .who { color: #201D1A; font-weight: 600; }
+
+  /* ---------- list cards ---------- */
+  .new-btn {
+    display: block;
+    width: 100%;
+    appearance: none;
+    font: inherit;
+    border: none;
+    background: #6D28A8;
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 700;
+    min-height: 52px;
+    padding: 14px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 0 0 20px;
+  }
+  .new-btn:active { background: #5B21B6; }
+  .list-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8A8378;
+    margin: 0 0 12px;
+  }
+  .item-card {
+    background: #FFFFFF;
+    border: 1px solid #E7E1D8;
+    border-radius: 20px;
+    padding: 18px 20px;
+    margin: 0 0 12px;
+  }
+  .item-card .name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #7A7368;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: lowercase;
+    color: #6D28A8;
+    background: #F3EAFB;
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .status { font-weight: 600; }
+  .status.pub { color: #1E7B34; }
+  .status.draft { color: #9A6B12; }
+  .item-actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn {
+    appearance: none;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 44px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 1px solid #E4DFD8;
+    background: #FFFFFF;
+    color: #201D1A;
+  }
+  .btn:active { background: #F1EDE6; }
+  .btn.primary {
+    background: #6D28A8;
+    border-color: #6D28A8;
+    color: #FFFFFF;
+  }
+  .btn.primary:active { background: #5B21B6; }
+
+  /* ---------- templates ---------- */
+  .tpl-intro {
+    font-size: 16px;
+    color: #4A443E;
+    margin: 0 0 24px;
+  }
+  .tpl-card {
+    background: #FFFFFF;
+    border: 1px solid #E7E1D8;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 0 0 14px;
+  }
+  .tpl-card .name {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+  }
+  .tpl-card .desc {
+    font-size: 15px;
+    color: #4A443E;
+    margin: 10px 0 8px;
+  }
+  .tpl-card .cat {
+    font-size: 13px;
+    color: #8A8378;
+    margin: 0;
+  }
+
+  /* ---------- stats ---------- */
+  .stats {
+    background: #FFFFFF;
+    border: 1px solid #E7E1D8;
+    border-radius: 20px;
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4A443E;
+    margin: 0 0 20px;
+    text-align: center;
+  }
+  .stats strong { color: #6D28A8; }
+
+  .view[hidden] { display: none; }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <!-- ================= STAGE 1 : HOME ================= -->
+  <section class="view" id="view-home">
+    <p class="workspace">Ashmed's workspace</p>
+    <h1>Good evening, Ashmed</h1>
+    <p class="question">What do you want to do?</p>
+
+    <button class="stage-card" type="button" data-goto="view-create">
+      <span class="glyph" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </span>
+      <span class="txt">
+        <span class="t">Create a form</span>
+        <span class="d">Start something new, or open one of yours</span>
+      </span>
+      <span class="chev" aria-hidden="true">›</span>
+    </button>
+
+    <button class="stage-card" type="button" data-goto="view-templates">
+      <span class="glyph" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      </span>
+      <span class="txt">
+        <span class="t">Start from a template</span>
+        <span class="d">Ready-made forms you can copy and edit</span>
+      </span>
+      <span class="chev" aria-hidden="true">›</span>
+    </button>
+
+    <button class="stage-card" type="button" data-goto="view-quiz">
+      <span class="glyph" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3" fill="currentColor" stroke="none"/></svg>
+      </span>
+      <span class="txt">
+        <span class="t">Run a quiz</span>
+        <span class="d">Put a quiz in front of your group</span>
+      </span>
+      <span class="chev" aria-hidden="true">›</span>
+    </button>
+
+    <div class="activity">
+      <h2>Recent activity</h2>
+      <ul>
+        <li><span class="who">Kitchen Hygiene Quiz</span> — Ama S. scored 9/10 · 2h ago</li>
+        <li><span class="who">Guest Registration</span> — New response · 5h ago</li>
+        <li><span class="who">Customer Feedback Survey</span> — New response · Yesterday</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= STAGE 2 : CREATE ================= -->
+  <section class="view" id="view-create" hidden>
+    <div class="crumb">
+      <button class="back-btn" type="button" data-goto="view-home">‹ Back</button>
+      <span class="crumb-path">Home › <strong>Create a form</strong></span>
+    </div>
+    <h1>Create a form</h1>
+
+    <button class="new-btn" type="button">+ New form</button>
+
+    <p class="list-label">Your forms</p>
+
+    <div class="item-card">
+      <p class="name">Kitchen Hygiene Quiz</p>
+      <div class="meta">
+        <span class="tag">quiz</span>
+        <span class="status pub">Published</span>
+        <span>· 12 responses</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <p class="name">Customer Feedback Survey</p>
+      <div class="meta">
+        <span class="tag">survey</span>
+        <span class="status draft">Draft</span>
+        <span>· 0 responses</span>
+      </div>
+    </div>
+
+    <div class="item-card">
+      <p class="name">Guest Registration</p>
+      <div class="meta">
+        <span class="tag">form</span>
+        <span class="status pub">Published</span>
+        <span>· 8 responses</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STAGE 2 : TEMPLATES ================= -->
+  <section class="view" id="view-templates" hidden>
+    <div class="crumb">
+      <button class="back-btn" type="button" data-goto="view-home">‹ Back</button>
+      <span class="crumb-path">Home › <strong>Templates</strong></span>
+    </div>
+    <h1>Templates</h1>
+    <p class="tpl-intro">Start from a ready-made form. Using a template copies it into this workspace as a draft — edit it freely afterwards; the template itself never changes, and your copy never changes it.</p>
+
+    <div class="tpl-card">
+      <p class="name">Customer Feedback Survey</p>
+      <div class="meta"><span class="tag">survey</span></div>
+      <p class="desc">Food, service, speed and value — rated per question, plus what to fix.</p>
+      <p class="cat">Feedback &amp; Satisfaction · 7 questions</p>
+      <div class="item-actions">
+        <button class="btn" type="button">Preview</button>
+        <button class="btn primary" type="button">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="name">Customer Satisfaction (NPS + CSAT)</p>
+      <div class="meta"><span class="tag">survey</span></div>
+      <p class="desc">The two scores that matter, the reason behind them, and a follow-up only if invited.</p>
+      <p class="cat">Feedback &amp; Satisfaction · 5 questions</p>
+      <div class="item-actions">
+        <button class="btn" type="button">Preview</button>
+        <button class="btn primary" type="button">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="name">Guest Registration</p>
+      <div class="meta"><span class="tag">form</span></div>
+      <p class="desc">Full registration for a conference or gathering — sessions, meals and badges.</p>
+      <p class="cat">Events &amp; Tickets · 10 questions</p>
+      <div class="item-actions">
+        <button class="btn" type="button">Preview</button>
+        <button class="btn primary" type="button">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="name">Free Event RSVP</p>
+      <div class="meta"><span class="tag">form</span></div>
+      <p class="desc">Who is coming and how many guests — so the host can plan the room.</p>
+      <p class="cat">Events &amp; Tickets · 4 questions</p>
+      <div class="item-actions">
+        <button class="btn" type="button">Preview</button>
+        <button class="btn primary" type="button">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="name">Job Application</p>
+      <div class="meta"><span class="tag">form</span></div>
+      <p class="desc">Apply for a role in one sitting — details, history and documents.</p>
+      <p class="cat">Hiring · 8 questions</p>
+      <div class="item-actions">
+        <button class="btn" type="button">Preview</button>
+        <button class="btn primary" type="button">Use this template</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STAGE 2 : RUN A QUIZ ================= -->
+  <section class="view" id="view-quiz" hidden>
+    <div class="crumb">
+      <button class="back-btn" type="button" data-goto="view-home">‹ Back</button>
+      <span class="crumb-path">Home › <strong>Run a quiz</strong></span>
+    </div>
+    <h1>Run a quiz</h1>
+
+    <p class="stats"><strong>3</strong> forms live · <strong>20</strong> responses this week · <strong>1</strong> quiz running</p>
+
+    <p class="list-label">Your forms</p>
+
+    <div class="item-card">
+      <p class="name">Kitchen Hygiene Quiz</p>
+      <div class="meta">
+        <span class="tag">quiz</span>
+        <span class="status pub">Published</span>
+        <span>· 12 responses</span>
+      </div>
+      <div class="item-actions">
+        <button class="btn primary" type="button">Start</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  (function () {
+    var views = document.querySelectorAll('.view');
+    function show(id) {
+      for (var i = 0; i < views.length; i++) {
+        if (views[i].id === id) { views[i].removeAttribute('hidden'); }
+        else { views[i].setAttribute('hidden', ''); }
+      }
+      window.scrollTo(0, 0);
+    }
+    var triggers = document.querySelectorAll('[data-goto]');
+    for (var j = 0; j < triggers.length; j++) {
+      triggers[j].addEventListener('click', function () {
+        show(this.getAttribute('data-goto'));
+      });
+    }
+  })();
+</script>
+</body>
+</html>

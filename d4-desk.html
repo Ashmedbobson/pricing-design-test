@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Desk</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #F7F8FA;
+    color: #14181F;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 0;
+    padding-bottom: 40px;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #E3E6EB;
+  }
+  .wordmark {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .wordmark span { color: #0E7C66; }
+  .workspace {
+    font-size: 12px;
+    color: #5B6472;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ---------- Greeting ---------- */
+  .greeting {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #5B6472;
+  }
+  .greeting strong { color: #14181F; font-weight: 600; }
+
+  /* ---------- Summary band ---------- */
+  .band {
+    margin-top: 10px;
+    background: #FFFFFF;
+    border: 1px solid #E3E6EB;
+    border-radius: 10px;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+  }
+  .band .side {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .band .side + .side { border-left: 1px solid #E3E6EB; }
+  .band .center {
+    flex: 1.3 1 0;
+    background: #14181F;
+    color: #FFFFFF;
+  }
+  .band .big {
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .band .big-label {
+    margin-top: 5px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #B9C0CC;
+  }
+  .band .stat-num {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .band .stat-label {
+    margin-top: 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5B6472;
+  }
+
+  /* ---------- Section labels ---------- */
+  .section-label {
+    margin-top: 28px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #5B6472;
+  }
+
+  /* ---------- Action tiles ---------- */
+  .tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    min-height: 76px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 14px;
+    padding-right: 14px;
+    background: #FFFFFF;
+    border: 1px solid #E3E6EB;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #14181F;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    width: 100%;
+  }
+  .tile:active { border-color: #0E7C66; }
+  .tile .t-title { font-size: 15px; font-weight: 700; }
+  .tile .t-sub { font-size: 12px; color: #5B6472; }
+  .tile.primary { background: #0E7C66; border-color: #0E7C66; color: #FFFFFF; }
+  .tile.primary .t-sub { color: #CDE8E1; }
+
+  /* ---------- Panels / lists ---------- */
+  .panel {
+    background: #FFFFFF;
+    border: 1px solid #E3E6EB;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .row {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .row + .row { border-top: 1px solid #E3E6EB; }
+
+  /* Your forms — table-like rows */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas:
+      "name status responses"
+      "name type responses";
+    column-gap: 14px;
+    align-items: center;
+  }
+  .form-row .f-name { grid-area: name; font-weight: 600; min-width: 0; }
+  .form-row .f-type {
+    grid-area: type;
+    font-size: 12px;
+    color: #5B6472;
+    text-transform: capitalize;
+  }
+  .form-row .f-status {
+    grid-area: status;
+    justify-self: end;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .form-row .f-resp {
+    grid-area: responses;
+    justify-self: end;
+    text-align: right;
+    font-size: 13px;
+    color: #5B6472;
+    white-space: nowrap;
+  }
+  .form-row .f-resp strong { color: #14181F; font-size: 15px; }
+  .status-live { color: #0E7C66; }
+  .status-draft { color: #9A6B12; }
+
+  /* Templates */
+  .templates-intro {
+    font-size: 13px;
+    color: #5B6472;
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .tpl-row { display: block; }
+  .tpl-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .tpl-name { font-weight: 600; min-width: 0; }
+  .tpl-tag {
+    flex: 0 0 auto;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #0E7C66;
+    background: #E6F2EE;
+    border-radius: 999px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 1px;
+  }
+  .tpl-desc { margin-top: 3px; font-size: 13px; color: #3C4450; }
+  .tpl-meta {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .tpl-cat { font-size: 12px; color: #5B6472; }
+  .tpl-actions { display: flex; align-items: center; gap: 14px; }
+  .tpl-preview {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0E7C66;
+    text-decoration: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .btn-use {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+    background: #0E7C66;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .btn-use:active { background: #0A6353; }
+
+  /* Recent activity */
+  .act-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .act-text { min-width: 0; font-size: 13px; }
+  .act-text strong { font-weight: 600; }
+  .act-when {
+    flex: 0 0 auto;
+    font-size: 12px;
+    color: #5B6472;
+    white-space: nowrap;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%) translateY(16px);
+    background: #14181F;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-radius: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    max-width: calc(100vw - 48px);
+    text-align: center;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ---------- Narrow: stack ---------- */
+  @media (max-width: 400px) {
+    .tiles { grid-template-columns: 1fr; }
+    .tile { min-height: 60px; }
+    .form-row {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "name responses"
+        "meta responses";
+    }
+    .form-row .f-meta {
+      grid-area: meta;
+      font-size: 12px;
+      color: #5B6472;
+    }
+    .form-row .f-type, .form-row .f-status { display: none; }
+  }
+  @media (min-width: 401px) {
+    .form-row .f-meta { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="wordmark">Forms<span>.</span></div>
+    <div class="workspace">Ashmed&rsquo;s workspace</div>
+  </header>
+
+  <!-- Greeting -->
+  <p class="greeting">Good evening, <strong>Ashmed</strong></p>
+
+  <!-- Summary band -->
+  <section class="band" aria-label="Summary">
+    <div class="side">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Forms live</div>
+    </div>
+    <div class="side center">
+      <div class="big">20</div>
+      <div class="big-label">Responses this week</div>
+    </div>
+    <div class="side">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Quiz running</div>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <h2 class="section-label">Start something</h2>
+  <div class="tiles">
+    <button class="tile primary" type="button" data-act="Create a form">
+      <span class="t-title">Create a form</span>
+      <span class="t-sub">Blank canvas, your questions</span>
+    </button>
+    <button class="tile" type="button" data-act="Start from a template" data-scroll="templates">
+      <span class="t-title">Start from a template</span>
+      <span class="t-sub">Ready-made, copied as a draft</span>
+    </button>
+    <button class="tile" type="button" data-act="Run a quiz">
+      <span class="t-title">Run a quiz</span>
+      <span class="t-sub">Scored, timed, shareable</span>
+    </button>
+    <button class="tile" type="button" data-act="View results">
+      <span class="t-title">View results</span>
+      <span class="t-sub">Responses and scores</span>
+    </button>
+  </div>
+
+  <!-- Your forms -->
+  <h2 class="section-label">Your forms</h2>
+  <div class="panel">
+    <div class="row form-row">
+      <div class="f-name">Kitchen Hygiene Quiz</div>
+      <div class="f-type">quiz</div>
+      <div class="f-status status-live">Published</div>
+      <div class="f-resp"><strong>12</strong> responses</div>
+      <div class="f-meta">quiz &middot; Published</div>
+    </div>
+    <div class="row form-row">
+      <div class="f-name">Customer Feedback Survey</div>
+      <div class="f-type">survey</div>
+      <div class="f-status status-draft">Draft</div>
+      <div class="f-resp"><strong>0</strong> responses</div>
+      <div class="f-meta">survey &middot; Draft</div>
+    </div>
+    <div class="row form-row">
+      <div class="f-name">Guest Registration</div>
+      <div class="f-type">form</div>
+      <div class="f-status status-live">Published</div>
+      <div class="f-resp"><strong>8</strong> responses</div>
+      <div class="f-meta">form &middot; Published</div>
+    </div>
+  </div>
+
+  <!-- Templates -->
+  <h2 class="section-label" id="templates">Templates</h2>
+  <p class="templates-intro">Start from a ready-made form. Using a template copies it into this workspace as a draft &mdash; edit it freely afterwards; the template itself never changes, and your copy never changes it.</p>
+  <div class="panel">
+    <div class="row tpl-row">
+      <div class="tpl-head">
+        <div class="tpl-name">Customer Feedback Survey</div>
+        <div class="tpl-tag">survey</div>
+      </div>
+      <div class="tpl-desc">Food, service, speed and value &mdash; rated per question, plus what to fix.</div>
+      <div class="tpl-meta">
+        <div class="tpl-cat">Feedback &amp; Satisfaction &middot; 7 questions</div>
+        <div class="tpl-actions">
+          <a class="tpl-preview" href="#" data-preview="Customer Feedback Survey">Preview</a>
+          <button class="btn-use" type="button" data-use="Customer Feedback Survey">Use this template</button>
+        </div>
+      </div>
+    </div>
+    <div class="row tpl-row">
+      <div class="tpl-head">
+        <div class="tpl-name">Customer Satisfaction (NPS + CSAT)</div>
+        <div class="tpl-tag">survey</div>
+      </div>
+      <div class="tpl-desc">The two scores that matter, the reason behind them, and a follow-up only if invited.</div>
+      <div class="tpl-meta">
+        <div class="tpl-cat">Feedback &amp; Satisfaction &middot; 5 questions</div>
+        <div class="tpl-actions">
+          <a class="tpl-preview" href="#" data-preview="Customer Satisfaction (NPS + CSAT)">Preview</a>
+          <button class="btn-use" type="button" data-use="Customer Satisfaction (NPS + CSAT)">Use this template</button>
+        </div>
+      </div>
+    </div>
+    <div class="row tpl-row">
+      <div class="tpl-head">
+        <div class="tpl-name">Guest Registration</div>
+        <div class="tpl-tag">form</div>
+      </div>
+      <div class="tpl-desc">Full registration for a conference or gathering &mdash; sessions, meals and badges.</div>
+      <div class="tpl-meta">
+        <div class="tpl-cat">Events &amp; Tickets &middot; 10 questions</div>
+        <div class="tpl-actions">
+          <a class="tpl-preview" href="#" data-preview="Guest Registration">Preview</a>
+          <button class="btn-use" type="button" data-use="Guest Registration">Use this template</button>
+        </div>
+      </div>
+    </div>
+    <div class="row tpl-row">
+      <div class="tpl-head">
+        <div class="tpl-name">Free Event RSVP</div>
+        <div class="tpl-tag">form</div>
+      </div>
+      <div class="tpl-desc">Who is coming and how many guests &mdash; so the host can plan the room.</div>
+      <div class="tpl-meta">
+        <div class="tpl-cat">Events &amp; Tickets &middot; 4 questions</div>
+        <div class="tpl-actions">
+          <a class="tpl-preview" href="#" data-preview="Free Event RSVP">Preview</a>
+          <button class="btn-use" type="button" data-use="Free Event RSVP">Use this template</button>
+        </div>
+      </div>
+    </div>
+    <div class="row tpl-row">
+      <div class="tpl-head">
+        <div class="tpl-name">Job Application</div>
+        <div class="tpl-tag">form</div>
+      </div>
+      <div class="tpl-desc">Apply for a role in one sitting &mdash; details, history and documents.</div>
+      <div class="tpl-meta">
+        <div class="tpl-cat">Hiring &middot; 8 questions</div>
+        <div class="tpl-actions">
+          <a class="tpl-preview" href="#" data-preview="Job Application">Preview</a>
+          <button class="btn-use" type="button" data-use="Job Application">Use this template</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent activity -->
+  <h2 class="section-label">Recent activity</h2>
+  <div class="panel">
+    <div class="row act-row">
+      <div class="act-text"><strong>Kitchen Hygiene Quiz</strong> &mdash; Ama S. scored 9/10</div>
+      <div class="act-when">2h ago</div>
+    </div>
+    <div class="row act-row">
+      <div class="act-text"><strong>Guest Registration</strong> &mdash; New response</div>
+      <div class="act-when">5h ago</div>
+    </div>
+    <div class="row act-row">
+      <div class="act-text"><strong>Customer Feedback Survey</strong> &mdash; New response</div>
+      <div class="act-when">Yesterday</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  (function () {
+    var toast = document.getElementById('toast');
+    var timer = null;
+    function show(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+    document.querySelectorAll('[data-use]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        show('\u201C' + el.getAttribute('data-use') + '\u201D copied to your workspace as a draft.');
+      });
+    });
+    document.querySelectorAll('[data-preview]').forEach(function (el) {
+      el.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        show('Preview: ' + el.getAttribute('data-preview'));
+      });
+    });
+    document.querySelectorAll('[data-act]').forEach(function (el) {
+      el.addEventListener('click', function () {
+        var target = el.getAttribute('data-scroll');
+        if (target) {
+          var node = document.getElementById(target);
+          if (node) node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        show(el.getAttribute('data-act'));
+      });
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms App — Design R1 · D2 Tabs</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FFFFFF;
+    color: #171A21;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .scroll { padding-bottom: 104px; }
+
+  /* ---------- header ---------- */
+  .greet { padding-top: 28px; }
+  .ws {
+    font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: #2563EB; margin: 0 0 6px;
+  }
+  h1 { font-size: 26px; line-height: 1.2; margin: 0 0 16px; font-weight: 800; letter-spacing: -.01em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+  .chip {
+    background: #F4F5F7; border-radius: 999px; padding: 8px 12px;
+    font-size: 13px; font-weight: 600; color: #3C4350; white-space: nowrap;
+  }
+  .chip b { color: #171A21; }
+
+  /* ---------- actions ---------- */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 52px; border-radius: 16px; border: 0; cursor: pointer;
+    font-size: 16px; font-weight: 700; width: 100%;
+    font-family: inherit; text-decoration: none;
+  }
+  .btn-primary { background: #2563EB; color: #FFFFFF; box-shadow: 0 8px 20px rgba(37,99,235,.28); }
+  .btn-row { display: flex; gap: 10px; margin-top: 10px; }
+  .btn-secondary {
+    flex: 1; min-height: 48px; background: #F4F5F7; color: #171A21;
+    font-size: 14px; font-weight: 600; border-radius: 14px; border: 0; cursor: pointer;
+    font-family: inherit; padding-left: 8px; padding-right: 8px;
+  }
+  .btn-primary:active, .btn-secondary:active, .btn-use:active, .btn-ghost:active { transform: scale(.985); }
+
+  /* ---------- sections ---------- */
+  h2 { font-size: 18px; margin: 30px 0 12px; font-weight: 800; letter-spacing: -.01em; }
+  .card {
+    background: #FFFFFF; border: 1px solid #E8EAEE; border-radius: 16px;
+    padding: 16px; margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(23,26,33,.05);
+  }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .card h3 { font-size: 16px; margin: 0 0 6px; font-weight: 700; line-height: 1.3; }
+  .tag {
+    display: inline-block; background: #EAF0FE; color: #2563EB;
+    font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 10px;
+    text-transform: lowercase;
+  }
+  .status { font-size: 12px; font-weight: 700; white-space: nowrap; padding-top: 2px; }
+  .status.pub { color: #15803D; }
+  .status.draft { color: #9A6A00; }
+  .meta { font-size: 14px; color: #5A6270; margin: 6px 0 0; line-height: 1.45; }
+  .resp { font-size: 13px; color: #5A6270; margin-top: 8px; }
+  .resp b { color: #171A21; }
+
+  /* ---------- activity ---------- */
+  .activity { background: #F4F5F7; border-radius: 16px; padding: 6px 16px; }
+  .act {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding-top: 12px; padding-bottom: 12px; border-bottom: 1px solid #E4E7EC;
+  }
+  .act:last-child { border-bottom: 0; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: #2563EB; margin-top: 6px; flex: none; }
+  .act p { margin: 0; font-size: 14px; line-height: 1.45; }
+  .act .when { color: #8A919E; font-size: 13px; }
+
+  /* ---------- templates ---------- */
+  .tpl-head { padding-top: 28px; }
+  .tpl-head h1 { margin-bottom: 10px; }
+  .tpl-intro { font-size: 15px; line-height: 1.55; color: #5A6270; margin: 0 0 22px; }
+  .tpl-actions { display: flex; gap: 10px; margin-top: 14px; }
+  .btn-ghost {
+    min-height: 44px; padding-left: 18px; padding-right: 18px;
+    background: #F4F5F7; color: #171A21; border: 0; border-radius: 12px;
+    font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .btn-use {
+    min-height: 44px; padding-left: 18px; padding-right: 18px;
+    background: #2563EB; color: #FFFFFF; border: 0; border-radius: 12px;
+    font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+
+  /* ---------- coming soon ---------- */
+  .soon { padding-top: 64px; text-align: center; }
+  .soon .ring {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 18px;
+    background: #EAF0FE; display: flex; align-items: center; justify-content: center;
+  }
+  .soon h1 { margin-bottom: 8px; }
+  .soon p { color: #5A6270; font-size: 15px; line-height: 1.55; margin: 0 auto; max-width: 300px; }
+  .pill {
+    display: inline-block; margin-top: 18px; background: #171A21; color: #FFFFFF;
+    font-size: 13px; font-weight: 700; border-radius: 999px; padding: 8px 16px;
+  }
+
+  /* ---------- tab bar ---------- */
+  .tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    background: rgba(255,255,255,.96); border-top: 1px solid #E8EAEE;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tabbar-in {
+    max-width: 430px; margin: 0 auto; display: flex;
+    padding-left: 8px; padding-right: 8px;
+  }
+  .tab {
+    flex: 1; min-height: 60px; background: none; border: 0; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    color: #8A919E; font-family: inherit; padding: 6px 2px 8px;
+  }
+  .tab span { font-size: 11px; font-weight: 600; white-space: nowrap; line-height: 1; }
+  .tab svg { display: block; }
+  .tab.active { color: #2563EB; }
+  .tab.create .fab {
+    width: 46px; height: 46px; border-radius: 50%; background: #2563EB; color: #FFFFFF;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 16px rgba(37,99,235,.35); margin-top: -18px;
+    border: 3px solid #FFFFFF;
+  }
+  .view { display: none; }
+  .view.on { display: block; }
+</style>
+</head>
+<body>
+
+<div class="scroll">
+
+  <!-- ================= HOME ================= -->
+  <section class="view on" id="view-home">
+    <div class="col">
+      <div class="greet">
+        <p class="ws">Ashmed's workspace</p>
+        <h1>Good evening, Ashmed</h1>
+        <div class="chips">
+          <span class="chip"><b>3</b> forms live</span>
+          <span class="chip"><b>20</b> responses this week</span>
+          <span class="chip"><b>1</b> quiz running</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" type="button">+&nbsp; Create a form</button>
+      <div class="btn-row">
+        <button class="btn-secondary" type="button" data-goto="templates">Start from a template</button>
+        <button class="btn-secondary" type="button">Run a quiz</button>
+      </div>
+
+      <h2>Your forms</h2>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>Kitchen Hygiene Quiz</h3>
+          <span class="status pub">Published</span>
+        </div>
+        <span class="tag">quiz</span>
+        <p class="resp"><b>12</b> responses</p>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>Customer Feedback Survey</h3>
+          <span class="status draft">Draft</span>
+        </div>
+        <span class="tag">survey</span>
+        <p class="resp"><b>0</b> responses</p>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <h3>Guest Registration</h3>
+          <span class="status pub">Published</span>
+        </div>
+        <span class="tag">form</span>
+        <p class="resp"><b>8</b> responses</p>
+      </div>
+
+      <h2>Recent activity</h2>
+      <div class="activity">
+        <div class="act">
+          <span class="dot"></span>
+          <p>Kitchen Hygiene Quiz — Ama S. scored 9/10 <span class="when">· 2h ago</span></p>
+        </div>
+        <div class="act">
+          <span class="dot"></span>
+          <p>Guest Registration — New response <span class="when">· 5h ago</span></p>
+        </div>
+        <div class="act">
+          <span class="dot"></span>
+          <p>Customer Feedback Survey — New response <span class="when">· Yesterday</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TEMPLATES ================= -->
+  <section class="view" id="view-templates">
+    <div class="col">
+      <div class="tpl-head">
+        <h1>Templates</h1>
+        <p class="tpl-intro">Start from a ready-made form. Using a template copies it into this workspace as a draft — edit it freely afterwards; the template itself never changes, and your copy never changes it.</p>
+      </div>
+
+      <div class="card">
+        <h3>Customer Feedback Survey</h3>
+        <span class="tag">survey</span>
+        <p class="meta">Food, service, speed and value — rated per question, plus what to fix.</p>
+        <p class="meta">Feedback &amp; Satisfaction · 7 questions</p>
+        <div class="tpl-actions">
+          <button class="btn-ghost" type="button">Preview</button>
+          <button class="btn-use" type="button">Use this template</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Customer Satisfaction (NPS + CSAT)</h3>
+        <span class="tag">survey</span>
+        <p class="meta">The two scores that matter, the reason behind them, and a follow-up only if invited.</p>
+        <p class="meta">Feedback &amp; Satisfaction · 5 questions</p>
+        <div class="tpl-actions">
+          <button class="btn-ghost" type="button">Preview</button>
+          <button class="btn-use" type="button">Use this template</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Guest Registration</h3>
+        <span class="tag">form</span>
+        <p class="meta">Full registration for a conference or gathering — sessions, meals and badges.</p>
+        <p class="meta">Events &amp; Tickets · 10 questions</p>
+        <div class="tpl-actions">
+          <button class="btn-ghost" type="button">Preview</button>
+          <button class="btn-use" type="button">Use this template</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Free Event RSVP</h3>
+        <span class="tag">form</span>
+        <p class="meta">Who is coming and how many guests — so the host can plan the room.</p>
+        <p class="meta">Events &amp; Tickets · 4 questions</p>
+        <div class="tpl-actions">
+          <button class="btn-ghost" type="button">Preview</button>
+          <button class="btn-use" type="button">Use this template</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Job Application</h3>
+        <span class="tag">form</span>
+        <p class="meta">Apply for a role in one sitting — details, history and documents.</p>
+        <p class="meta">Hiring · 8 questions</p>
+        <div class="tpl-actions">
+          <button class="btn-ghost" type="button">Preview</button>
+          <button class="btn-use" type="button">Use this template</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CREATE (coming soon) ================= -->
+  <section class="view" id="view-create">
+    <div class="col soon">
+      <div class="ring">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+      <h1>Create</h1>
+      <p>Build a form, survey or quiz from a blank page — this space is reserved in this design.</p>
+      <span class="pill">Coming soon</span>
+    </div>
+  </section>
+
+  <!-- ================= MY THINGS (coming soon) ================= -->
+  <section class="view" id="view-things">
+    <div class="col soon">
+      <div class="ring">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </div>
+      <h1>My Things</h1>
+      <p>Everything you have filled in, joined or been invited to — gathered in one place.</p>
+      <span class="pill">Coming soon</span>
+    </div>
+  </section>
+
+  <!-- ================= MORE (coming soon) ================= -->
+  <section class="view" id="view-more">
+    <div class="col soon">
+      <div class="ring">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="#2563EB"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+      </div>
+      <h1>More</h1>
+      <p>Workspace settings, members, billing and help — the rest of the app lives here.</p>
+      <span class="pill">Coming soon</span>
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= TAB BAR ================= -->
+<nav class="tabbar" aria-label="Main">
+  <div class="tabbar-in">
+    <button class="tab active" type="button" data-view="home">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="tab" type="button" data-view="templates">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+      <span>Templates</span>
+    </button>
+    <button class="tab create" type="button" data-view="create">
+      <span class="fab">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </span>
+      <span>Create</span>
+    </button>
+    <button class="tab" type="button" data-view="things">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      <span>My Things</span>
+    </button>
+    <button class="tab" type="button" data-view="more">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>
+      <span>More</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+  (function () {
+    var tabs = document.querySelectorAll('.tab[data-view]');
+    function show(name) {
+      document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('on'); });
+      var el = document.getElementById('view-' + name);
+      if (el) el.classList.add('on');
+      tabs.forEach(function (t) { t.classList.toggle('active', t.getAttribute('data-view') === name); });
+      window.scrollTo(0, 0);
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () { show(t.getAttribute('data-view')); });
+    });
+    document.querySelectorAll('[data-goto]').forEach(function (b) {
+      b.addEventListener('click', function () { show(b.getAttribute('data-goto')); });
+    });
+  })();
+</script>
+</body>
+</html>

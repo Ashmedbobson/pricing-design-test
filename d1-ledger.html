@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Ledger</title>
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FAF7F2;
+    color: #1C1A17;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 28px;
+    padding-bottom: 56px;
+  }
+  h1, h2, h3, .serif {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 600;
+    color: #1C1A17;
+  }
+  /* ---------- Masthead ---------- */
+  .masthead { border-bottom: 3px double #1C1A17; padding-bottom: 18px; }
+  .wordmark {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    margin: 0;
+  }
+  .workspace-line {
+    margin-top: 6px;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6B645A;
+  }
+  .greeting {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 24px;
+    margin: 22px 0 4px 0;
+    line-height: 1.25;
+  }
+  .stats {
+    font-size: 14px;
+    color: #6B645A;
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  /* ---------- Index ---------- */
+  .index { margin-top: 26px; border-top: 1px solid #D8D1C4; border-bottom: 1px solid #D8D1C4; padding-top: 10px; padding-bottom: 10px; }
+  .index-title {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6B645A;
+    margin: 2px 0 6px 0;
+  }
+  .index a {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #1C1A17;
+    text-decoration: none;
+    border-bottom: 1px dotted #D8D1C4;
+    font-size: 16px;
+  }
+  .index a:last-child { border-bottom: none; }
+  .index a .no {
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    color: #1F5C3D;
+    min-width: 22px;
+  }
+  .index a .dots { flex: 1; border-bottom: 1px dotted #B9B0A0; transform: translateY(-4px); }
+  .index a .pg { font-variant-numeric: tabular-nums; font-size: 13px; color: #6B645A; }
+  /* ---------- Sections ---------- */
+  section { margin-top: 44px; scroll-margin-top: 16px; }
+  .sec-head { border-bottom: 2px solid #1C1A17; padding-bottom: 8px; margin-bottom: 6px; }
+  .sec-head h2 { font-size: 26px; margin: 0; line-height: 1.2; }
+  .sec-kicker {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #1F5C3D;
+    margin: 0 0 4px 0;
+  }
+  .lede { font-size: 15px; color: #45403A; margin: 10px 0 14px 0; }
+  /* ---------- Numbered actions ---------- */
+  .actions { list-style: none; margin: 0; padding: 0; }
+  .actions li { border-bottom: 1px solid #D8D1C4; }
+  .actions a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    color: #1C1A17;
+    text-decoration: none;
+  }
+  .actions .num {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 26px;
+    color: #1F5C3D;
+    font-variant-numeric: tabular-nums;
+    min-width: 30px;
+    line-height: 1;
+  }
+  .actions .label { font-size: 18px; font-weight: 600; }
+  .actions .arrow { margin-left: auto; color: #1F5C3D; font-size: 18px; }
+  /* ---------- Ledger rows ---------- */
+  .ledger { list-style: none; margin: 0; padding: 0; }
+  .ledger li { border-bottom: 1px solid #D8D1C4; padding-top: 14px; padding-bottom: 14px; }
+  .ledger li:last-child { border-bottom: 1px solid #1C1A17; }
+  .row-top { display: flex; align-items: baseline; gap: 10px; }
+  .row-name { font-family: Georgia, "Times New Roman", serif; font-size: 19px; font-weight: 600; line-height: 1.3; }
+  .row-resp { margin-left: auto; font-variant-numeric: tabular-nums; font-size: 14px; color: #45403A; white-space: nowrap; }
+  .row-meta { margin-top: 3px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #6B645A; }
+  .status { color: #1F5C3D; }
+  .status.draft { color: #8A6D1F; }
+  /* ---------- Activity lines ---------- */
+  .activity { list-style: none; margin: 0; padding: 0; }
+  .activity li {
+    border-bottom: 1px solid #D8D1C4;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    font-size: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+  .activity li:last-child { border-bottom: 1px solid #1C1A17; }
+  .activity .when { margin-left: auto; font-size: 13px; color: #6B645A; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .activity .what { min-width: 0; }
+  /* ---------- Templates ---------- */
+  .tpl { list-style: none; margin: 0; padding: 0; }
+  .tpl li { border-bottom: 1px solid #D8D1C4; padding-top: 16px; padding-bottom: 16px; }
+  .tpl li:last-child { border-bottom: 1px solid #1C1A17; }
+  .tpl .row-name { font-size: 20px; }
+  .tpl .kind {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #1F5C3D;
+    border: 1px solid #1F5C3D;
+    border-radius: 999px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  .tpl .desc { margin: 8px 0 0 0; font-size: 15px; color: #45403A; }
+  .tpl .cat { margin-top: 6px; font-size: 13px; color: #6B645A; font-variant-numeric: tabular-nums; }
+  .tpl .btns { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #1C1A17;
+    background: transparent;
+    color: #1C1A17;
+    font-family: inherit;
+  }
+  .btn.primary { background: #1F5C3D; border-color: #1F5C3D; color: #FAF7F2; }
+  .btn:active { opacity: 0.85; }
+  /* ---------- Colophon ---------- */
+  .colophon {
+    margin-top: 48px;
+    border-top: 3px double #1C1A17;
+    padding-top: 14px;
+    font-size: 13px;
+    color: #6B645A;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <header class="masthead">
+    <h1 class="wordmark">Forms</h1>
+    <div class="workspace-line">Ashmed's workspace</div>
+    <p class="greeting">Good evening, Ashmed</p>
+    <p class="stats">3 forms live &middot; 20 responses this week &middot; 1 quiz running</p>
+  </header>
+
+  <nav class="index" aria-label="Contents">
+    <p class="index-title">Contents</p>
+    <a href="#start"><span class="no">01</span><span>Start</span><span class="dots"></span><span class="pg">Actions</span></a>
+    <a href="#your-forms"><span class="no">02</span><span>Your forms</span><span class="dots"></span><span class="pg">3 entries</span></a>
+    <a href="#activity"><span class="no">03</span><span>Recent activity</span><span class="dots"></span><span class="pg">3 lines</span></a>
+    <a href="#templates"><span class="no">04</span><span>Templates</span><span class="dots"></span><span class="pg">5 entries</span></a>
+  </nav>
+
+  <section id="start">
+    <div class="sec-head">
+      <p class="sec-kicker">Section 01</p>
+      <h2>Start</h2>
+    </div>
+    <ol class="actions">
+      <li><a href="#your-forms"><span class="num">1.</span><span class="label">Create a form</span><span class="arrow">&rarr;</span></a></li>
+      <li><a href="#templates"><span class="num">2.</span><span class="label">Start from a template</span><span class="arrow">&rarr;</span></a></li>
+      <li><a href="#your-forms"><span class="num">3.</span><span class="label">Run a quiz</span><span class="arrow">&rarr;</span></a></li>
+    </ol>
+  </section>
+
+  <section id="your-forms">
+    <div class="sec-head">
+      <p class="sec-kicker">Section 02</p>
+      <h2>Your forms</h2>
+    </div>
+    <ul class="ledger">
+      <li>
+        <div class="row-top"><span class="row-name">Kitchen Hygiene Quiz</span><span class="row-resp">12 responses</span></div>
+        <div class="row-meta">Quiz &middot; <span class="status">Published</span></div>
+      </li>
+      <li>
+        <div class="row-top"><span class="row-name">Customer Feedback Survey</span><span class="row-resp">0 responses</span></div>
+        <div class="row-meta">Survey &middot; <span class="status draft">Draft</span></div>
+      </li>
+      <li>
+        <div class="row-top"><span class="row-name">Guest Registration</span><span class="row-resp">8 responses</span></div>
+        <div class="row-meta">Form &middot; <span class="status">Published</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="activity">
+    <div class="sec-head">
+      <p class="sec-kicker">Section 03</p>
+      <h2>Recent activity</h2>
+    </div>
+    <ul class="activity">
+      <li><span class="what">Kitchen Hygiene Quiz — Ama S. scored 9/10</span><span class="when">2h ago</span></li>
+      <li><span class="what">Guest Registration — New response</span><span class="when">5h ago</span></li>
+      <li><span class="what">Customer Feedback Survey — New response</span><span class="when">Yesterday</span></li>
+    </ul>
+  </section>
+
+  <section id="templates">
+    <div class="sec-head">
+      <p class="sec-kicker">Section 04</p>
+      <h2>Templates</h2>
+    </div>
+    <p class="lede">Start from a ready-made form. Using a template copies it into this workspace as a draft — edit it freely afterwards; the template itself never changes, and your copy never changes it.</p>
+    <ul class="tpl">
+      <li>
+        <div class="row-name">Customer Feedback Survey</div>
+        <span class="kind">Survey</span>
+        <p class="desc">Food, service, speed and value — rated per question, plus what to fix.</p>
+        <div class="cat">Feedback &amp; Satisfaction &middot; 7 questions</div>
+        <div class="btns">
+          <button class="btn" type="button">Preview</button>
+          <button class="btn primary" type="button">Use this template</button>
+        </div>
+      </li>
+      <li>
+        <div class="row-name">Customer Satisfaction (NPS + CSAT)</div>
+        <span class="kind">Survey</span>
+        <p class="desc">The two scores that matter, the reason behind them, and a follow-up only if invited.</p>
+        <div class="cat">Feedback &amp; Satisfaction &middot; 5 questions</div>
+        <div class="btns">
+          <button class="btn" type="button">Preview</button>
+          <button class="btn primary" type="button">Use this template</button>
+        </div>
+      </li>
+      <li>
+        <div class="row-name">Guest Registration</div>
+        <span class="kind">Form</span>
+        <p class="desc">Full registration for a conference or gathering — sessions, meals and badges.</p>
+        <div class="cat">Events &amp; Tickets &middot; 10 questions</div>
+        <div class="btns">
+          <button class="btn" type="button">Preview</button>
+          <button class="btn primary" type="button">Use this template</button>
+        </div>
+      </li>
+      <li>
+        <div class="row-name">Free Event RSVP</div>
+        <span class="kind">Form</span>
+        <p class="desc">Who is coming and how many guests — so the host can plan the room.</p>
+        <div class="cat">Events &amp; Tickets &middot; 4 questions</div>
+        <div class="btns">
+          <button class="btn" type="button">Preview</button>
+          <button class="btn primary" type="button">Use this template</button>
+        </div>
+      </li>
+      <li>
+        <div class="row-name">Job Application</div>
+        <span class="kind">Form</span>
+        <p class="desc">Apply for a role in one sitting — details, history and documents.</p>
+        <div class="cat">Hiring &middot; 8 questions</div>
+        <div class="btns">
+          <button class="btn" type="button">Preview</button>
+          <button class="btn primary" type="button">Use this template</button>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="colophon">Forms &middot; Ashmed's workspace &middot; End of document</footer>
+
+</div>
+</body>
+</html>

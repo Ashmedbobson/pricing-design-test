@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Stream</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { overflow-x: clip; }
+  body {
+    margin: 0;
+    background: #FFF9F0;
+    color: #23201C;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .col {
+    max-width: 430px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 40px;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 4px;
+  }
+  .wordmark {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .wordmark .dot { color: #E4572E; }
+  .workspace {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6E675C;
+    background: #FFFFFF;
+    border: 1px solid #F0E6D8;
+    border-radius: 999px;
+    padding: 8px 14px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    max-width: 55%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .stats {
+    font-size: 13.5px;
+    color: #6E675C;
+    margin: 10px 0 0 0;
+  }
+
+  /* ---------- create bar ---------- */
+  .create-bar { margin-top: 22px; }
+  .create-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 60px;
+    border: none;
+    border-radius: 18px;
+    background: #E4572E;
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(228, 87, 46, 0.30);
+    font-family: inherit;
+  }
+  .create-main:active { transform: translateY(1px); }
+  .create-pills {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .pill {
+    flex: 1;
+    min-height: 48px;
+    border-radius: 999px;
+    border: 1.5px solid #F0DCC8;
+    background: #FFFFFF;
+    color: #23201C;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .pill:active { background: #FFF3E4; }
+
+  /* ---------- section headings ---------- */
+  h2.section {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin: 34px 0 4px 0;
+  }
+  .sub {
+    font-size: 14.5px;
+    color: #6E675C;
+    margin: 0 0 14px 0;
+  }
+
+  /* ---------- activity stream ---------- */
+  .stream { display: flex; flex-direction: column; gap: 12px; }
+  .entry {
+    display: flex;
+    gap: 14px;
+    background: #FFFFFF;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(35, 32, 28, 0.06);
+    border: 1px solid #F5EBDC;
+  }
+  .icon-dot {
+    flex: 0 0 auto;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    line-height: 1;
+  }
+  .dot-quiz { background: #DCFCE7; }
+  .dot-form { background: #DBEAFE; }
+  .dot-survey { background: #EDE9FE; }
+  .entry-body { min-width: 0; }
+  .entry-name { font-size: 16px; font-weight: 700; margin: 2px 0 3px 0; }
+  .entry-what { font-size: 14.5px; color: #4A443B; margin: 0; }
+  .entry-time { font-size: 12.5px; color: #A39A8B; margin: 4px 0 0 0; font-weight: 600; }
+
+  /* ---------- template shelf ---------- */
+  .tpl-note {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6E675C;
+    margin: 0 0 14px 0;
+  }
+  .shelf {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-left: -24px;
+    margin-right: -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 4px;
+    padding-bottom: 12px;
+    scroll-padding-left: 24px;
+  }
+  .shelf::-webkit-scrollbar { display: none; }
+  .tpl-card {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+    background: #FFFFFF;
+    border-radius: 18px;
+    border: 1px solid #F5EBDC;
+    box-shadow: 0 4px 14px rgba(35, 32, 28, 0.07);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+  }
+  .tpl-name { font-size: 17.5px; font-weight: 800; margin: 0 0 8px 0; line-height: 1.25; }
+  .tag {
+    align-self: flex-start;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 4px 11px;
+    margin-bottom: 10px;
+    letter-spacing: 0.2px;
+  }
+  .tag-form { background: #DBEAFE; color: #2563EB; }
+  .tag-survey { background: #EDE9FE; color: #7C3AED; }
+  .tag-quiz { background: #DCFCE7; color: #15803D; }
+  .tpl-desc { font-size: 14.5px; line-height: 1.5; color: #4A443B; margin: 0 0 10px 0; }
+  .tpl-meta { font-size: 13px; color: #A39A8B; font-weight: 600; margin: 0 0 16px 0; }
+  .tpl-actions { display: flex; gap: 10px; margin-top: auto; }
+  .btn-preview {
+    min-height: 48px;
+    padding-left: 18px;
+    padding-right: 18px;
+    border-radius: 12px;
+    border: 1.5px solid #EDE3D2;
+    background: #FFF9F0;
+    color: #23201C;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-use {
+    flex: 1;
+    min-height: 48px;
+    border-radius: 12px;
+    border: none;
+    background: #2563EB;
+    color: #FFFFFF;
+    font-size: 14.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .btn-use:active { filter: brightness(0.93); }
+
+  /* ---------- your forms ---------- */
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #FFFFFF;
+    border-radius: 18px;
+    border: 1px solid #F5EBDC;
+    box-shadow: 0 2px 10px rgba(35, 32, 28, 0.05);
+    padding: 16px;
+    margin-bottom: 12px;
+    min-height: 44px;
+  }
+  .form-row .icon-dot { width: 40px; height: 40px; font-size: 18px; }
+  .form-main { flex: 1; min-width: 0; }
+  .form-name { font-size: 16px; font-weight: 700; margin: 0 0 3px 0; }
+  .form-meta { font-size: 13px; color: #6E675C; margin: 0; }
+  .badge {
+    flex: 0 0 auto;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 5px 11px;
+  }
+  .badge-live { background: #DCFCE7; color: #15803D; }
+  .badge-draft { background: #FEF3C7; color: #92400E; }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%) translateY(20px);
+    background: #23201C;
+    color: #FFF9F0;
+    font-size: 14.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 13px 22px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    max-width: calc(100vw - 48px);
+    text-align: center;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="col">
+
+  <header>
+    <div class="wordmark">Forms<span class="dot">.</span></div>
+    <div class="workspace">Ashmed&rsquo;s workspace</div>
+  </header>
+  <p class="stats">3 forms live &middot; 20 responses this week &middot; 1 quiz running</p>
+
+  <div class="create-bar">
+    <button class="create-main" data-say="Let&rsquo;s build a new form">&#65291; Create a form</button>
+    <div class="create-pills">
+      <button class="pill" data-say="Pick a template below to start">Start from a template</button>
+      <button class="pill" data-say="Your live quiz: Kitchen Hygiene Quiz">Run a quiz</button>
+    </div>
+  </div>
+
+  <h2 class="section">Latest activity</h2>
+  <p class="sub">Good evening, Ashmed</p>
+  <div class="stream">
+    <div class="entry">
+      <div class="icon-dot dot-quiz">&#127891;</div>
+      <div class="entry-body">
+        <p class="entry-name">Kitchen Hygiene Quiz</p>
+        <p class="entry-what">Ama S. scored 9/10</p>
+        <p class="entry-time">2h ago</p>
+      </div>
+    </div>
+    <div class="entry">
+      <div class="icon-dot dot-form">&#128229;</div>
+      <div class="entry-body">
+        <p class="entry-name">Guest Registration</p>
+        <p class="entry-what">New response</p>
+        <p class="entry-time">5h ago</p>
+      </div>
+    </div>
+    <div class="entry">
+      <div class="icon-dot dot-survey">&#128229;</div>
+      <div class="entry-body">
+        <p class="entry-name">Customer Feedback Survey</p>
+        <p class="entry-what">New response</p>
+        <p class="entry-time">Yesterday</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section">Templates</h2>
+  <p class="tpl-note">Start from a ready-made form. Using a template copies it into this workspace as a draft &mdash; edit it freely afterwards; the template itself never changes, and your copy never changes it.</p>
+  <div class="shelf" id="shelf">
+
+    <div class="tpl-card">
+      <p class="tpl-name">Customer Feedback Survey</p>
+      <span class="tag tag-survey">survey</span>
+      <p class="tpl-desc">Food, service, speed and value &mdash; rated per question, plus what to fix.</p>
+      <p class="tpl-meta">Feedback &amp; Satisfaction &middot; 7 questions</p>
+      <div class="tpl-actions">
+        <button class="btn-preview" data-say="Previewing Customer Feedback Survey">Preview</button>
+        <button class="btn-use" data-say="Customer Feedback Survey copied to your workspace as a draft">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="tpl-name">Customer Satisfaction (NPS + CSAT)</p>
+      <span class="tag tag-survey">survey</span>
+      <p class="tpl-desc">The two scores that matter, the reason behind them, and a follow-up only if invited.</p>
+      <p class="tpl-meta">Feedback &amp; Satisfaction &middot; 5 questions</p>
+      <div class="tpl-actions">
+        <button class="btn-preview" data-say="Previewing Customer Satisfaction (NPS + CSAT)">Preview</button>
+        <button class="btn-use" data-say="Customer Satisfaction (NPS + CSAT) copied to your workspace as a draft">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="tpl-name">Guest Registration</p>
+      <span class="tag tag-form">form</span>
+      <p class="tpl-desc">Full registration for a conference or gathering &mdash; sessions, meals and badges.</p>
+      <p class="tpl-meta">Events &amp; Tickets &middot; 10 questions</p>
+      <div class="tpl-actions">
+        <button class="btn-preview" data-say="Previewing Guest Registration">Preview</button>
+        <button class="btn-use" data-say="Guest Registration copied to your workspace as a draft">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="tpl-name">Free Event RSVP</p>
+      <span class="tag tag-form">form</span>
+      <p class="tpl-desc">Who is coming and how many guests &mdash; so the host can plan the room.</p>
+      <p class="tpl-meta">Events &amp; Tickets &middot; 4 questions</p>
+      <div class="tpl-actions">
+        <button class="btn-preview" data-say="Previewing Free Event RSVP">Preview</button>
+        <button class="btn-use" data-say="Free Event RSVP copied to your workspace as a draft">Use this template</button>
+      </div>
+    </div>
+
+    <div class="tpl-card">
+      <p class="tpl-name">Job Application</p>
+      <span class="tag tag-form">form</span>
+      <p class="tpl-desc">Apply for a role in one sitting &mdash; details, history and documents.</p>
+      <p class="tpl-meta">Hiring &middot; 8 questions</p>
+      <div class="tpl-actions">
+        <button class="btn-preview" data-say="Previewing Job Application">Preview</button>
+        <button class="btn-use" data-say="Job Application copied to your workspace as a draft">Use this template</button>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 class="section">Your forms</h2>
+  <div class="form-row">
+    <div class="icon-dot dot-quiz">&#127891;</div>
+    <div class="form-main">
+      <p class="form-name">Kitchen Hygiene Quiz</p>
+      <p class="form-meta">quiz &middot; 12 responses</p>
+    </div>
+    <span class="badge badge-live">Published</span>
+  </div>
+  <div class="form-row">
+    <div class="icon-dot dot-survey">&#128202;</div>
+    <div class="form-main">
+      <p class="form-name">Customer Feedback Survey</p>
+      <p class="form-meta">survey &middot; 0 responses</p>
+    </div>
+    <span class="badge badge-draft">Draft</span>
+  </div>
+  <div class="form-row">
+    <div class="icon-dot dot-form">&#128221;</div>
+    <div class="form-main">
+      <p class="form-name">Guest Registration</p>
+      <p class="form-meta">form &middot; 8 responses</p>
+    </div>
+    <span class="badge badge-live">Published</span>
+  </div>
+
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+  (function () {
+    var toast = document.getElementById('toast');
+    var timer = null;
+    function say(msg) {
+      toast.innerHTML = msg;
+      toast.classList.add('show');
+      clearTimeout(timer);
+      timer = setTimeout(function () { toast.classList.remove('show'); }, 2200);
+    }
+    var buttons = document.querySelectorAll('[data-say]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function () { say(this.getAttribute('data-say')); });
+    }
+    var tplPill = document.querySelectorAll('.pill')[0];
+    if (tplPill) {
+      tplPill.addEventListener('click', function () {
+        var shelf = document.getElementById('shelf');
+        if (shelf) { shelf.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      });
+    }
+  })();
+</script>
+</body>
+</html>
